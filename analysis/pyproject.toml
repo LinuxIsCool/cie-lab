@@ -1,0 +1,9 @@
+[project]
+name = "cie-lab-analysis"
+version = "0.0.1"
+description = "POC #1 analysis: synthetic data + clean-room bridging + self-code overlays"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "scikit-learn>=1.4",
+]
