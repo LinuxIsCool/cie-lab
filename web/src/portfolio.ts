@@ -56,7 +56,7 @@ export const POCS: Poc[] = [
   },
   {
     id: "P7", route: "/p7", short: "Hybrid quant+qual", title: "Hybrid Quant+Qual",
-    status: "planned", wave: "Wave 1",
+    status: "built", wave: "Built", labPoc: "POC #7",
     question: "Does bridging + light self-coding beat either alone?",
     why: "Likely the strongest product candidate.", cost: "med",
   },

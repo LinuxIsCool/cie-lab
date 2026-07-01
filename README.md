@@ -65,6 +65,15 @@ withholds P0's additions (AI labels, self-codes, free-text, confidence badges). 
 between P2 and P0 in the hub *is* the experiment: what do the extra layers actually buy?
 Pure subtraction over the existing artifact — no analysis changes. Lives at `#/p2`.
 
+## POC #7 — Hybrid quant+qual (P7)
+
+Reads two signals together, group by group. P0 keeps the votes (quantitative common
+ground) and the self-codes (how heard people feel) in separate panels; P7 derives a
+per-group **common-ground score** (average agreement across the bridging statements) and
+pairs it with feeling-heard, view-intensity, and that group's own comments. Surfaces
+patterns neither number shows alone (a group can share the agenda yet feel unheard). Pure
+client-side derive over the existing artifact — no analysis changes. Lives at `#/p7`.
+
 ## POC #6 — Conversational elicitation (P3)
 
 Talk instead of vote. A neutral AI facilitator asks open, non-leading questions, then a
