@@ -44,7 +44,7 @@ export const POCS: Poc[] = [
   },
   {
     id: "P3", route: "/p3", short: "Conversational elicitation", title: "Conversational Elicitation",
-    status: "planned", wave: "Wave 1",
+    status: "built", wave: "Built", labPoc: "POC #6",
     question: "Does LLM-chat elicitation beat vote+text, and can LLM synthesis be made defensible?",
     why: "Tests chat elicitation + LLM synthesis; surfaces the egress/governance risk.", cost: "med",
   },

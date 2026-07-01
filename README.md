@@ -65,6 +65,15 @@ withholds P0's additions (AI labels, self-codes, free-text, confidence badges). 
 between P2 and P0 in the hub *is* the experiment: what do the extra layers actually buy?
 Pure subtraction over the existing artifact — no analysis changes. Lives at `#/p2`.
 
+## POC #6 — Conversational elicitation (P3)
+
+Talk instead of vote. A neutral AI facilitator asks open, non-leading questions, then a
+**defensible synthesis** reflects your positions back — each one tied to a **verbatim quote**
+the server validated is literally in your words (any position it can't ground is dropped),
+and you confirm before it counts. Surfaces the governance/egress edge honestly (free-text →
+LLM). Two endpoints on the same server (`analysis/converse.py`): `/api/facilitate`,
+`/api/extract`. Lives at `#/p3` (needs the ask+converse server running).
+
 ## POC #5 — Comhairle interop-export (P1)
 
 Makes "interoperate, don't fork" concrete. Exports the **raw** deliberation
@@ -76,8 +85,9 @@ against their source). No LLM needed; `run.py` emits it unconditionally. Lives a
 
 ## Layout
 - `analysis/` — Python (uv): `gen_synthetic.py`, `bridging.py`, `telus.py` (free TELUS client),
-  `run.py` (POC #1 pipeline + KG), `ask.py` (POC #2 retrieval + grounding), `serve.py`
-  (POC #2 local /api/ask), `kg.py` (POC #3 knowledge-graph builder)
+  `run.py` (P0 pipeline + KG + interop), `ask.py` (P6 retrieval + grounding),
+  `converse.py` (P3 facilitator + defensible extraction), `serve.py` (local API:
+  /api/ask, /api/facilitate, /api/extract), `kg.py` (P5 graph), `interop.py` (P1 export)
 - `web/` — Vite + React 19 + TS + Tailwind v4 hub: nav tree + per-demo views (`src/views/`)
   reading the `cie.results.v0` / `cie.kg.v0` artifacts
 

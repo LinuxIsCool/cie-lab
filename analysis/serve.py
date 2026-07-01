@@ -1,8 +1,12 @@
-"""P6 ask-server — tiny local API: POST /api/ask {q} -> grounded answer.
+"""Local API for the free-TELUS demos (P6 ask + P3 converse).
 
-stdlib http.server + numpy only. Embeds the statement set ONCE at startup (free
-TELUS), so each request is one query-embed + one Gemma call. The Vite dev server
-proxies /api -> here (see vite.config.ts), so the browser sees a same-origin API.
+stdlib http.server + numpy only. The statement set is embedded ONCE at startup.
+The Vite dev server proxies /api -> here (see vite.config.ts), same-origin.
+
+Endpoints:
+  POST /api/ask         {q}                 -> P6 grounded answer
+  POST /api/facilitate  {history}           -> P3 facilitator's next message
+  POST /api/extract     {transcript}        -> P3 positions, each with a verbatim quote
 
 Run:  cd analysis && uv run python serve.py     (listens 127.0.0.1:5181)
 """
@@ -12,6 +16,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import ask as ask_mod
+import converse
 
 ART = json.load(open(Path(__file__).parent.parent / "web/public/artifact.json"))
 RET = ask_mod.Retriever(ART)  # embeds all statements once, up front
@@ -26,19 +31,31 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _body(self) -> dict:
+        n = int(self.headers.get("Content-Length", 0))
+        return json.loads(self.rfile.read(n) or "{}")
+
     def do_POST(self) -> None:
-        if self.path.rstrip("/") != "/api/ask":
-            return self._send(404, {"error": "not found"})
+        path = self.path.rstrip("/")
         try:
-            n = int(self.headers.get("Content-Length", 0))
-            q = (json.loads(self.rfile.read(n) or "{}").get("q") or "").strip()
+            body = self._body()
         except Exception:
             return self._send(400, {"error": "bad json"})
-        if not q:
-            return self._send(400, {"error": "empty question"})
         try:
-            self._send(200, ask_mod.answer(q, ART, RET))
-        except Exception as e:  # surface TELUS/embedding errors to the UI, don't swallow
+            if path == "/api/ask":
+                q = (body.get("q") or "").strip()
+                if not q:
+                    return self._send(400, {"error": "empty question"})
+                return self._send(200, ask_mod.answer(q, ART, RET))
+            if path == "/api/facilitate":
+                return self._send(200, {"message": converse.facilitate(body.get("history") or [])})
+            if path == "/api/extract":
+                transcript = (body.get("transcript") or "").strip()
+                if not transcript:
+                    return self._send(400, {"error": "empty transcript"})
+                return self._send(200, {"positions": converse.extract(transcript)})
+            return self._send(404, {"error": "not found"})
+        except Exception as e:  # surface TELUS errors to the UI, don't swallow
             self._send(500, {"error": f"{type(e).__name__}: {e}"})
 
     def log_message(self, *a) -> None:  # keep the console quiet
@@ -46,5 +63,5 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    print(f"P6 ask-server on http://127.0.0.1:5181  ·  {len(ART['statements'])} statements embedded")
+    print(f"ask+converse server on http://127.0.0.1:5181  ·  {len(ART['statements'])} statements embedded")
     ThreadingHTTPServer(("127.0.0.1", 5181), Handler).serve_forever()
