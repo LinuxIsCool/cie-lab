@@ -1,7 +1,14 @@
 // Placeholder for a not-yet-built POC — reachable from the nav tree so planned
 // prototypes are legible (question / why / cost / wave), never a dead link.
 import type { Poc } from "../portfolio";
-import { Commentary, DesignNotes } from "../commentary";
+import { Commentary } from "../commentary";
+
+const WAVE_REASON: Record<string, string> = {
+  "Wave 1": "Cheap and independent, so it can run in parallel behind P0's stable core.",
+  "Wave 2": "Built after the basics, once we know which pieces are worth combining.",
+  "Wave 3": "A step toward a real product — saved for last because it's hard to undo.",
+  Deferred: "Waiting on a real use before it's worth building.",
+};
 
 export default function Planned({ poc }: { poc: Poc }) {
   return (
@@ -35,22 +42,14 @@ export default function Planned({ poc }: { poc: Poc }) {
         </div>
       </div>
 
-      <DesignNotes
-        title="Where this prototype sits in the method"
-        subtitle="Nothing is built until its turn — and its turn is chosen deliberately. Here's the thinking that governs when and why this one gets built.">
-        <Commentary kind="methodology" title="A deliberately-chosen probe, not a backlog item">
-          <p>The portfolio is a <strong>fractional-factorial screening design</strong>: every axis-value appears at least once, so the whole space gets covered without building every combination. <strong>{poc.id}</strong> is one such point — selected for the specific question it answers (<em>{poc.question}</em>), not because it's next on a list. Each prototype earns its slot by the information it buys.</p>
+      <div className="mt-4 space-y-2">
+        <Commentary kind="choice" title={`Why it waits for ${poc.wave}`}>
+          {WAVE_REASON[poc.wave] ?? "Sequenced by how much it teaches versus how hard it is to reverse."} Rough cost: {poc.cost}.
         </Commentary>
-        <Commentary kind="choice" title={`Sequenced into ${poc.wave}`}>
-          <p>Its place in the schedule follows <strong>irreversibility × information-per-build</strong>. {poc.wave === "Wave 1" ? "Wave 1 is cheap two-way-door probes behind P0's stable contract — sprayed in parallel because they're reversible and independent." : poc.wave === "Wave 2" ? "Wave 2 is surfaces and the heavier methodology bet — built once the trunk and cheap probes have taught us what to compose." : poc.wave === "Wave 3" ? "Wave 3 opens the productization one-way doors (config, tenancy) — deliberately last, because they bake assumptions that are expensive to reverse." : "It's deferred until a real consumer exists — building it earlier would be speculative work against an interface that isn't wired yet."} Estimated cost: <strong>{poc.cost}</strong>.</p>
+        <Commentary kind="principle" title="Some of these won't get built">
+          Each prototype is a small experiment. The ones that don't prove out get dropped — narrowing toward what becomes the real product.
         </Commentary>
-        <Commentary kind="perspective" title="Why it's in the portfolio">
-          <p>{poc.why} Holding it as an <em>option</em> — mapped, costed, and sequenced — is itself valuable: it keeps the design space honest and makes the eventual convergence a choice among known alternatives rather than a leap.</p>
-        </Commentary>
-        <Commentary kind="principle" title="Expect to kill several — that's the point">
-          <p>Set-based design means several of these planned probes will be <strong>retired by evidence</strong>, and that's a success, not a shortfall. Each one that dies cheaply narrows the field toward the surviving intersection that becomes the product. A placeholder here isn't a promise to build — it's a live option in an explicit, reproducible search.</p>
-        </Commentary>
-      </DesignNotes>
+      </div>
 
       <a href="#/" className="inline-block mt-6 text-[13px] text-blue-600 hover:text-blue-800">← Back to portfolio</a>
     </div>

@@ -3,7 +3,7 @@
 // answer are the real StatementCards from the artifact, rendered by React.
 import { useState } from "react";
 import { useArtifact, StatementCard } from "../shared";
-import { Commentary, DesignNotes } from "../commentary";
+import { Commentary } from "../commentary";
 
 type AskResult = { question: string; answer: string; citations: string[]; evidence: { id: string; score: number }[] };
 
@@ -96,38 +96,27 @@ export default function Ask() {
         )}
       </div>
 
+      <div className="mt-3 space-y-2">
+        <Commentary kind="principle" title="Answers are grounded in the votes">
+          The AI picks the relevant statements and phrases the answer — the numbers come from the data, not the model.
+        </Commentary>
+        <Commentary kind="methodology" title="It won't make things up">
+          Ask it to prove something the votes don't support and it says the evidence doesn't answer, rather than inventing a mandate.
+        </Commentary>
+      </div>
+
       {/* the actual human votes behind the answer */}
       {citedStatements.length > 0 && art && (
         <div className="mt-5 space-y-3">
           <h2 className="text-sm font-semibold text-slate-600">The votes behind the answer</h2>
+          <Commentary kind="goal" title="Always sourced">
+            Every answer links to the exact statements behind it — shown here as their real vote cards, so you can check the AI's summary against the data.
+          </Commentary>
           {citedStatements.map((s) => <StatementCard key={s!.id} s={s!} groups={art.opinion_groups} />)}
         </div>
       )}
 
       {artErr && <div className="mt-3 text-[13px] text-rose-600">Could not load the artifact for evidence cards: {artErr}</div>}
-
-      <DesignNotes
-        title="How a chat surface stays trustworthy"
-        subtitle="P6 is a Wave-2 surface: a thin, grounded layer over P0's gated data. The design question is whether 'ask your results and get a sourced answer' is the candidate's killer surface — without letting the model become the measurement.">
-        <Commentary kind="architecture" title="RAG, inverted">
-          <p>Ordinary retrieval-augmented generation retrieves <em>text</em> and lets the model synthesize freely. Here the retrieval index is embeddings, but the <strong>payload is verified statistics</strong> — Wilson bounds, GIC, badges. The model's job is narrowed to two things it's genuinely good at: <strong>routing</strong> (which statements bear on this question) and <strong>phrasing</strong>. Everything quantitative is rendered from the artifact by the deterministic layer.</p>
-        </Commentary>
-        <Commentary kind="principle" title="The guardrail makes it architectural, not aspirational">
-          <p>A strict grounding prompt forbids inventing statements or numbers and forces the model to respect each statement's badge. But the deeper protection is structural: the percentages on screen are drawn by the UI from the artifact, so the model <em>literally cannot</em> emit a number that isn't in the evidence. "AI is a listening aid, never the measurement" stops being a promise and becomes a property of the wiring.</p>
-        </Commentary>
-        <Commentary kind="methodology" title="It respects confidence — and refuses">
-          <p>Ask "what do all groups agree on?" and it separates a <em>confirmed</em> bridge from a merely <em>directional</em> one, in words. Ask it to "prove everyone opposes new taxes" and it answers "the evidence does not answer this" — because the votes never said so. A civic answer engine that <strong>declines to manufacture a mandate</strong> is doing the most important thing it can do.</p>
-        </Commentary>
-        <Commentary kind="design" title="Two free calls, the whole lever">
-          <p>Each question is one <strong>embedding</strong> (the query, matched against the statements) plus one <strong>chat</strong> completion (the grounded phrasing) — both on free, local TELUS, $0. The sovereign-LLM lever at full extension: unlimited iteration on the exact interaction a campaign would use, with no per-question cost and no data leaving the machine.</p>
-        </Commentary>
-        <Commentary kind="perspective" title="Why this might be the killer surface">
-          <p>A dashboard asks the candidate to read; a chat surface lets them <em>ask</em>. For a busy campaign, "where do my constituents actually converge on housing?" answered in a sentence, <strong>with the votes attached</strong>, may be the single most compelling way to consume the whole pipeline. P6 tests that hypothesis as a <em>thin</em> layer, so if it wins, it wins cheaply — and if it doesn't, little was spent.</p>
-        </Commentary>
-        <Commentary kind="goal" title="Every answer is sourced">
-          <p>The answer always cites the statements it drew from, and those statements render right below as their real vote cards. That's provenance at the point of use: the reader can go from a sentence of prose to the <strong>human votes behind it</strong> in one glance. Sourced-by-default is what separates a civic answer engine from a chatbot.</p>
-        </Commentary>
-      </DesignNotes>
 
       <footer className="mt-8 text-[11px] text-slate-400">
         Retrieval + phrasing by free TELUS (e5 embeddings + Gemma) · $0 · grounded strictly in the P0 artifact.
