@@ -26,14 +26,15 @@ type Assessment = {
   gifts: { t: string; d: string }[];
 };
 
-const FID: Record<string, { label: string; cls: string }> = {
-  clean: { label: "clean", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
-  rekey: { label: "re-key", cls: "bg-sky-50 text-sky-700 ring-sky-200" },
-  recast: { label: "recast", cls: "bg-violet-50 text-violet-700 ring-violet-200" },
-  lossy: { label: "lossy", cls: "bg-orange-50 text-orange-700 ring-orange-200" },
-  dropped: { label: "dropped", cls: "bg-slate-100 text-slate-500 ring-slate-200" },
-  gap: { label: "gap", cls: "bg-rose-50 text-rose-700 ring-rose-200" },
+const FID: Record<string, { label: string; cls: string; def: string }> = {
+  clean: { label: "clean", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200", def: "A direct one-to-one match — the value carries over as-is." },
+  rekey: { label: "re-key", cls: "bg-sky-50 text-sky-700 ring-sky-200", def: "Same meaning, different id scheme — CIE's ULIDs become UUIDs." },
+  recast: { label: "recast", cls: "bg-violet-50 text-violet-700 ring-violet-200", def: "The information survives in a different shape — a comment lands as a Statement." },
+  lossy: { label: "lossy", cls: "bg-orange-50 text-orange-700 ring-orange-200", def: "It fits, though some detail (a numeric range) is simplified on the way." },
+  gap: { label: "gap", cls: "bg-rose-50 text-rose-700 ring-rose-200", def: "Their grammar has no field for it yet — the spots the upstream gifts would fill." },
+  dropped: { label: "dropped", cls: "bg-slate-100 text-slate-500 ring-slate-200", def: "Carried by CIE's trust layer, with no counterpart in the interchange schema." },
 };
+const FID_ORDER = ["clean", "rekey", "recast", "lossy", "gap", "dropped"];
 const COV = [
   { k: "satisfies", c: "#059669" }, { k: "partial", c: "#0ea5e9" }, { k: "gap", c: "#f43f5e" }, { k: "na", c: "#94a3b8" },
 ] as const;
@@ -131,6 +132,22 @@ export default function Interop() {
       </div>
 
       <H>Field mapping → Comhairle grammar</H>
+      <div className="mb-3">
+        <Commentary kind="design" title="How to read this mapping">
+          Handing data to another tool means lining up each of your fields with one of theirs. This table walks every CIE record onto Comhairle's <em>interchange grammar</em> — its Statement / Reaction / Group / Participant vocabulary — and labels how cleanly each one lands, from an exact match down to the few spots where their grammar would need a small addition to hold what CIE carries.
+        </Commentary>
+      </div>
+      <div className="rounded-xl bg-white ring-1 ring-slate-200 p-3.5 shadow-sm mb-3">
+        <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-2">What the labels mean</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-1.5">
+          {FID_ORDER.map((k) => (
+            <div key={k} className="flex items-start gap-2">
+              <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${FID[k].cls}`}>{FID[k].label}</span>
+              <span className="text-[12px] text-slate-500 leading-snug">{FID[k].def}</span>
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden">
         {mapping.map((m, i) => (
           <div key={i} className="px-3 py-2.5 border-b border-slate-50 last:border-0">
