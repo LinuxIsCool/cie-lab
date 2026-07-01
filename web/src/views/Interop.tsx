@@ -46,6 +46,36 @@ const RS_ORDER = ["gain", "watch", "diverges"];
 const REV_RANK: Record<string, number> = { gain: 0, watch: 1, diverges: 2 };
 const AREA_SHORT: Record<string, string> = { Requirement: "Req", "Quality gate": "Gate", "Build core": "Build" };
 const STATUS_RANK: Record<string, number> = { satisfies: 0, partial: 1, gap: 2, na: 3 };
+// Type (R/T/M + the Comhairle side) — soft outline chips, distinct from the Coverage palette.
+const TYPE_CLS: Record<string, string> = {
+  Requirement: "bg-indigo-50 text-indigo-700 ring-indigo-200",
+  "Quality gate": "bg-fuchsia-50 text-fuchsia-700 ring-fuchsia-200",
+  "Build core": "bg-cyan-50 text-cyan-700 ring-cyan-200",
+  "Comhairle feature": "bg-stone-100 text-stone-600 ring-stone-300",
+};
+// Component — 20 labels, so map each name deterministically into a fixed palette (stable per name).
+const COMP_PALETTE = [
+  "bg-rose-50 text-rose-700 ring-rose-200", "bg-orange-50 text-orange-700 ring-orange-200",
+  "bg-lime-50 text-lime-700 ring-lime-200", "bg-emerald-50 text-emerald-700 ring-emerald-200",
+  "bg-teal-50 text-teal-700 ring-teal-200", "bg-cyan-50 text-cyan-700 ring-cyan-200",
+  "bg-sky-50 text-sky-700 ring-sky-200", "bg-blue-50 text-blue-700 ring-blue-200",
+  "bg-indigo-50 text-indigo-700 ring-indigo-200", "bg-violet-50 text-violet-700 ring-violet-200",
+  "bg-purple-50 text-purple-700 ring-purple-200", "bg-pink-50 text-pink-700 ring-pink-200",
+];
+const COMP_HUES = ["rose", "orange", "lime", "emerald", "teal", "cyan", "sky", "blue", "indigo", "violet", "purple", "pink"];
+const compIdx = (name: string) => { let h = 0; for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0; return h % COMP_PALETTE.length; };
+const compCls = (name: string) => COMP_PALETTE[compIdx(name)];
+// hex equivalents [bg, fg] so the <select>/<option> dropdowns can match the in-table chip colors
+const HEX: Record<string, [string, string]> = {
+  indigo: ["#eef2ff", "#4338ca"], fuchsia: ["#fdf4ff", "#a21caf"], cyan: ["#ecfeff", "#0e7490"], stone: ["#f5f5f4", "#57534e"],
+  rose: ["#fff1f2", "#be123c"], orange: ["#fff7ed", "#c2410c"], lime: ["#f7fee7", "#4d7c0f"], emerald: ["#ecfdf5", "#047857"],
+  teal: ["#f0fdfa", "#0f766e"], sky: ["#f0f9ff", "#0369a1"], blue: ["#eff6ff", "#1d4ed8"], violet: ["#f5f3ff", "#6d28d9"],
+  purple: ["#faf5ff", "#7e22ce"], pink: ["#fdf2f8", "#be185d"], slate: ["#f1f5f9", "#475569"],
+};
+const TYPE_HUE: Record<string, string> = { Requirement: "indigo", "Quality gate": "fuchsia", "Build core": "cyan", "Comhairle feature": "stone" };
+const SRC_HUE: Record<string, string> = { CIE: "blue", Comhairle: "slate" };
+const STATUS_HUE: Record<string, string> = { satisfies: "emerald", partial: "sky", gap: "rose", na: "slate", gain: "emerald", watch: "sky", diverges: "violet" };
+const oStyle = (hue?: string): React.CSSProperties | undefined => (hue && HEX[hue] ? { background: HEX[hue][0], color: HEX[hue][1] } : undefined);
 // id ordering: CIE spec ids (R < T < M) first, then Comhairle-sourced ids (CT/CI/CS/CD/CF, and legacy I/F).
 const ID_RANK: Record<string, number> = { R: 0, T: 1, M: 2, CT: 10, CI: 11, CS: 12, CD: 13, CF: 14, I: 11, F: 14 };
 const idKey = (id: string) => { const m = id.match(/^([A-Z]+)(\d+)$/); const g = ID_RANK[m?.[1] ?? "R"] ?? 99; return g * 1000 + (m ? parseInt(m[2], 10) : 0); };
@@ -227,17 +257,21 @@ export default function Interop() {
             <div className="flex flex-wrap items-center gap-1.5">
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…"
                 className="text-[12px] rounded-md border border-slate-200 bg-white px-2 py-1 w-40 text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-300" />
-              <select value={fSource} onChange={(e) => setFSource(e.target.value)} className={selCls} title="Filter by source">
-                <option value="">All sources</option><option value="CIE">CIE</option><option value="Comhairle">Comhairle</option>
+              <select value={fSource} onChange={(e) => setFSource(e.target.value)} className={selCls} style={oStyle(SRC_HUE[fSource])} title="Filter by source">
+                <option value="">All sources</option>
+                {["CIE", "Comhairle"].map((s) => <option key={s} value={s} style={oStyle(SRC_HUE[s])}>{s}</option>)}
               </select>
-              <select value={fType} onChange={(e) => setFType(e.target.value)} className={selCls} title="Filter by type">
-                <option value="">All types</option>{types.map((t) => <option key={t} value={t}>{t}</option>)}
+              <select value={fType} onChange={(e) => setFType(e.target.value)} className={selCls} style={oStyle(TYPE_HUE[fType])} title="Filter by type">
+                <option value="">All types</option>
+                {types.map((t) => <option key={t} value={t} style={oStyle(TYPE_HUE[t])}>{t}</option>)}
               </select>
-              <select value={fComp} onChange={(e) => setFComp(e.target.value)} className={selCls} title="Filter by component">
-                <option value="">All components</option>{components.map((c) => <option key={c} value={c}>{c}</option>)}
+              <select value={fComp} onChange={(e) => setFComp(e.target.value)} className={selCls} style={fComp ? oStyle(COMP_HUES[compIdx(fComp)]) : undefined} title="Filter by component">
+                <option value="">All components</option>
+                {components.map((c) => <option key={c} value={c} style={oStyle(COMP_HUES[compIdx(c)])}>{c}</option>)}
               </select>
-              <select value={fStatus} onChange={(e) => setFStatus(e.target.value)} className={selCls} title="Filter by coverage / stance">
-                <option value="">All coverage</option>{statusOpts.map((s) => <option key={s} value={s}>{(CS[s] ?? RS[s]).label}</option>)}
+              <select value={fStatus} onChange={(e) => setFStatus(e.target.value)} className={selCls} style={oStyle(STATUS_HUE[fStatus])} title="Filter by coverage / stance">
+                <option value="">All coverage</option>
+                {statusOpts.map((s) => <option key={s} value={s} style={oStyle(STATUS_HUE[s])}>{(CS[s] ?? RS[s]).label}</option>)}
               </select>
               {(q || fSource || fType || fComp || fStatus) && (
                 <button onClick={() => { setQ(""); setFSource(""); setFType(""); setFComp(""); setFStatus(""); }}
@@ -246,10 +280,10 @@ export default function Interop() {
             </div>
           </div>
           <div className="max-h-[600px] overflow-auto">
-            <table className="text-left border-collapse" style={{ minWidth: 1320 }}>
+            <table className="text-left border-collapse" style={{ minWidth: 1400 }}>
               <thead className="sticky top-0 z-10">
                 <tr className="bg-slate-50 text-[10px] uppercase tracking-wide text-slate-400 border-b border-slate-200">
-                  {([["id", "ID", 52], ["source", "Source", 72], ["type", "Type", 104], ["component", "Component", 128], ["name", "Item", 150], ["status", "Coverage", 88]] as const).map(([k, label, w]) => (
+                  {([["id", "ID", 52], ["source", "Source", 84], ["type", "Type", 120], ["component", "Component", 184], ["name", "Item", 150], ["status", "Coverage", 88]] as const).map(([k, label, w]) => (
                     <th key={k} style={{ width: w, minWidth: w }} className="px-2.5 py-2 align-bottom">
                       <button onClick={() => clickSort(k)} className="font-semibold hover:text-slate-600">{label}{Sarrow(k)}</button>
                     </th>
@@ -263,9 +297,9 @@ export default function Interop() {
                 {rows.map((it) => (
                   <tr key={it.id} className="border-b border-slate-50 align-top hover:bg-slate-50/50">
                     <td className="px-2.5 py-2 font-mono text-[12px] text-slate-600 whitespace-nowrap">{it.id}</td>
-                    <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${it.source === "CIE" ? "bg-blue-50 text-blue-700 ring-blue-200" : "bg-slate-100 text-slate-600 ring-slate-300"}`}>{it.source}</span></td>
-                    <td className="px-2.5 py-2 text-[11px] text-slate-500">{it.type}</td>
-                    <td className="px-2.5 py-2 text-[11px] text-slate-500">{it.component}</td>
+                    <td className="px-2.5 py-2"><span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap ${it.source === "CIE" ? "bg-blue-600 text-white" : "bg-slate-600 text-white"}`}>{it.source}</span></td>
+                    <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 whitespace-nowrap ${TYPE_CLS[it.type] ?? "bg-slate-100 text-slate-500 ring-slate-200"}`}>{it.type}</span></td>
+                    <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 whitespace-nowrap ${compCls(it.component)}`}>{it.component}</span></td>
                     <td className="px-2.5 py-2 text-[12px] text-slate-700 font-medium">{it.name}</td>
                     <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${it.sm[it.status]?.cls ?? ""}`}>{it.sm[it.status]?.label ?? it.status}</span>{it.sourced === false && <span className="text-slate-300 text-[10px]"> ·inf</span>}</td>
                     <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{den(it, "cie")}</td>
