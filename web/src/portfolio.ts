@@ -50,7 +50,7 @@ export const POCS: Poc[] = [
   },
   {
     id: "P5", route: "/p5", short: "Knowledge-graph sensemaking", title: "Knowledge-Graph Sensemaking",
-    status: "planned", wave: "Wave 1",
+    status: "built", wave: "Built", labPoc: "POC #3",
     question: "Can a position/claim graph beat clustering for exploration?",
     why: "Tests a KG sensemaking substrate; the substrate P6 can also query.", cost: "med-high",
   },

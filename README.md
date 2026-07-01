@@ -40,10 +40,29 @@ cd analysis && uv run python serve.py          # http://127.0.0.1:5181 (Vite pro
 
 Then use the **Ask your constituency** panel at the top of the dashboard.
 
+## POC #3 — Knowledge-graph sensemaking (P5)
+
+A position/claim graph over the same artifact — the exploration surface *next to* P0's
+opinion map. Where P0 clusters **people** by vote pattern, P5 clusters **positions** by
+**meaning** (statement embeddings → k-means themes, Gemma-named). Resident comments become
+"voice" nodes, each distilled to a short claim (Gemma), linked to its nearest statement by
+embedding, with **stance taken from that person's actual vote** (not the LLM). A numpy
+force-directed layout is baked offline so the web view is pure SVG (hover to trace links,
+click to pin). Honest caveat surfaced in-UI: civic statements embed close (silhouette ≈ 0.06),
+so themes are *soft* and the **edge topology** carries the structure.
+
+`run.py` builds `kg.json` too (skipped under `--no-llm`, which needs no network). Or standalone:
+
+```bash
+cd analysis && uv run python kg.py            # → web/public/kg.json (cie.kg.v0)
+```
+
 ## Layout
 - `analysis/` — Python (uv): `gen_synthetic.py`, `bridging.py`, `telus.py` (free TELUS client),
-  `run.py` (POC #1 pipeline), `ask.py` (POC #2 retrieval + grounding), `serve.py` (local /api/ask)
-- `web/` — Vite + React 19 + TS + Tailwind v4 dashboard reading the results artifact
+  `run.py` (POC #1 pipeline + KG), `ask.py` (POC #2 retrieval + grounding), `serve.py`
+  (POC #2 local /api/ask), `kg.py` (POC #3 knowledge-graph builder)
+- `web/` — Vite + React 19 + TS + Tailwind v4 hub: nav tree + per-demo views (`src/views/`)
+  reading the `cie.results.v0` / `cie.kg.v0` artifacts
 
 ## Notes
 - TELUS e5 embeddings are **asymmetric** — `input_type` ("query"/"passage") is **required** (else HTTP 400).

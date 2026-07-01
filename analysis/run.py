@@ -11,6 +11,7 @@ from dataclasses import asdict
 
 import gen_synthetic
 import bridging
+import kg
 
 
 def label_groups(art: dict) -> None:
@@ -62,6 +63,11 @@ def main() -> None:
     print(f"  group labels: {labels}")
     print(f"  feeling-heard avg={art['overall_self_codes']['feeling_heard_mean']} "
           f"comment-rate={art['overall_self_codes']['comment_rate']}")
+
+    # P5 knowledge graph rides the same ds+artifact (needs embeddings, so skip under --no-llm)
+    if not a.no_llm:
+        print("building P5 knowledge graph via free TELUS…")
+        kg.build_and_write(ds, art, use_llm=True)
 
 
 if __name__ == "__main__":
