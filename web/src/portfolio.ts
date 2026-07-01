@@ -38,7 +38,7 @@ export const POCS: Poc[] = [
   },
   {
     id: "P2", route: "/p2", short: "Classic Pol.is baseline", title: "Classic Pol.is Baseline",
-    status: "planned", wave: "Wave 1",
+    status: "built", wave: "Built", labPoc: "POC #4",
     question: "Does vote-only + opinion map give a compelling read at least friction?",
     why: "Control for vote-only elicitation / opinion-map surface.", cost: "low",
   },

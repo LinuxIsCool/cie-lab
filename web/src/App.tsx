@@ -7,6 +7,7 @@ import Home from "./views/Home";
 import Dashboard from "./views/Dashboard";
 import Ask from "./views/Ask";
 import Graph from "./views/Graph";
+import Baseline from "./views/Baseline";
 import Planned from "./views/Planned";
 
 function useHashRoute() {
@@ -81,6 +82,7 @@ function Content({ route }: { route: string }) {
   const poc = pocByRoute(route);
   if (!poc) return <Home />;
   if (poc.route === "/p0") return <Dashboard />;
+  if (poc.route === "/p2") return <Baseline />;
   if (poc.route === "/p5") return <Graph />;
   if (poc.route === "/p6") return <Ask />;
   return <Planned poc={poc} />;

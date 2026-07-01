@@ -57,6 +57,14 @@ so themes are *soft* and the **edge topology** carries the structure.
 cd analysis && uv run python kg.py            # → web/public/kg.json (cie.kg.v0)
 ```
 
+## POC #4 — Classic Pol.is baseline (P2)
+
+The **control**. Renders the same `cie.results.v0` artifact the plain vote-only way —
+opinion map + consensus/divisive statements, groups as "A/B/C" — and deliberately
+withholds P0's additions (AI labels, self-codes, free-text, confidence badges). Flipping
+between P2 and P0 in the hub *is* the experiment: what do the extra layers actually buy?
+Pure subtraction over the existing artifact — no analysis changes. Lives at `#/p2`.
+
 ## Layout
 - `analysis/` — Python (uv): `gen_synthetic.py`, `bridging.py`, `telus.py` (free TELUS client),
   `run.py` (POC #1 pipeline + KG), `ask.py` (POC #2 retrieval + grounding), `serve.py`
