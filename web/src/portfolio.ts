@@ -74,7 +74,7 @@ export const POCS: Poc[] = [
   },
   {
     id: "P9", route: "/p9", short: "Multi-tenant SaaS shell", title: "Multi-Tenant SaaS Shell (own core)",
-    status: "planned", wave: "Wave 3",
+    status: "built", wave: "Built", labPoc: "POC #10",
     question: "What does tenancy isolation demand of the record contract / trust model?",
     why: "The productization one-way door; surfaces tenancy assumptions early. AGPL-free.", cost: "high",
   },

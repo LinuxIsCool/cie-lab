@@ -13,6 +13,7 @@ import Converse from "./views/Converse";
 import Hybrid from "./views/Hybrid";
 import Pni from "./views/Pni";
 import Wizard from "./views/Wizard";
+import Tenancy from "./views/Tenancy";
 import Planned from "./views/Planned";
 
 function useHashRoute() {
@@ -93,6 +94,7 @@ function Content({ route }: { route: string }) {
   if (poc.route === "/p7") return <Hybrid />;
   if (poc.route === "/p4") return <Pni />;
   if (poc.route === "/p8") return <Wizard />;
+  if (poc.route === "/p9") return <Tenancy />;
   if (poc.route === "/p5") return <Graph />;
   if (poc.route === "/p6") return <Ask />;
   return <Planned poc={poc} />;
