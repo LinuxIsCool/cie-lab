@@ -54,6 +54,12 @@ export default function Ask() {
         <p className="text-sm text-slate-500">Grounded chat-to-query — the AI routes &amp; phrases; every number comes from the votes</p>
       </header>
 
+      <div className="mb-4">
+        <Commentary kind="perspective" title="What this lets you do">
+          The main dashboard (P0) shows everything at once. Here you can skip the reading and just ask a plain-English question — "where do people agree on housing?", "what divides the town?" — and get a short answer, with the exact statements it used shown right underneath. Think of it as the dashboard you can talk to.
+        </Commentary>
+      </div>
+
       <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
         <form onSubmit={(e) => { e.preventDefault(); ask(q); }} className="flex gap-2">
           <input
@@ -98,10 +104,10 @@ export default function Ask() {
 
       <div className="mt-3 space-y-2">
         <Commentary kind="principle" title="Answers are grounded in the votes">
-          The AI picks the relevant statements and phrases the answer — the numbers come from the data, not the model.
+          This is the crucial part. The AI's only jobs are to <em>find</em> the statements your question is about and to <em>phrase</em> a reply — every actual number it reports is pulled straight from the votes, never invented. It's acting as a helpful librarian, not as the source of truth.
         </Commentary>
-        <Commentary kind="methodology" title="It won't make things up">
-          Ask it to prove something the votes don't support and it says the evidence doesn't answer, rather than inventing a mandate.
+        <Commentary kind="methodology" title="It won't invent a mandate">
+          Ask it to prove something the community never said — "show that everyone opposes new taxes" — and instead of obliging, it answers that the evidence doesn't support that. A tool that will happily manufacture agreement is worse than no tool, so refusing is a feature, not a limitation.
         </Commentary>
       </div>
 
@@ -109,8 +115,8 @@ export default function Ask() {
       {citedStatements.length > 0 && art && (
         <div className="mt-5 space-y-3">
           <h2 className="text-sm font-semibold text-slate-600">The votes behind the answer</h2>
-          <Commentary kind="goal" title="Always sourced">
-            Every answer links to the exact statements behind it — shown here as their real vote cards, so you can check the AI's summary against the data.
+          <Commentary kind="goal" title="Always sourced — check its work">
+            Every answer links to the exact statements it drew from, shown below as their real vote cards. So you never have to take the AI's word for anything — you can look straight at the human votes behind any claim it makes.
           </Commentary>
           {citedStatements.map((s) => <StatementCard key={s!.id} s={s!} groups={art.opinion_groups} />)}
         </div>

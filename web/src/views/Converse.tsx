@@ -76,11 +76,14 @@ export default function Converse() {
       </header>
 
       <div className="mb-4 space-y-2">
-        <Commentary kind="design" title="A different way in">
-          Some people will never fill out a survey but will happily talk. Here a neutral facilitator asks open questions — no pre-written statements, no agree/disagree — and gathers your views in your own words.
+        <Commentary kind="perspective" title="What you're doing here">
+          Every other demo starts from votes on ready-made statements. This one starts from a <em>conversation</em>. You chat with a neutral AI facilitator — like a good interviewer, it asks open questions and never pushes an opinion — and afterward it reflects back the positions you expressed, so they could feed into the same picture the votes build.
+        </Commentary>
+        <Commentary kind="design" title="Why offer a conversation at all">
+          Some people will never fill out a survey but will happily talk. Meeting them in their own words, at their own pace, reaches voices a checkbox form would miss entirely. Whether that's worth the extra complexity is exactly the question this prototype exists to test.
         </Commentary>
         <Commentary kind="caveat" title="This is the governance edge">
-          Free-text goes to a language model to run this. On synthetic data that's free and fine — but with real residents this is exactly the step that needs consent and a data-governance gate. The demo makes that cost visible on purpose.
+          To make it work, a resident's free-text has to be sent to a language model. On the made-up data here that's free and harmless — but with real residents this is precisely the step that needs consent and a proper data-governance gate. The demo keeps that cost visible on purpose rather than hiding it.
         </Commentary>
       </div>
 
@@ -122,11 +125,15 @@ export default function Converse() {
       {positions && (
         <div className="mt-5">
           <div className="space-y-2 mb-3">
-            <Commentary kind="principle" title="Defensible synthesis — your words, not the AI's">
-              Every position below quotes something you actually said, and the server checked that the quote really appears in your words. Anything the AI couldn't ground was dropped, not shown.
+            <Commentary kind="principle" title="The catch with letting an AI 'summarize' you">
+              A conversation is exactly where an AI could put words in your mouth. So there's a hard rule: every position
+              below must quote something you <em>actually said</em>, and the computer double-checks that the quote really
+              appears in your words before showing it. Anything it couldn't ground in a real quote was thrown out, not
+              displayed — the AI can organize what you said, but it can't invent it.
             </Commentary>
-            <Commentary kind="goal" title="You stay in control">
-              Nothing counts until you confirm it. Untick anything the AI got wrong — you decide what becomes part of your input, not the model.
+            <Commentary kind="goal" title="And you get the final say">
+              Even then, nothing counts until <em>you</em> confirm it. Untick anything the AI got wrong or overstated.
+              You decide what becomes part of your input — the model only ever makes a suggestion for you to approve.
             </Commentary>
           </div>
 

@@ -44,11 +44,21 @@ export default function Interop() {
       </header>
 
       <div className="mb-4 space-y-2">
-        <Commentary kind="choice" title="Interoperate, don't fork">
-          Comhairle's license rules out a hosted fork, so instead of copying their code CIE hands over the <em>data</em> in a shared format. Any tool that reads it can ingest a CIE deliberation — collaboration without license entanglement.
+        <Commentary kind="perspective" title="What this page is even about">
+          There's another civic tool out there called <strong>Comhairle</strong> that does similar work. A natural
+          temptation is to "fork" it — copy its open-source code and build your own version on top. But its license
+          would then force CIE to give away any hosted product built from it. This page shows the smarter path:
+          instead of copying code, make the two tools able to <em>exchange data</em>.
         </Commentary>
-        <Commentary kind="methodology" title="Lossless means exporting the evidence, not the conclusions">
-          The file carries the raw statements, participants, and votes — <em>not</em> CIE's computed groups or consensus. A receiving tool re-runs its own analysis, so nothing is lost or pre-judged in the handoff.
+        <Commentary kind="choice" title="Interoperate, don't fork">
+          So CIE builds its own core and, when it wants to collaborate, simply hands Comhairle the <em>data</em> in a
+          shared, tool-neutral format — like emailing a spreadsheet anyone can open. Collaboration without copying code,
+          and without inheriting a license CIE can't build a product under.
+        </Commentary>
+        <Commentary kind="methodology" title="'Lossless' means handing over the evidence, not the conclusions">
+          The file carries the raw material — the statements, the (anonymous) participants, and every vote — <em>not</em>
+          CIE's computed groups or consensus. That way the receiving tool re-runs its <em>own</em> analysis and draws
+          its own conclusions; nothing is lost or pre-decided in the handoff.
         </Commentary>
       </div>
 

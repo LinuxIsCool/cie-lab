@@ -73,9 +73,16 @@ export default function Graph() {
         <p className="text-sm text-slate-500">Positions clustered by <em>meaning</em>, not people by vote — the exploration surface next to P0's opinion map</p>
       </header>
 
-      <div className="mb-4 max-w-3xl">
-        <Commentary kind="design" title="A different lens than P0">
-          The dashboard groups <em>people</em> by how they voted. This groups <em>statements</em> by what they mean, then hangs each resident's comment next to the position it relates to.
+      <div className="mb-4 max-w-3xl space-y-2">
+        <Commentary kind="perspective" title="What a 'knowledge graph' is">
+          A knowledge graph shows ideas as a web of connected dots instead of a list. Here every dot is a statement or a
+          resident's comment, and a line connects two that relate. It's a way to <em>wander</em> the landscape of
+          opinion rather than read a ranked table — good for spotting how themes and voices hang together.
+        </Commentary>
+        <Commentary kind="design" title="A different lens than the dashboard">
+          The main dashboard (P0) groups <em>people</em> by how they voted. This groups <em>statements</em> by what they
+          <em> mean</em> — same data, flipped on its side — and hangs each resident's comment next to the position it
+          relates to. Two different ways to make sense of one conversation, side by side.
         </Commentary>
       </div>
 
@@ -113,8 +120,10 @@ export default function Graph() {
             })}
           </svg>
           </div>
-          <Commentary kind="caveat" title="Themes here are loose">
-            These short civic statements look alike to the model, so the clusters are weak — the <em>links</em> between nodes tell you more than the theme groupings. Hover a node to trace its links; click to pin.
+          <Commentary kind="caveat" title="Being honest: the themes here are loose">
+            The big dark hubs are AI-named "themes" it grouped statements into. But these statements are short and
+            similar, so the grouping is weak — and we show that rather than hide it. The useful signal is the <em>links</em>
+            between dots, not the theme bubbles. Hover any dot to trace what it connects to; click to pin it.
           </Commentary>
         </div>
 
@@ -188,11 +197,15 @@ export default function Graph() {
           </div>
 
           <div className="space-y-2">
-            <Commentary kind="methodology" title="Stance comes from votes">
-              A voice supports or challenges a position based on how that person actually voted — not the AI's guess. The AI only shortens the comment into a claim.
+            <Commentary kind="methodology" title="A 'voice' is a real comment, and its side comes from a real vote">
+              The small colored dots are residents' comments. Whether a voice <span className="font-semibold text-emerald-700">supports</span>
+              or <span className="font-semibold text-rose-600">challenges</span> a statement is read from how that person
+              actually voted on it — not the AI's guess. The AI only shortens their comment into a short claim; the
+              stance is still theirs.
             </Commentary>
-            <Commentary kind="architecture" title="Drawn from a prebuilt layout">
-              The node positions are computed once in Python and saved, so the page just draws them — fast and simple.
+            <Commentary kind="architecture" title="Why it loads instantly">
+              Working out where every dot should sit is real computation, so it's done once ahead of time and saved. The
+              page just draws the finished picture — which is also why exploring it feels immediate.
             </Commentary>
           </div>
         </div>

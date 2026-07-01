@@ -66,8 +66,16 @@ export default function Baseline() {
       </header>
 
       <div className="mb-4 space-y-2">
-        <Commentary kind="design" title="This is the control">
-          Same votes as P0, shown the plain Pol.is way — just the opinion map and the statements. No "feeling heard", no free-text comments, no AI group labels, no confidence badges. Flip between this and P0 to see exactly what those extra layers buy.
+        <Commentary kind="perspective" title="What 'Pol.is' is">
+          Pol.is is a well-known open-source tool that pioneered this whole vote-and-cluster approach — it was used
+          famously by Taiwan's government to find common ground on contentious laws. CIE builds on the same idea, and
+          this page is the plain, no-frills Pol.is version of the data.
+        </Commentary>
+        <Commentary kind="design" title="Why show a stripped-down version?">
+          This is the <strong>control</strong> in the experiment. It shows the exact same votes as P0 (the main
+          dashboard) but deliberately withholds everything P0 adds — no "feeling heard", no comments, no AI group
+          labels, no confidence badges. Flip between this and P0 and the difference <em>is</em> the answer to "are
+          those extra layers worth building?"
         </Commentary>
       </div>
 
@@ -85,8 +93,11 @@ export default function Baseline() {
               ))}
             </div>
           </div>
-          <Commentary kind="perspective" title="Groups are just A, B, C here">
-            Classic Pol.is names groups by letter and leaves you to read them off the map. The plain-English labels on P0 ("Essential Public Services"…) are an AI convenience layer P0 adds on top.
+          <Commentary kind="perspective" title="Reading the map: groups are just A, B, C">
+            Every dot is one person, positioned so that people who voted alike sit near each other — the clumps are the
+            opinion groups. Classic Pol.is just numbers them by letter and leaves you to interpret them. Those
+            plain-English names on P0 ("Essential Public Services"…) are a convenience the AI adds on top; here you read
+            the groups straight off the map.
           </Commentary>
         </div>
 
@@ -98,8 +109,11 @@ export default function Baseline() {
 
           <div className="space-y-3">
             <h2 className="text-sm font-semibold text-slate-600">What divides people <span className="text-[11px] font-normal text-slate-400">— groups split hardest here</span></h2>
-            <Commentary kind="methodology" title="Majority isn't consensus">
-              Pol.is's core insight: a statement can win an overall majority while a group flatly rejects it. These are ranked by how far apart the groups are — the biggest gaps are where a simple headline poll would mislead.
+            <Commentary kind="methodology" title="Why 'majority' can mislead">
+              Pol.is's core insight, and the reason CIE exists: a statement can win an overall majority while one group
+              flatly rejects it. These are ranked by how far apart the groups are — watch for a modest overall number
+              hiding a big split (one group at 87%, another at 15%). That gap is exactly what a simple headline poll
+              would paper over, and why "what does the majority want?" is the wrong question.
             </Commentary>
             {divisive.map((s) => <Row key={s.id} s={s} />)}
           </div>

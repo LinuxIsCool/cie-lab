@@ -42,16 +42,32 @@ export default function Dashboard() {
         ))}
       </div>
 
+      <div className="mb-4">
+        <Commentary kind="perspective" title="What you're looking at">
+          This is the main dashboard — what a candidate would see after residents respond to a set of statements by
+          agreeing, disagreeing, or passing. It's the heart of the whole project; every other demo in this lab is a
+          variation on it. Read it top to bottom: the common ground first, then a map of where people stand, then the
+          groups themselves and what they said in their own words.
+        </Commentary>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* statements (the headline) */}
         <div className="lg:col-span-2 space-y-3">
           <h2 className="text-sm font-semibold text-slate-600">What constituents agree on, ranked by bridging</h2>
           <div className="space-y-2">
             <Commentary kind="methodology" title="“Bridging” means broad agreement">
-              We find opinion groups from voting patterns, then rank statements that <em>every</em> group tends to accept — not just what the majority wants.
+              This list is ranked by how well each statement <em>bridges</em> — how well it holds up across
+              <em> every</em> group, not just the biggest one. A plain poll would surface whatever 51% want; this
+              deliberately promotes what people who disagree can <em>both</em> still accept, because that shared
+              ground is what a real decision can stand on.
             </Commentary>
-            <Commentary kind="design" title="The badge is a confidence check">
-              A statement reads <span className="font-semibold text-emerald-700">Bridges across groups</span> only when support is high and solid in every group — otherwise <span className="font-semibold text-sky-700">Directional</span> (a hint) or <span className="font-semibold text-slate-500">Below bar</span>. The small print (GIC, group size, coverage) is the receipts.
+            <Commentary kind="design" title="The badge tells you how sure to be">
+              <span className="font-semibold text-emerald-700">Bridges across groups</span> means the agreement is
+              strong and statistically solid in every group. <span className="font-semibold text-sky-700">Directional</span>
+              is a promising hint that isn't confirmed yet, and <span className="font-semibold text-slate-500">Below bar</span>
+              means don't claim agreement. Small groups make percentages jumpy, so the tool only makes the strong claim
+              when the math backs it — the fine print (group size, coverage) is the receipts.
             </Commentary>
           </div>
           {art.statements.map((s) => <StatementCard key={s.id} s={s} groups={art.opinion_groups} />)}
@@ -64,8 +80,11 @@ export default function Dashboard() {
             <OpinionMap art={art} />
             <p className="mt-2 text-[11px] text-slate-400">Each dot is a respondent, placed by how they voted.</p>
           </div>
-          <Commentary kind="principle" title="Groups come from votes, not identity">
-            Clusters form from vote patterns only — no demographics, no profiling. The AI just puts a neutral label on each one.
+          <Commentary kind="principle" title="What an 'opinion group' is">
+            The tool watches how people vote and sorts them into a few clusters that vote alike — each cluster is an
+            "opinion group." It's built from votes only: no names, no demographics, no profiling. The plain-English
+            label (like "Essential Public Services") is just the AI's neutral description of what that cluster tends to
+            support; the cluster itself is pure math.
           </Commentary>
 
           <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
@@ -90,8 +109,10 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-          <Commentary kind="methodology" title="“Feeling heard” is an overlay">
-            Everyone answers it, so it's shown here — but it never helps form the groups. That keeps the groups purely about how people voted.
+          <Commentary kind="methodology" title="“Feeling heard” — a light extra signal">
+            Alongside voting, everyone also rates how heard they felt and how strongly they hold their view. It's shown
+            here as an overlay but never used to form the groups — so the clusters stay purely about how people voted,
+            while you still learn whether the process itself felt fair to people.
           </Commentary>
 
           <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
@@ -106,7 +127,9 @@ export default function Dashboard() {
             </div>
           </div>
           <Commentary kind="perspective" title="Comments stay in people's words">
-            About {(art.overall_self_codes.comment_rate * 100).toFixed(0)}% leave one. In a real deployment these are paraphrased for privacy, never shown word-for-word.
+            Beyond voting, about {(art.overall_self_codes.comment_rate * 100).toFixed(0)}% add an open comment. They're
+            shown as-is here on sample data, but with real residents they'd be paraphrased for privacy — you'd get the
+            gist, never a quote that could identify someone.
           </Commentary>
         </div>
       </div>
