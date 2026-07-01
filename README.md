@@ -93,14 +93,25 @@ and you confirm before it counts. Surfaces the governance/egress edge honestly (
 LLM). Two endpoints on the same server (`analysis/converse.py`): `/api/facilitate`,
 `/api/extract`. Lives at `#/p3` (needs the ask+converse server running).
 
-## POC #5 — Comhairle interop-export (P1)
+## POC #5 — Comhairle interop & integration assessment (P1)
 
-Makes "interoperate, don't fork" concrete. Exports the **raw** deliberation
-(statements + anonymized participants + votes, not the computed results) as a portable
-`cie.interop.v0` flat-file, so another platform could ingest it and re-run its own
-analysis — lossless because it's the evidence, not the conclusions. Shows a candidate
-field-mapping to Comhairle's grammar with one row honestly marked **pending** (unverified
-against their source). No LLM needed; `run.py` emits it unconditionally. Lives at `#/p1`.
+The full compare-and-contrast made shareable — grounded in the 06-29 assessment doc and
+**re-verified against `crownshy/comhairle` HEAD** (2026-07-01, via a repo-study agent). Covers:
+the build-vs-fork **decision** + AGPL §13 read (copyright is team-held with no CLA, so a
+proprietary fork is closed); a **side-by-side** (10 dimensions); the **70-item coverage**
+(4 satisfies / 15 partial / 35 gap / 16 N/A — the two systems agree on the Pol.is spine and
+diverge on everything CIE adds); the **data-model mapping** with per-field fidelity
+(clean/re-key/recast/lossy/gap/dropped — incl. the HEAD-verified `Reaction`-has-no-target-id
+gap); **two integration paths** (export-first ~2–4 d vs fork-adapter ~7–12 d); **two upstream
+gifts**; and the working `cie.interop.v0` export (raw votes, anonymized, download). `#/p1`.
+
+## POC #11 — Comhairle adapter / white-label (P10)
+
+The deep-integration counterpart to P1: CIE's bridging as a native Comhairle **tool** (a
+`ToolImpl` modeled on `polis.rs`, a `cie_statement_aux` table + migration, the enum/match-arm/
+`router()` surgery, a real `sync_data`), plus the white-label angle. Shown at depth as a
+contribution plan — deferred until Comhairle wires its interchange ingest (export-first now,
+adapter-later). `#/p10`.
 
 ## Layout
 - `analysis/` — Python (uv): `gen_synthetic.py`, `bridging.py`, `telus.py` (free TELUS client),

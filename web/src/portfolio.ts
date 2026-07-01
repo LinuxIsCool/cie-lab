@@ -80,7 +80,7 @@ export const POCS: Poc[] = [
   },
   {
     id: "P10", route: "/p10", short: "Comhairle adapter / white-label", title: "Comhairle Adapter-as-Tool / white-label",
-    status: "planned", wave: "Deferred",
+    status: "built", wave: "Built", labPoc: "POC #11",
     question: "The Phase-2 'join the crew' contribution.",
     why: "Only once Comhairle wires its ingest; else defer via ADR.", cost: "high",
   },

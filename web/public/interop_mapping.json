@@ -1,46 +1,172 @@
 {
   "mapping": [
     {
-      "cie": "statement.id",
-      "interop": "statement.id",
-      "comhairle": "Comment.id",
-      "verified": true
+      "cie": "vote (agree / disagree / pass)",
+      "comhairle": "SimpleVote (Positive / Negative / Neutral)",
+      "fidelity": "clean",
+      "note": "maps 1:1"
     },
     {
-      "cie": "statement.text",
-      "interop": "statement.text",
-      "comhairle": "Comment.body",
-      "verified": true
+      "cie": "statement",
+      "comhairle": "Statement",
+      "fidelity": "clean",
+      "note": "direct"
     },
     {
-      "cie": "vote.value (agree/disagree/pass)",
-      "interop": "vote.value (+1/-1/0)",
-      "comhairle": "Reaction.kind",
-      "verified": true
+      "cie": "opinion group (cluster)",
+      "comhairle": "Group { entity_type: Participant }",
+      "fidelity": "clean",
+      "note": "cohort \u2192 group"
     },
     {
-      "cie": "vote.participant",
-      "interop": "vote.participant",
-      "comhairle": "Reaction.author",
-      "verified": true
+      "cie": "analysis provenance",
+      "comhairle": "Generator::Algorithm(AlgorithmDescriptor)",
+      "fidelity": "clean",
+      "note": "who / what computed it"
     },
     {
-      "cie": "vote.statement",
-      "interop": "vote.statement",
-      "comhairle": "Reaction.target_id",
-      "verified": false
+      "cie": "participant (ULID)",
+      "comhairle": "Participant (UUID)",
+      "fidelity": "rekey",
+      "note": "ULID \u2192 UUIDv5; id scheme differs"
     },
     {
-      "cie": "participant.id",
-      "interop": "participant.id",
-      "comhairle": "Participant.id",
-      "verified": true
+      "cie": "open text / comment",
+      "comhairle": "Statement { role: Belief }",
+      "fidelity": "recast",
+      "note": "a comment becomes a statement, not a reaction"
     },
     {
-      "cie": "opinion group (derived)",
-      "interop": "derived.groups[]",
-      "comhairle": "(recomputed by receiver)",
-      "verified": true
+      "cie": "scale / intensity",
+      "comhairle": "Score(i32)",
+      "fidelity": "lossy",
+      "note": "range + unit-normalization lost"
+    },
+    {
+      "cie": "vote \u2192 which statement",
+      "comhairle": "Reaction.entity_type = Statement (no target id, no timestamp)",
+      "fidelity": "gap",
+      "note": "Reaction names a type but carries no target-entity id and no timestamp \u2014 'P voted + on statement S at time T' can't be expressed. Verified against HEAD: byte-identical schema on staging + main. Proposed as an upstream fix."
+    },
+    {
+      "cie": "choice (multi-select)",
+      "comhairle": "\u2014 (no interchange type)",
+      "fidelity": "gap",
+      "note": "no analog; would need an invented mapping"
+    },
+    {
+      "cie": "createdAt / submissionId / promptShown",
+      "comhairle": "\u2014",
+      "fidelity": "dropped",
+      "note": "Reaction carries no time / session / audit"
+    },
+    {
+      "cie": "append-only + hash chain \u00b7 consent events \u00b7 moderation class",
+      "comhairle": "\u2014",
+      "fidelity": "dropped",
+      "note": "no analog \u2014 CIE's whole trust layer has no target in the grammar"
     }
-  ]
+  ],
+  "assessment": {
+    "decision": "Ship CIE's own stack for Pilot 1; align with Comhairle at the protocol layer afterward. The stacks diverge (Rust/Svelte vs TS/Python), CIE is already validated and tuned to the campaign, and AGPL \u00a713 rules out the fork-and-SaaS path. Interoperate \u2014 don't fork.",
+    "agpl": "Running a modified Comhairle as a network service (AGPL-3.0 \u00a713) obliges you to release the complete corresponding source \u2014 your adapter, branding, every change \u2014 to every user of the hosted instance. And a clean dual-license escape is unlikely: copyright is spread across the Crown Shy team with no contributor agreement pooling the rights, so a proprietary exception would need sign-off from every contributor. CIE's own clean-room stack carries none of this, which is why the engine stays the product core and Comhairle is an interop partner, not a base to hide inside a paid product.",
+    "verified": "Comhairle findings re-verified against crownshy/comhairle HEAD (default branch 'staging') on 2026-07-01: AGPL-3.0, 91 SQLx migrations, Rust/Axum + SvelteKit, production on comhairle.scot. The interchange grammar is real but unpopulated \u2014 the data_model crate is a 3-line stub, no tool overrides sync_data, and no interchange tables exist (tools persist to per-tool aux tables like polis_statement_aux). Reaction carries neither a target-entity id nor a timestamp, byte-identical on staging + main.",
+    "side_by_side": [
+      {
+        "dim": "Philosophy",
+        "comhairle": "Wrap & orchestrate existing OSS deliberation tools",
+        "cie": "Same \u2014 clean-room Pol.is math + a thin custom app"
+      },
+      {
+        "dim": "Maturity",
+        "comhairle": "Production (comhairle.scot), ~92 migrations, active",
+        "cie": "Validated pipeline + scaffold; not yet deployed"
+      },
+      {
+        "dim": "Stack",
+        "comhairle": "Rust (Axum, SQLx) + SvelteKit",
+        "cie": "TypeScript (React Router 7) + Python pipeline"
+      },
+      {
+        "dim": "Scope",
+        "comhairle": "Broad \u2014 many tools, workflows, multi-org",
+        "cie": "Narrow & sharp \u2014 one campaign-listening flow"
+      },
+      {
+        "dim": "Analysis",
+        "comhairle": "Orchestrates Pol.is; bridging needs hand-coding",
+        "cie": "Bridging is the core \u2014 clean-room GIC, validated on 4 real datasets"
+      },
+      {
+        "dim": "Trust / integrity",
+        "comhairle": "Ordinary mutable Postgres; not surfaced",
+        "cie": "Append-only DB, roles, guard triggers, hash-chain, two-tier consent"
+      },
+      {
+        "dim": "Product surface",
+        "comhairle": "Admin builder + public participation",
+        "cie": "Candidate dashboard, validity cards, scope banner, bridging badges"
+      },
+      {
+        "dim": "Extension",
+        "comhairle": "ToolImpl Rust trait \u2014 compile-time, fork-level",
+        "cie": "Own the whole stack"
+      },
+      {
+        "dim": "Interop seam",
+        "comhairle": "data_model/schema.json (Statement/Reaction/Group/Participant)",
+        "cie": "Record contract is elicitation-agnostic; maps cleanly to theirs"
+      },
+      {
+        "dim": "License",
+        "comhairle": "AGPL-3.0",
+        "cie": "Ours to license"
+      }
+    ],
+    "coverage": {
+      "satisfies": 4,
+      "partial": 15,
+      "gap": 35,
+      "na": 16,
+      "total": 70,
+      "finding": "The two systems agree on the Pol.is spine and diverge on everything CIE adds around it. The only items Comhairle fully satisfies (votes-only aggregation, demographic-blind clustering, the Pol.is tool, the PCA\u2192k-means core) are the Pol.is-derived substrate CIE already re-implements clean-room."
+    },
+    "cie_gaps": [
+      "Bridging as a gated claim \u2014 GIC \u2265 0.5 + per-group Wilson lower bound > 0.5 + a vote floor. Comhairle shows Pol.is's raw consensus float: a number, not a defensible claim.",
+      "Database-enforced append-only trust + off-box hash chain. Comhairle uses ordinary mutable Postgres.",
+      "Two-tier consent + PII quarantine. Comhairle has a single consent boolean and stores joinable demographics.",
+      "The quality-gate ladder + validity cards. Comhairle renders Pol.is math live and ungated.",
+      "Paraphrase-only quotes. Comhairle stores and serves verbatim statement text \u2014 the opposite policy.",
+      "Claim discipline \u2014 scope banner, copy linter, badge vocabulary, methods note.",
+      "Data-sovereignty egress \u2014 local embeddings + one batch-LLM call over scrubbed aggregates; Comhairle makes many per-record external AI calls."
+    ],
+    "comhairle_has": "Composable multi-tool workflows (quadratic-vote prioritization, ranking, ThinkingSpace), RAGFlow document Q&A, multi-org tenancy, i18n, ScotAccount OIDC + anonymous\u2192account upgrade, audio transcription, and demographic / representativeness breakdowns. (That last one is exactly what CIE deliberately quarantines \u2014 a tension to flag.)",
+    "paths": [
+      {
+        "name": "Path 1 \u00b7 Interop-export",
+        "effort": "~2\u20134 days",
+        "fork": false,
+        "recommended": true,
+        "note": "A pipeline stage that serializes CIE data into Comhairle's schema.json shape. No Comhairle code, reversible, PII stays quarantined \u2014 the literal artifact to bring to the July call: 'CIE speaks Comhairle's grammar.'"
+      },
+      {
+        "name": "Path 2 \u00b7 Custom adapter (fork)",
+        "effort": "~7\u201312 days",
+        "fork": true,
+        "recommended": false,
+        "note": "A CIE ToolImpl inside a Comhairle fork. Buys little today \u2014 Comhairle's interchange ingest is unwired \u2014 and carries fork-maintenance + AGPL \u00a713 exposure. Fund it once there's a live consumer."
+      }
+    ],
+    "posture": "Export-first, adapter-later. CIE stays the system of record in every scenario \u2014 the mapping is lossy in exactly the direction that matters: CIE's trust, consent, moderation, and bridging-badge guarantees have no target in Comhairle's model. So Comhairle is at best a downstream interop consumer, never a replacement store.",
+    "gifts": [
+      {
+        "t": "A Reaction target-entity id",
+        "d": "So 'participant P voted + on statement S' can be expressed at all \u2014 a real hole this mapping surfaced."
+      },
+      {
+        "t": "A moderation / provenance entity",
+        "d": "So the two-class moderation policy (hide-but-count vs exclude-session) survives the handoff instead of silently corrupting the statistics."
+      }
+    ]
+  }
 }
