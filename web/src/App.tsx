@@ -12,6 +12,7 @@ import Interop from "./views/Interop";
 import Converse from "./views/Converse";
 import Hybrid from "./views/Hybrid";
 import Pni from "./views/Pni";
+import Wizard from "./views/Wizard";
 import Planned from "./views/Planned";
 
 function useHashRoute() {
@@ -91,6 +92,7 @@ function Content({ route }: { route: string }) {
   if (poc.route === "/p3") return <Converse />;
   if (poc.route === "/p7") return <Hybrid />;
   if (poc.route === "/p4") return <Pni />;
+  if (poc.route === "/p8") return <Wizard />;
   if (poc.route === "/p5") return <Graph />;
   if (poc.route === "/p6") return <Ask />;
   return <Planned poc={poc} />;

@@ -68,7 +68,7 @@ export const POCS: Poc[] = [
   },
   {
     id: "P8", route: "/p8", short: "Config wizard", title: "Config Wizard",
-    status: "planned", wave: "Wave 3",
+    status: "built", wave: "Built", labPoc: "POC #9",
     question: "Can a non-technical campaign stand up an instance unaided?",
     why: "The two-way door before SaaS.", cost: "med",
   },
