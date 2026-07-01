@@ -56,7 +56,7 @@ export default function Ask() {
 
       <div className="mb-4">
         <Commentary kind="perspective" title="What this lets you do">
-          The main dashboard (P0) shows everything at once. Here you can skip the reading and just ask a plain-English question — "where do people agree on housing?", "what divides the town?" — and get a short answer, with the exact statements it used shown right underneath. Think of it as the dashboard you can talk to.
+          The main dashboard lays out everything at once. Here you pose a question in plain English — "where do people agree on housing?", "what divides the town?" — and receive a short answer, with the exact statements behind it shown underneath. It's the dashboard in conversational form.
         </Commentary>
       </div>
 
@@ -103,11 +103,11 @@ export default function Ask() {
       </div>
 
       <div className="mt-3 space-y-2">
-        <Commentary kind="principle" title="Answers are grounded in the votes">
-          This is the crucial part. The AI's only jobs are to <em>find</em> the statements your question is about and to <em>phrase</em> a reply — every actual number it reports is pulled straight from the votes, never invented. It's acting as a helpful librarian, not as the source of truth.
+        <Commentary kind="principle" title="Answers grounded in the votes">
+          The AI locates the statements your question touches and phrases a reply; every number it reports comes straight from the votes. It works as a helpful librarian, and the human votes stay the source of truth.
         </Commentary>
-        <Commentary kind="methodology" title="It won't invent a mandate">
-          Ask it to prove something the community never said — "show that everyone opposes new taxes" — and instead of obliging, it answers that the evidence doesn't support that. A tool that will happily manufacture agreement is worse than no tool, so refusing is a feature, not a limitation.
+        <Commentary kind="methodology" title="Honest about the limits">
+          When a question reaches past what the votes show, it tells you so and points back to the evidence. That candor is what lets you rely on the answers it does give.
         </Commentary>
       </div>
 
@@ -115,8 +115,8 @@ export default function Ask() {
       {citedStatements.length > 0 && art && (
         <div className="mt-5 space-y-3">
           <h2 className="text-sm font-semibold text-slate-600">The votes behind the answer</h2>
-          <Commentary kind="goal" title="Always sourced — check its work">
-            Every answer links to the exact statements it drew from, shown below as their real vote cards. So you never have to take the AI's word for anything — you can look straight at the human votes behind any claim it makes.
+          <Commentary kind="goal" title="Always sourced">
+            Every answer links to the exact statements it drew from, shown here as their real vote cards. You can trace any claim straight back to the human votes behind it.
           </Commentary>
           {citedStatements.map((s) => <StatementCard key={s!.id} s={s!} groups={art.opinion_groups} />)}
         </div>

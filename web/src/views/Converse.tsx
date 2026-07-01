@@ -77,13 +77,13 @@ export default function Converse() {
 
       <div className="mb-4 space-y-2">
         <Commentary kind="perspective" title="What you're doing here">
-          Every other demo starts from votes on ready-made statements. This one starts from a <em>conversation</em>. You chat with a neutral AI facilitator — like a good interviewer, it asks open questions and never pushes an opinion — and afterward it reflects back the positions you expressed, so they could feed into the same picture the votes build.
+          Every other demo starts from votes on ready-made statements. This one starts from a <em>conversation</em>. You talk with a neutral AI facilitator — like a thoughtful interviewer, it asks open questions and stays neutral — and afterward it reflects back the positions you expressed, so they join the same picture the votes build.
         </Commentary>
-        <Commentary kind="design" title="Why offer a conversation at all">
-          Some people will never fill out a survey but will happily talk. Meeting them in their own words, at their own pace, reaches voices a checkbox form would miss entirely. Whether that's worth the extra complexity is exactly the question this prototype exists to test.
+        <Commentary kind="design" title="Why a conversation">
+          Many people who pass over a form will gladly talk. Meeting them in their own words, at their own pace, widens who takes part. Testing whether that reach is worth the added complexity is the purpose of this prototype.
         </Commentary>
-        <Commentary kind="caveat" title="This is the governance edge">
-          To make it work, a resident's free-text has to be sent to a language model. On the made-up data here that's free and harmless — but with real residents this is precisely the step that needs consent and a proper data-governance gate. The demo keeps that cost visible on purpose rather than hiding it.
+        <Commentary kind="caveat" title="The governance edge">
+          Running this sends a resident's free-text to a language model. On the sample data here that stays free and safe; with real residents it becomes the step that calls for consent and a data-governance gate. The demo keeps that cost in view on purpose.
         </Commentary>
       </div>
 
