@@ -1,0 +1,1790 @@
+{
+  "schema": "cie.kg.v0",
+  "meta": {
+    "generated_from": "cie.results.v0",
+    "n_nodes": 53,
+    "n_edges": 122,
+    "n_themes": 4,
+    "n_positions": 13,
+    "n_voices": 36,
+    "n_groups": 3,
+    "rel_edge_min": 0.55
+  },
+  "themes": [
+    {
+      "id": "T0",
+      "label": "Community Development Planning",
+      "members": [
+        "S02",
+        "S11"
+      ]
+    },
+    {
+      "id": "T1",
+      "label": "Local Government Priorities",
+      "members": [
+        "S04",
+        "S01",
+        "S03",
+        "S00",
+        "S05",
+        "S06",
+        "S07",
+        "S09"
+      ]
+    },
+    {
+      "id": "T2",
+      "label": "Residential Land Use",
+      "members": [
+        "S08",
+        "S10"
+      ]
+    },
+    {
+      "id": "T3",
+      "label": "Elm Street Traffic",
+      "members": [
+        "S12"
+      ]
+    }
+  ],
+  "group_labels": [
+    null,
+    null,
+    null
+  ],
+  "nodes": [
+    {
+      "id": "T0",
+      "type": "theme",
+      "label": "Community Development Planning",
+      "size": 22,
+      "x": 0.3386,
+      "y": 0.3447
+    },
+    {
+      "id": "T1",
+      "type": "theme",
+      "label": "Local Government Priorities",
+      "size": 22,
+      "x": 0.5888,
+      "y": 0.4861
+    },
+    {
+      "id": "T2",
+      "type": "theme",
+      "label": "Residential Land Use",
+      "size": 22,
+      "x": 0.4586,
+      "y": 0.5978
+    },
+    {
+      "id": "T3",
+      "type": "theme",
+      "label": "Elm Street Traffic",
+      "size": 22,
+      "x": 0.6239,
+      "y": 0.7847
+    },
+    {
+      "id": "S04",
+      "type": "position",
+      "label": "S04",
+      "text": "Clean drinking water infrastructure should be a top spending priority.",
+      "tag": "bridge",
+      "badge": "representative-enough",
+      "gic": 0.5629,
+      "theme": 1,
+      "size": 15.125,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 55,
+          "disagrees": 15,
+          "passes": 9,
+          "seen": 70,
+          "agree_rate": 0.786,
+          "wilson_lower": 0.676
+        },
+        {
+          "group": 1,
+          "agrees": 91,
+          "disagrees": 17,
+          "passes": 15,
+          "seen": 108,
+          "agree_rate": 0.843,
+          "wilson_lower": 0.762
+        },
+        {
+          "group": 2,
+          "agrees": 89,
+          "disagrees": 13,
+          "passes": 16,
+          "seen": 102,
+          "agree_rate": 0.873,
+          "wilson_lower": 0.794
+        }
+      ],
+      "x": 0.5195,
+      "y": 0.2904
+    },
+    {
+      "id": "S01",
+      "type": "position",
+      "label": "S01",
+      "text": "Public school funding should keep pace with enrollment growth.",
+      "tag": "bridge",
+      "badge": "representative-enough",
+      "gic": 0.5567,
+      "theme": 1,
+      "size": 14.796875,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 50,
+          "disagrees": 12,
+          "passes": 17,
+          "seen": 62,
+          "agree_rate": 0.806,
+          "wilson_lower": 0.691
+        },
+        {
+          "group": 1,
+          "agrees": 89,
+          "disagrees": 17,
+          "passes": 17,
+          "seen": 106,
+          "agree_rate": 0.84,
+          "wilson_lower": 0.758
+        },
+        {
+          "group": 2,
+          "agrees": 82,
+          "disagrees": 15,
+          "passes": 21,
+          "seen": 97,
+          "agree_rate": 0.845,
+          "wilson_lower": 0.76
+        }
+      ],
+      "x": 0.6553,
+      "y": 0.2952
+    },
+    {
+      "id": "S03",
+      "type": "position",
+      "label": "S03",
+      "text": "Local emergency services need reliable funding regardless of the budget cycle.",
+      "tag": "bridge",
+      "badge": "representative-enough",
+      "gic": 0.5184,
+      "theme": 1,
+      "size": 15.212499999999999,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 59,
+          "disagrees": 13,
+          "passes": 7,
+          "seen": 72,
+          "agree_rate": 0.819,
+          "wilson_lower": 0.715
+        },
+        {
+          "group": 1,
+          "agrees": 80,
+          "disagrees": 23,
+          "passes": 20,
+          "seen": 103,
+          "agree_rate": 0.777,
+          "wilson_lower": 0.687
+        },
+        {
+          "group": 2,
+          "agrees": 91,
+          "disagrees": 18,
+          "passes": 9,
+          "seen": 109,
+          "agree_rate": 0.835,
+          "wilson_lower": 0.754
+        }
+      ],
+      "x": 0.6194,
+      "y": 0.4617
+    },
+    {
+      "id": "S02",
+      "type": "position",
+      "label": "S02",
+      "text": "Residents deserve clear, plain-language notice before zoning changes.",
+      "tag": "bridge",
+      "badge": "representative-enough",
+      "gic": 0.5041,
+      "theme": 0,
+      "size": 15.037500000000001,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 63,
+          "disagrees": 9,
+          "passes": 7,
+          "seen": 72,
+          "agree_rate": 0.875,
+          "wilson_lower": 0.779
+        },
+        {
+          "group": 1,
+          "agrees": 84,
+          "disagrees": 23,
+          "passes": 16,
+          "seen": 107,
+          "agree_rate": 0.785,
+          "wilson_lower": 0.698
+        },
+        {
+          "group": 2,
+          "agrees": 73,
+          "disagrees": 24,
+          "passes": 21,
+          "seen": 97,
+          "agree_rate": 0.753,
+          "wilson_lower": 0.658
+        }
+      ],
+      "x": 0.4723,
+      "y": 0.4208
+    },
+    {
+      "id": "S00",
+      "type": "position",
+      "label": "S00",
+      "text": "Traffic impact should be weighed before approving new developments.",
+      "tag": "bridge",
+      "badge": "directional",
+      "gic": 0.4825,
+      "theme": 1,
+      "size": 15.234375,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 52,
+          "disagrees": 18,
+          "passes": 9,
+          "seen": 70,
+          "agree_rate": 0.743,
+          "wilson_lower": 0.63
+        },
+        {
+          "group": 1,
+          "agrees": 80,
+          "disagrees": 29,
+          "passes": 14,
+          "seen": 109,
+          "agree_rate": 0.734,
+          "wilson_lower": 0.644
+        },
+        {
+          "group": 2,
+          "agrees": 96,
+          "disagrees": 10,
+          "passes": 12,
+          "seen": 106,
+          "agree_rate": 0.906,
+          "wilson_lower": 0.835
+        }
+      ],
+      "x": 0.6956,
+      "y": 0.6119
+    },
+    {
+      "id": "S05",
+      "type": "position",
+      "label": "S05",
+      "text": "Property taxes should be cut even if it reduces public services.",
+      "tag": "wedge",
+      "badge": "below-bar",
+      "gic": 0.1019,
+      "theme": 1,
+      "size": 14.90625,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 30,
+          "disagrees": 39,
+          "passes": 10,
+          "seen": 69,
+          "agree_rate": 0.435,
+          "wilson_lower": 0.324
+        },
+        {
+          "group": 1,
+          "agrees": 30,
+          "disagrees": 74,
+          "passes": 19,
+          "seen": 104,
+          "agree_rate": 0.288,
+          "wilson_lower": 0.21
+        },
+        {
+          "group": 2,
+          "agrees": 78,
+          "disagrees": 19,
+          "passes": 21,
+          "seen": 97,
+          "agree_rate": 0.804,
+          "wilson_lower": 0.714
+        }
+      ],
+      "x": 0.4094,
+      "y": 0.577
+    },
+    {
+      "id": "S06",
+      "type": "position",
+      "label": "S06",
+      "text": "New apartment density downtown is good for the community.",
+      "tag": "wedge",
+      "badge": "below-bar",
+      "gic": 0.0992,
+      "theme": 1,
+      "size": 15.256250000000001,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 41,
+          "disagrees": 28,
+          "passes": 10,
+          "seen": 69,
+          "agree_rate": 0.594,
+          "wilson_lower": 0.476
+        },
+        {
+          "group": 1,
+          "agrees": 23,
+          "disagrees": 92,
+          "passes": 8,
+          "seen": 115,
+          "agree_rate": 0.2,
+          "wilson_lower": 0.137
+        },
+        {
+          "group": 2,
+          "agrees": 84,
+          "disagrees": 18,
+          "passes": 16,
+          "seen": 102,
+          "agree_rate": 0.824,
+          "wilson_lower": 0.738
+        }
+      ],
+      "x": 0.7308,
+      "y": 0.4421
+    },
+    {
+      "id": "S07",
+      "type": "position",
+      "label": "S07",
+      "text": "The county should expand bus service even if ridership starts low.",
+      "tag": "wedge",
+      "badge": "below-bar",
+      "gic": 0.0894,
+      "theme": 1,
+      "size": 15.190625,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 44,
+          "disagrees": 26,
+          "passes": 9,
+          "seen": 70,
+          "agree_rate": 0.629,
+          "wilson_lower": 0.511
+        },
+        {
+          "group": 1,
+          "agrees": 20,
+          "disagrees": 92,
+          "passes": 11,
+          "seen": 112,
+          "agree_rate": 0.179,
+          "wilson_lower": 0.119
+        },
+        {
+          "group": 2,
+          "agrees": 79,
+          "disagrees": 22,
+          "passes": 17,
+          "seen": 101,
+          "agree_rate": 0.782,
+          "wilson_lower": 0.692
+        }
+      ],
+      "x": 0.5275,
+      "y": 0.697
+    },
+    {
+      "id": "S09",
+      "type": "position",
+      "label": "S09",
+      "text": "A new sports stadium is worth public subsidy.",
+      "tag": "wedge",
+      "badge": "below-bar",
+      "gic": 0.0865,
+      "theme": 1,
+      "size": 15.256250000000001,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 32,
+          "disagrees": 39,
+          "passes": 8,
+          "seen": 71,
+          "agree_rate": 0.451,
+          "wilson_lower": 0.34
+        },
+        {
+          "group": 1,
+          "agrees": 26,
+          "disagrees": 83,
+          "passes": 14,
+          "seen": 109,
+          "agree_rate": 0.239,
+          "wilson_lower": 0.168
+        },
+        {
+          "group": 2,
+          "agrees": 84,
+          "disagrees": 22,
+          "passes": 12,
+          "seen": 106,
+          "agree_rate": 0.792,
+          "wilson_lower": 0.706
+        }
+      ],
+      "x": 0.5476,
+      "y": 0.4329
+    },
+    {
+      "id": "S08",
+      "type": "position",
+      "label": "S08",
+      "text": "Short-term rentals should be tightly restricted in residential areas.",
+      "tag": "wedge",
+      "badge": "below-bar",
+      "gic": 0.0699,
+      "theme": 2,
+      "size": 15.146875000000001,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 46,
+          "disagrees": 23,
+          "passes": 10,
+          "seen": 69,
+          "agree_rate": 0.667,
+          "wilson_lower": 0.549
+        },
+        {
+          "group": 1,
+          "agrees": 13,
+          "disagrees": 94,
+          "passes": 16,
+          "seen": 107,
+          "agree_rate": 0.121,
+          "wilson_lower": 0.072
+        },
+        {
+          "group": 2,
+          "agrees": 87,
+          "disagrees": 18,
+          "passes": 13,
+          "seen": 105,
+          "agree_rate": 0.829,
+          "wilson_lower": 0.745
+        }
+      ],
+      "x": 0.4919,
+      "y": 0.4929
+    },
+    {
+      "id": "S11",
+      "type": "position",
+      "label": "S11",
+      "text": "The old mill site should become an arts district, not retail.",
+      "tag": "niche",
+      "badge": "below-bar",
+      "gic": 0.036,
+      "theme": 0,
+      "size": 15.278125,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 62,
+          "disagrees": 9,
+          "passes": 8,
+          "seen": 71,
+          "agree_rate": 0.873,
+          "wilson_lower": 0.776
+        },
+        {
+          "group": 1,
+          "agrees": 17,
+          "disagrees": 95,
+          "passes": 11,
+          "seen": 112,
+          "agree_rate": 0.152,
+          "wilson_lower": 0.097
+        },
+        {
+          "group": 2,
+          "agrees": 27,
+          "disagrees": 77,
+          "passes": 14,
+          "seen": 104,
+          "agree_rate": 0.26,
+          "wilson_lower": 0.185
+        }
+      ],
+      "x": 0.2558,
+      "y": 0.3502
+    },
+    {
+      "id": "S10",
+      "type": "position",
+      "label": "S10",
+      "text": "Backyard chickens should be allowed in all neighborhoods.",
+      "tag": "niche",
+      "badge": "below-bar",
+      "gic": 0.0248,
+      "theme": 2,
+      "size": 15.278125,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 57,
+          "disagrees": 14,
+          "passes": 8,
+          "seen": 71,
+          "agree_rate": 0.803,
+          "wilson_lower": 0.696
+        },
+        {
+          "group": 1,
+          "agrees": 20,
+          "disagrees": 90,
+          "passes": 13,
+          "seen": 110,
+          "agree_rate": 0.182,
+          "wilson_lower": 0.121
+        },
+        {
+          "group": 2,
+          "agrees": 17,
+          "disagrees": 89,
+          "passes": 12,
+          "seen": 106,
+          "agree_rate": 0.16,
+          "wilson_lower": 0.103
+        }
+      ],
+      "x": 0.5251,
+      "y": 0.5115
+    },
+    {
+      "id": "S12",
+      "type": "position",
+      "label": "S12",
+      "text": "Speed bumps should be added on Elm Street specifically.",
+      "tag": "niche",
+      "badge": "below-bar",
+      "gic": 0.0245,
+      "theme": 3,
+      "size": 15.409375,
+      "per_group": [
+        {
+          "group": 0,
+          "agrees": 59,
+          "disagrees": 14,
+          "passes": 6,
+          "seen": 73,
+          "agree_rate": 0.808,
+          "wilson_lower": 0.703
+        },
+        {
+          "group": 1,
+          "agrees": 23,
+          "disagrees": 91,
+          "passes": 9,
+          "seen": 114,
+          "agree_rate": 0.202,
+          "wilson_lower": 0.138
+        },
+        {
+          "group": 2,
+          "agrees": 15,
+          "disagrees": 91,
+          "passes": 12,
+          "seen": 106,
+          "agree_rate": 0.142,
+          "wilson_lower": 0.088
+        }
+      ],
+      "x": 0.5738,
+      "y": 0.6247
+    },
+    {
+      "id": "V0",
+      "type": "voice",
+      "label": "Water quality concerns were unreported last summer",
+      "text": "The water tasted off last summer and nobody told us why.",
+      "group": 2,
+      "linked_to": "S04",
+      "stance": "neutral",
+      "size": 6,
+      "x": 0.3934,
+      "y": 0.0873
+    },
+    {
+      "id": "V1",
+      "type": "voice",
+      "label": "Bus services would benefit non-driving residents",
+      "text": "Buses would help my mom who can't drive anymore.",
+      "group": 1,
+      "linked_to": "S07",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.5563,
+      "y": 0.9663
+    },
+    {
+      "id": "V2",
+      "type": "voice",
+      "label": "Bus services would benefit non-driving residents",
+      "text": "Buses would help my mom who can't drive anymore.",
+      "group": 0,
+      "linked_to": "S07",
+      "stance": "neutral",
+      "size": 6,
+      "x": 0.4984,
+      "y": 1.0
+    },
+    {
+      "id": "V3",
+      "type": "voice",
+      "label": "Resident requests no tax increase due to income",
+      "text": "Please don't raise my taxes, I'm on a fixed income.",
+      "group": 1,
+      "linked_to": "S05",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.2724,
+      "y": 0.8081
+    },
+    {
+      "id": "V4",
+      "type": "voice",
+      "label": "Rush hour traffic on the main road is heavy",
+      "text": "Traffic on the main road is already unbearable at rush hour.",
+      "group": 0,
+      "linked_to": "S00",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.8675,
+      "y": 0.846
+    },
+    {
+      "id": "V5",
+      "type": "voice",
+      "label": "Resident requests no tax increase due to income",
+      "text": "Please don't raise my taxes, I'm on a fixed income.",
+      "group": 2,
+      "linked_to": "S05",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.2534,
+      "y": 0.7308
+    },
+    {
+      "id": "V6",
+      "type": "voice",
+      "label": "More affordable housing is needed",
+      "text": "We need more housing people can actually afford.",
+      "group": 2,
+      "linked_to": "S06",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.9555,
+      "y": 0.5206
+    },
+    {
+      "id": "V7",
+      "type": "voice",
+      "label": "Resident requests no tax increase due to income",
+      "text": "Please don't raise my taxes, I'm on a fixed income.",
+      "group": 0,
+      "linked_to": "S05",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.1833,
+      "y": 0.7233
+    },
+    {
+      "id": "V8",
+      "type": "voice",
+      "label": "The resident supports a downtown arts district",
+      "text": "I love the idea of an arts district downtown.",
+      "group": 1,
+      "linked_to": "S11",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.0463,
+      "y": 0.4546
+    },
+    {
+      "id": "V9",
+      "type": "voice",
+      "label": "Rush hour traffic on the main road is heavy",
+      "text": "Traffic on the main road is already unbearable at rush hour.",
+      "group": 1,
+      "linked_to": "S00",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.7898,
+      "y": 0.861
+    },
+    {
+      "id": "V10",
+      "type": "voice",
+      "label": "More affordable housing is needed",
+      "text": "We need more housing people can actually afford.",
+      "group": 0,
+      "linked_to": "S06",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.921,
+      "y": 0.2947
+    },
+    {
+      "id": "V11",
+      "type": "voice",
+      "label": "The resident supports a downtown arts district",
+      "text": "I love the idea of an arts district downtown.",
+      "group": 1,
+      "linked_to": "S11",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.072,
+      "y": 0.3318
+    },
+    {
+      "id": "V12",
+      "type": "voice",
+      "label": "The resident requests adequate school staffing",
+      "text": "I just want my kids' school to have enough teachers.",
+      "group": 2,
+      "linked_to": "S01",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.6872,
+      "y": 0.0262
+    },
+    {
+      "id": "V13",
+      "type": "voice",
+      "label": "The resident supports a downtown arts district",
+      "text": "I love the idea of an arts district downtown.",
+      "group": 0,
+      "linked_to": "S11",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.0,
+      "y": 0.3848
+    },
+    {
+      "id": "V14",
+      "type": "voice",
+      "label": "Resident requests no tax increase due to income",
+      "text": "Please don't raise my taxes, I'm on a fixed income.",
+      "group": 2,
+      "linked_to": "S05",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.1932,
+      "y": 0.6292
+    },
+    {
+      "id": "V15",
+      "type": "voice",
+      "label": "Water quality concerns were unreported last summer",
+      "text": "The water tasted off last summer and nobody told us why.",
+      "group": 0,
+      "linked_to": "S04",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.4399,
+      "y": 0.027
+    },
+    {
+      "id": "V16",
+      "type": "voice",
+      "label": "Water quality concerns were unreported last summer",
+      "text": "The water tasted off last summer and nobody told us why.",
+      "group": 1,
+      "linked_to": "S04",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.5081,
+      "y": 0.0
+    },
+    {
+      "id": "V17",
+      "type": "voice",
+      "label": "Bus services would benefit non-driving residents",
+      "text": "Buses would help my mom who can't drive anymore.",
+      "group": 2,
+      "linked_to": "S07",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.4425,
+      "y": 0.9588
+    },
+    {
+      "id": "V18",
+      "type": "voice",
+      "label": "The resident supports a downtown arts district",
+      "text": "I love the idea of an arts district downtown.",
+      "group": 2,
+      "linked_to": "S11",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.0035,
+      "y": 0.2895
+    },
+    {
+      "id": "V19",
+      "type": "voice",
+      "label": "More affordable housing is needed",
+      "text": "We need more housing people can actually afford.",
+      "group": 1,
+      "linked_to": "S06",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.9839,
+      "y": 0.3451
+    },
+    {
+      "id": "V20",
+      "type": "voice",
+      "label": "The resident requests adequate school staffing",
+      "text": "I just want my kids' school to have enough teachers.",
+      "group": 1,
+      "linked_to": "S01",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.7643,
+      "y": 0.0178
+    },
+    {
+      "id": "V21",
+      "type": "voice",
+      "label": "The resident requests adequate school staffing",
+      "text": "I just want my kids' school to have enough teachers.",
+      "group": 1,
+      "linked_to": "S01",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.7664,
+      "y": 0.1058
+    },
+    {
+      "id": "V22",
+      "type": "voice",
+      "label": "The resident requests adequate school staffing",
+      "text": "I just want my kids' school to have enough teachers.",
+      "group": 0,
+      "linked_to": "S01",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.8423,
+      "y": 0.0744
+    },
+    {
+      "id": "V23",
+      "type": "voice",
+      "label": "Rush hour traffic on the main road is heavy",
+      "text": "Traffic on the main road is already unbearable at rush hour.",
+      "group": 1,
+      "linked_to": "S00",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.9261,
+      "y": 0.6739
+    },
+    {
+      "id": "V24",
+      "type": "voice",
+      "label": "Bus services would benefit non-driving residents",
+      "text": "Buses would help my mom who can't drive anymore.",
+      "group": 0,
+      "linked_to": "S07",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.3882,
+      "y": 0.9146
+    },
+    {
+      "id": "V25",
+      "type": "voice",
+      "label": "The resident supports a downtown arts district",
+      "text": "I love the idea of an arts district downtown.",
+      "group": 0,
+      "linked_to": "S11",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.0867,
+      "y": 0.127
+    },
+    {
+      "id": "V26",
+      "type": "voice",
+      "label": "Water quality concerns were unreported last summer",
+      "text": "The water tasted off last summer and nobody told us why.",
+      "group": 1,
+      "linked_to": "S04",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.5569,
+      "y": 0.0545
+    },
+    {
+      "id": "V27",
+      "type": "voice",
+      "label": "Rush hour traffic on the main road is heavy",
+      "text": "Traffic on the main road is already unbearable at rush hour.",
+      "group": 1,
+      "linked_to": "S00",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.9313,
+      "y": 0.7604
+    },
+    {
+      "id": "V28",
+      "type": "voice",
+      "label": "The resident supports a downtown arts district",
+      "text": "I love the idea of an arts district downtown.",
+      "group": 2,
+      "linked_to": "S11",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.0249,
+      "y": 0.205
+    },
+    {
+      "id": "V29",
+      "type": "voice",
+      "label": "More affordable housing is needed",
+      "text": "We need more housing people can actually afford.",
+      "group": 2,
+      "linked_to": "S06",
+      "stance": "supports",
+      "size": 6,
+      "x": 1.0,
+      "y": 0.4476
+    },
+    {
+      "id": "V30",
+      "type": "voice",
+      "label": "The resident supports a downtown arts district",
+      "text": "I love the idea of an arts district downtown.",
+      "group": 2,
+      "linked_to": "S11",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.1042,
+      "y": 0.2124
+    },
+    {
+      "id": "V31",
+      "type": "voice",
+      "label": "Bus services would benefit non-driving residents",
+      "text": "Buses would help my mom who can't drive anymore.",
+      "group": 1,
+      "linked_to": "S07",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.6255,
+      "y": 0.9547
+    },
+    {
+      "id": "V32",
+      "type": "voice",
+      "label": "More affordable housing is needed",
+      "text": "We need more housing people can actually afford.",
+      "group": 2,
+      "linked_to": "S06",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.9282,
+      "y": 0.4106
+    },
+    {
+      "id": "V33",
+      "type": "voice",
+      "label": "Rush hour traffic on the main road is heavy",
+      "text": "Traffic on the main road is already unbearable at rush hour.",
+      "group": 1,
+      "linked_to": "S00",
+      "stance": "supports",
+      "size": 6,
+      "x": 0.8557,
+      "y": 0.7625
+    },
+    {
+      "id": "V34",
+      "type": "voice",
+      "label": "The resident supports a downtown arts district",
+      "text": "I love the idea of an arts district downtown.",
+      "group": 2,
+      "linked_to": "S11",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.1663,
+      "y": 0.1133
+    },
+    {
+      "id": "V35",
+      "type": "voice",
+      "label": "The resident requests adequate school staffing",
+      "text": "I just want my kids' school to have enough teachers.",
+      "group": 1,
+      "linked_to": "S01",
+      "stance": "challenges",
+      "size": 6,
+      "x": 0.8598,
+      "y": 0.159
+    }
+  ],
+  "edges": [
+    {
+      "source": "T1",
+      "target": "S04",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T1",
+      "target": "S01",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T1",
+      "target": "S03",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T0",
+      "target": "S02",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T1",
+      "target": "S00",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T1",
+      "target": "S05",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T1",
+      "target": "S06",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T1",
+      "target": "S07",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T1",
+      "target": "S09",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T2",
+      "target": "S08",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T0",
+      "target": "S11",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T2",
+      "target": "S10",
+      "kind": "theme-member"
+    },
+    {
+      "source": "T3",
+      "target": "S12",
+      "kind": "theme-member"
+    },
+    {
+      "source": "S04",
+      "target": "S01",
+      "kind": "related",
+      "weight": 0.801
+    },
+    {
+      "source": "S04",
+      "target": "S03",
+      "kind": "related",
+      "weight": 0.728
+    },
+    {
+      "source": "S04",
+      "target": "S02",
+      "kind": "related",
+      "weight": 0.702
+    },
+    {
+      "source": "S04",
+      "target": "S00",
+      "kind": "related",
+      "weight": 0.762
+    },
+    {
+      "source": "S04",
+      "target": "S05",
+      "kind": "related",
+      "weight": 0.779
+    },
+    {
+      "source": "S04",
+      "target": "S06",
+      "kind": "related",
+      "weight": 0.706
+    },
+    {
+      "source": "S04",
+      "target": "S07",
+      "kind": "related",
+      "weight": 0.718
+    },
+    {
+      "source": "S04",
+      "target": "S09",
+      "kind": "related",
+      "weight": 0.776
+    },
+    {
+      "source": "S04",
+      "target": "S08",
+      "kind": "related",
+      "weight": 0.672
+    },
+    {
+      "source": "S04",
+      "target": "S11",
+      "kind": "related",
+      "weight": 0.637
+    },
+    {
+      "source": "S04",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.667
+    },
+    {
+      "source": "S01",
+      "target": "S03",
+      "kind": "related",
+      "weight": 0.77
+    },
+    {
+      "source": "S01",
+      "target": "S02",
+      "kind": "related",
+      "weight": 0.712
+    },
+    {
+      "source": "S01",
+      "target": "S00",
+      "kind": "related",
+      "weight": 0.749
+    },
+    {
+      "source": "S01",
+      "target": "S05",
+      "kind": "related",
+      "weight": 0.797
+    },
+    {
+      "source": "S01",
+      "target": "S06",
+      "kind": "related",
+      "weight": 0.72
+    },
+    {
+      "source": "S01",
+      "target": "S07",
+      "kind": "related",
+      "weight": 0.757
+    },
+    {
+      "source": "S01",
+      "target": "S09",
+      "kind": "related",
+      "weight": 0.809
+    },
+    {
+      "source": "S01",
+      "target": "S08",
+      "kind": "related",
+      "weight": 0.696
+    },
+    {
+      "source": "S01",
+      "target": "S11",
+      "kind": "related",
+      "weight": 0.619
+    },
+    {
+      "source": "S01",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.696
+    },
+    {
+      "source": "S01",
+      "target": "S12",
+      "kind": "related",
+      "weight": 0.561
+    },
+    {
+      "source": "S03",
+      "target": "S02",
+      "kind": "related",
+      "weight": 0.646
+    },
+    {
+      "source": "S03",
+      "target": "S00",
+      "kind": "related",
+      "weight": 0.651
+    },
+    {
+      "source": "S03",
+      "target": "S05",
+      "kind": "related",
+      "weight": 0.741
+    },
+    {
+      "source": "S03",
+      "target": "S06",
+      "kind": "related",
+      "weight": 0.655
+    },
+    {
+      "source": "S03",
+      "target": "S07",
+      "kind": "related",
+      "weight": 0.721
+    },
+    {
+      "source": "S03",
+      "target": "S09",
+      "kind": "related",
+      "weight": 0.701
+    },
+    {
+      "source": "S03",
+      "target": "S08",
+      "kind": "related",
+      "weight": 0.67
+    },
+    {
+      "source": "S03",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.641
+    },
+    {
+      "source": "S02",
+      "target": "S00",
+      "kind": "related",
+      "weight": 0.786
+    },
+    {
+      "source": "S02",
+      "target": "S05",
+      "kind": "related",
+      "weight": 0.73
+    },
+    {
+      "source": "S02",
+      "target": "S06",
+      "kind": "related",
+      "weight": 0.739
+    },
+    {
+      "source": "S02",
+      "target": "S07",
+      "kind": "related",
+      "weight": 0.672
+    },
+    {
+      "source": "S02",
+      "target": "S09",
+      "kind": "related",
+      "weight": 0.733
+    },
+    {
+      "source": "S02",
+      "target": "S08",
+      "kind": "related",
+      "weight": 0.735
+    },
+    {
+      "source": "S02",
+      "target": "S11",
+      "kind": "related",
+      "weight": 0.651
+    },
+    {
+      "source": "S02",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.703
+    },
+    {
+      "source": "S02",
+      "target": "S12",
+      "kind": "related",
+      "weight": 0.564
+    },
+    {
+      "source": "S00",
+      "target": "S05",
+      "kind": "related",
+      "weight": 0.742
+    },
+    {
+      "source": "S00",
+      "target": "S06",
+      "kind": "related",
+      "weight": 0.75
+    },
+    {
+      "source": "S00",
+      "target": "S07",
+      "kind": "related",
+      "weight": 0.698
+    },
+    {
+      "source": "S00",
+      "target": "S09",
+      "kind": "related",
+      "weight": 0.795
+    },
+    {
+      "source": "S00",
+      "target": "S08",
+      "kind": "related",
+      "weight": 0.716
+    },
+    {
+      "source": "S00",
+      "target": "S11",
+      "kind": "related",
+      "weight": 0.655
+    },
+    {
+      "source": "S00",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.69
+    },
+    {
+      "source": "S00",
+      "target": "S12",
+      "kind": "related",
+      "weight": 0.593
+    },
+    {
+      "source": "S05",
+      "target": "S06",
+      "kind": "related",
+      "weight": 0.738
+    },
+    {
+      "source": "S05",
+      "target": "S07",
+      "kind": "related",
+      "weight": 0.764
+    },
+    {
+      "source": "S05",
+      "target": "S09",
+      "kind": "related",
+      "weight": 0.783
+    },
+    {
+      "source": "S05",
+      "target": "S08",
+      "kind": "related",
+      "weight": 0.777
+    },
+    {
+      "source": "S05",
+      "target": "S11",
+      "kind": "related",
+      "weight": 0.667
+    },
+    {
+      "source": "S05",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.741
+    },
+    {
+      "source": "S05",
+      "target": "S12",
+      "kind": "related",
+      "weight": 0.585
+    },
+    {
+      "source": "S06",
+      "target": "S07",
+      "kind": "related",
+      "weight": 0.728
+    },
+    {
+      "source": "S06",
+      "target": "S09",
+      "kind": "related",
+      "weight": 0.78
+    },
+    {
+      "source": "S06",
+      "target": "S08",
+      "kind": "related",
+      "weight": 0.73
+    },
+    {
+      "source": "S06",
+      "target": "S11",
+      "kind": "related",
+      "weight": 0.701
+    },
+    {
+      "source": "S06",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.743
+    },
+    {
+      "source": "S06",
+      "target": "S12",
+      "kind": "related",
+      "weight": 0.554
+    },
+    {
+      "source": "S07",
+      "target": "S09",
+      "kind": "related",
+      "weight": 0.707
+    },
+    {
+      "source": "S07",
+      "target": "S08",
+      "kind": "related",
+      "weight": 0.679
+    },
+    {
+      "source": "S07",
+      "target": "S11",
+      "kind": "related",
+      "weight": 0.62
+    },
+    {
+      "source": "S07",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.672
+    },
+    {
+      "source": "S07",
+      "target": "S12",
+      "kind": "related",
+      "weight": 0.571
+    },
+    {
+      "source": "S09",
+      "target": "S08",
+      "kind": "related",
+      "weight": 0.701
+    },
+    {
+      "source": "S09",
+      "target": "S11",
+      "kind": "related",
+      "weight": 0.634
+    },
+    {
+      "source": "S09",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.708
+    },
+    {
+      "source": "S08",
+      "target": "S11",
+      "kind": "related",
+      "weight": 0.624
+    },
+    {
+      "source": "S08",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.765
+    },
+    {
+      "source": "S08",
+      "target": "S12",
+      "kind": "related",
+      "weight": 0.58
+    },
+    {
+      "source": "S11",
+      "target": "S10",
+      "kind": "related",
+      "weight": 0.617
+    },
+    {
+      "source": "S11",
+      "target": "S12",
+      "kind": "related",
+      "weight": 0.554
+    },
+    {
+      "source": "V0",
+      "target": "S04",
+      "kind": "voice",
+      "stance": "neutral"
+    },
+    {
+      "source": "V1",
+      "target": "S07",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V2",
+      "target": "S07",
+      "kind": "voice",
+      "stance": "neutral"
+    },
+    {
+      "source": "V3",
+      "target": "S05",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V4",
+      "target": "S00",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V5",
+      "target": "S05",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V6",
+      "target": "S06",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V7",
+      "target": "S05",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V8",
+      "target": "S11",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V9",
+      "target": "S00",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V10",
+      "target": "S06",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V11",
+      "target": "S11",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V12",
+      "target": "S01",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V13",
+      "target": "S11",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V14",
+      "target": "S05",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V15",
+      "target": "S04",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V16",
+      "target": "S04",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V17",
+      "target": "S07",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V18",
+      "target": "S11",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V19",
+      "target": "S06",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V20",
+      "target": "S01",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V21",
+      "target": "S01",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V22",
+      "target": "S01",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V23",
+      "target": "S00",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V24",
+      "target": "S07",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V25",
+      "target": "S11",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V26",
+      "target": "S04",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V27",
+      "target": "S00",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V28",
+      "target": "S11",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V29",
+      "target": "S06",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V30",
+      "target": "S11",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V31",
+      "target": "S07",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V32",
+      "target": "S06",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V33",
+      "target": "S00",
+      "kind": "voice",
+      "stance": "supports"
+    },
+    {
+      "source": "V34",
+      "target": "S11",
+      "kind": "voice",
+      "stance": "challenges"
+    },
+    {
+      "source": "V35",
+      "target": "S01",
+      "kind": "voice",
+      "stance": "challenges"
+    }
+  ]
+}

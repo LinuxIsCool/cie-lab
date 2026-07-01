@@ -1,0 +1,548 @@
+{
+  "schema": "cie.pni.v0",
+  "meta": {
+    "n_stories": 52,
+    "pni_volume_target": "50\u2013100 stories for full PNI"
+  },
+  "self_codes": [
+    "feeling",
+    "agency",
+    "time",
+    "scope"
+  ],
+  "stories": [
+    {
+      "id": "N000",
+      "group": 0,
+      "text": "Every winter the same road floods and nothing ever gets done.",
+      "feeling": 0.18,
+      "agency": 0.215,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N001",
+      "group": 0,
+      "text": "The county fixed our sidewalk; I had nothing to do with it but I'm glad.",
+      "feeling": 0.789,
+      "agency": 0.314,
+      "time": "past",
+      "scope": "personal"
+    },
+    {
+      "id": "N002",
+      "group": 1,
+      "text": "Nobody told us why the water tasted strange; we just had to guess.",
+      "feeling": 0.086,
+      "agency": 0.151,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N003",
+      "group": 1,
+      "text": "We started a community garden on the empty lot and it's thriving.",
+      "feeling": 0.708,
+      "agency": 0.673,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N004",
+      "group": 1,
+      "text": "Neighbors organized a cleanup and the park finally feels ours again.",
+      "feeling": 0.754,
+      "agency": 0.746,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N005",
+      "group": 0,
+      "text": "Every winter the same road floods and nothing ever gets done.",
+      "feeling": 0.099,
+      "agency": 0.174,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N006",
+      "group": 1,
+      "text": "I spoke at the council meeting and they actually changed the plan.",
+      "feeling": 0.58,
+      "agency": 0.744,
+      "time": "past",
+      "scope": "personal"
+    },
+    {
+      "id": "N007",
+      "group": 1,
+      "text": "Nobody told us why the water tasted strange; we just had to guess.",
+      "feeling": 0.0,
+      "agency": 0.006,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N008",
+      "group": 1,
+      "text": "They rezoned our street overnight and we found out from a sign.",
+      "feeling": 0.0,
+      "agency": 0.089,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N009",
+      "group": 0,
+      "text": "My kid's school added a teacher after parents kept showing up.",
+      "feeling": 0.781,
+      "agency": 0.743,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N010",
+      "group": 1,
+      "text": "They rezoned our street overnight and we found out from a sign.",
+      "feeling": 0.072,
+      "agency": 0.0,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N011",
+      "group": 0,
+      "text": "A small grant let us fix the playground ourselves.",
+      "feeling": 0.837,
+      "agency": 0.913,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N012",
+      "group": 1,
+      "text": "Nobody told us why the water tasted strange; we just had to guess.",
+      "feeling": 0.09,
+      "agency": 0.0,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N013",
+      "group": 0,
+      "text": "Volunteers keep the food bank running when the county won't.",
+      "feeling": 0.463,
+      "agency": 0.641,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N014",
+      "group": 2,
+      "text": "The clinic hours got cut and now my mother can't be seen nearby.",
+      "feeling": 0.113,
+      "agency": 0.339,
+      "time": "future",
+      "scope": "personal"
+    },
+    {
+      "id": "N015",
+      "group": 1,
+      "text": "The county fixed our sidewalk; I had nothing to do with it but I'm glad.",
+      "feeling": 0.728,
+      "agency": 0.174,
+      "time": "past",
+      "scope": "personal"
+    },
+    {
+      "id": "N016",
+      "group": 1,
+      "text": "Volunteers keep the food bank running when the county won't.",
+      "feeling": 0.518,
+      "agency": 0.613,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N017",
+      "group": 0,
+      "text": "Neighbors organized a cleanup and the park finally feels ours again.",
+      "feeling": 0.863,
+      "agency": 0.915,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N018",
+      "group": 1,
+      "text": "Our street planted trees together and strangers became neighbors.",
+      "feeling": 0.806,
+      "agency": 0.742,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N019",
+      "group": 2,
+      "text": "A small grant let us fix the playground ourselves.",
+      "feeling": 0.922,
+      "agency": 0.921,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N020",
+      "group": 0,
+      "text": "I've stopped going to meetings; it never changes anything.",
+      "feeling": 0.244,
+      "agency": 0.088,
+      "time": "present",
+      "scope": "personal"
+    },
+    {
+      "id": "N021",
+      "group": 0,
+      "text": "We started a community garden on the empty lot and it's thriving.",
+      "feeling": 1.0,
+      "agency": 0.861,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N022",
+      "group": 0,
+      "text": "Every winter the same road floods and nothing ever gets done.",
+      "feeling": 0.133,
+      "agency": 0.237,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N023",
+      "group": 2,
+      "text": "We keep petitioning about the flooding, and I know we'll win eventually.",
+      "feeling": 0.591,
+      "agency": 0.834,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N024",
+      "group": 1,
+      "text": "Losing the library hurt, but neighbors are already organizing to bring it back.",
+      "feeling": 0.197,
+      "agency": 0.671,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N025",
+      "group": 1,
+      "text": "Neighbors organized a cleanup and the park finally feels ours again.",
+      "feeling": 0.814,
+      "agency": 0.965,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N026",
+      "group": 0,
+      "text": "I'm thankful for the new clinic, even though decisions happen without us.",
+      "feeling": 0.652,
+      "agency": 0.301,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N027",
+      "group": 0,
+      "text": "Volunteers keep the food bank running when the county won't.",
+      "feeling": 0.527,
+      "agency": 0.68,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N028",
+      "group": 1,
+      "text": "The clinic hours got cut and now my mother can't be seen nearby.",
+      "feeling": 0.134,
+      "agency": 0.07,
+      "time": "present",
+      "scope": "personal"
+    },
+    {
+      "id": "N029",
+      "group": 0,
+      "text": "Our street planted trees together and strangers became neighbors.",
+      "feeling": 0.94,
+      "agency": 0.796,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N030",
+      "group": 0,
+      "text": "I spoke at the council meeting and they actually changed the plan.",
+      "feeling": 0.8,
+      "agency": 0.769,
+      "time": "past",
+      "scope": "personal"
+    },
+    {
+      "id": "N031",
+      "group": 1,
+      "text": "We keep petitioning about the flooding, and I know we'll win eventually.",
+      "feeling": 0.474,
+      "agency": 0.678,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N032",
+      "group": 0,
+      "text": "Losing the library hurt, but neighbors are already organizing to bring it back.",
+      "feeling": 0.496,
+      "agency": 0.651,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N033",
+      "group": 1,
+      "text": "Nobody told us why the water tasted strange; we just had to guess.",
+      "feeling": 0.059,
+      "agency": 0.0,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N034",
+      "group": 0,
+      "text": "We started a community garden on the empty lot and it's thriving.",
+      "feeling": 0.764,
+      "agency": 0.822,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N035",
+      "group": 0,
+      "text": "I worry the new development will price my family out of here.",
+      "feeling": 0.301,
+      "agency": 0.161,
+      "time": "future",
+      "scope": "personal"
+    },
+    {
+      "id": "N036",
+      "group": 1,
+      "text": "We started a community garden on the empty lot and it's thriving.",
+      "feeling": 0.809,
+      "agency": 0.839,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N037",
+      "group": 2,
+      "text": "The clinic hours got cut and now my mother can't be seen nearby.",
+      "feeling": 0.178,
+      "agency": 0.329,
+      "time": "present",
+      "scope": "personal"
+    },
+    {
+      "id": "N038",
+      "group": 0,
+      "text": "Volunteers keep the food bank running when the county won't.",
+      "feeling": 0.623,
+      "agency": 0.679,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N039",
+      "group": 0,
+      "text": "I worry the new development will price my family out of here.",
+      "feeling": 0.202,
+      "agency": 0.378,
+      "time": "future",
+      "scope": "personal"
+    },
+    {
+      "id": "N040",
+      "group": 2,
+      "text": "I'm thankful for the new clinic, even though decisions happen without us.",
+      "feeling": 0.779,
+      "agency": 0.343,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N041",
+      "group": 2,
+      "text": "Nobody told us why the water tasted strange; we just had to guess.",
+      "feeling": 0.301,
+      "agency": 0.235,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N042",
+      "group": 1,
+      "text": "I worry the new development will price my family out of here.",
+      "feeling": 0.08,
+      "agency": 0.207,
+      "time": "future",
+      "scope": "personal"
+    },
+    {
+      "id": "N043",
+      "group": 2,
+      "text": "They rezoned our street overnight and we found out from a sign.",
+      "feeling": 0.445,
+      "agency": 0.37,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N044",
+      "group": 1,
+      "text": "Nobody told us why the water tasted strange; we just had to guess.",
+      "feeling": 0.072,
+      "agency": 0.002,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N045",
+      "group": 0,
+      "text": "The stadium plan feels like it's for someone else, not us.",
+      "feeling": 0.316,
+      "agency": 0.208,
+      "time": "future",
+      "scope": "community"
+    },
+    {
+      "id": "N046",
+      "group": 2,
+      "text": "Our street planted trees together and strangers became neighbors.",
+      "feeling": 0.889,
+      "agency": 0.858,
+      "time": "past",
+      "scope": "community"
+    },
+    {
+      "id": "N047",
+      "group": 0,
+      "text": "When the bus route was cut, I lost my way to work for a month.",
+      "feeling": 0.239,
+      "agency": 0.077,
+      "time": "past",
+      "scope": "personal"
+    },
+    {
+      "id": "N048",
+      "group": 2,
+      "text": "Every winter the same road floods and nothing ever gets done.",
+      "feeling": 0.132,
+      "agency": 0.386,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N049",
+      "group": 0,
+      "text": "The clinic hours got cut and now my mother can't be seen nearby.",
+      "feeling": 0.172,
+      "agency": 0.292,
+      "time": "present",
+      "scope": "personal"
+    },
+    {
+      "id": "N050",
+      "group": 0,
+      "text": "Losing the library hurt, but neighbors are already organizing to bring it back.",
+      "feeling": 0.343,
+      "agency": 0.741,
+      "time": "present",
+      "scope": "community"
+    },
+    {
+      "id": "N051",
+      "group": 0,
+      "text": "The stadium plan feels like it's for someone else, not us.",
+      "feeling": 0.223,
+      "agency": 0.125,
+      "time": "future",
+      "scope": "community"
+    }
+  ],
+  "quadrants": {
+    "grievance": 24,
+    "frustrated-but-willing": 2,
+    "grateful-but-passive": 4,
+    "empowered": 17
+  },
+  "patterns": [
+    {
+      "label": "Powerlessness",
+      "count": 21,
+      "note": "stories of grievance with little sense that anything can change"
+    },
+    {
+      "label": "Pride in community",
+      "count": 16,
+      "note": "positive stories about the community acting together"
+    },
+    {
+      "label": "Worry about what's coming",
+      "count": 6,
+      "note": "stories that are negative and about the future \u2014 anxiety a yes/no vote would miss"
+    }
+  ],
+  "representative": [
+    {
+      "id": "N000",
+      "group": 0,
+      "text": "Every winter the same road floods and nothing ever gets done.",
+      "feeling": 0.18,
+      "agency": 0.215,
+      "time": "present",
+      "scope": "community",
+      "quadrant": "grievance"
+    },
+    {
+      "id": "N024",
+      "group": 1,
+      "text": "Losing the library hurt, but neighbors are already organizing to bring it back.",
+      "feeling": 0.197,
+      "agency": 0.671,
+      "time": "present",
+      "scope": "community",
+      "quadrant": "frustrated-but-willing"
+    },
+    {
+      "id": "N015",
+      "group": 1,
+      "text": "The county fixed our sidewalk; I had nothing to do with it but I'm glad.",
+      "feeling": 0.728,
+      "agency": 0.174,
+      "time": "past",
+      "scope": "personal",
+      "quadrant": "grateful-but-passive"
+    },
+    {
+      "id": "N046",
+      "group": 2,
+      "text": "Our street planted trees together and strangers became neighbors.",
+      "feeling": 0.889,
+      "agency": 0.858,
+      "time": "past",
+      "scope": "community",
+      "quadrant": "empowered"
+    }
+  ]
+}
