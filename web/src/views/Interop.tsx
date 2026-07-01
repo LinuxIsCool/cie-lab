@@ -15,7 +15,7 @@ type Interop = {
   value_codes: Record<string, number>;
 };
 type MapRow = { cie: string; comhairle: string; fidelity: string; note: string };
-type CovItem = { id: string; area: string; name: string; status: string; note: string; sourced?: boolean };
+type CovItem = { id: string; area: string; name: string; status: string; note: string; sourced?: boolean; cie?: string; comhairle?: string; meaning?: string; component?: string };
 type Assessment = {
   decision: string; agpl: string; verified: string;
   side_by_side: { dim: string; comhairle: string; cie: string }[];
@@ -34,6 +34,8 @@ const CS: Record<string, { label: string; cls: string }> = {
   na: { label: "n/a", cls: "bg-slate-100 text-slate-500 ring-slate-200" },
 };
 const AREA_SHORT: Record<string, string> = { Requirement: "Req", "Quality gate": "Gate", "Build core": "Build" };
+const STATUS_RANK: Record<string, number> = { satisfies: 0, partial: 1, gap: 2, na: 3 };
+const idKey = (id: string) => { const m = id.match(/^([A-Z]+)(\d+)$/); const g = ({ R: 0, T: 1, M: 2 } as Record<string, number>)[m?.[1] ?? "R"] ?? 9; return g * 100 + (m ? parseInt(m[2], 10) : 0); };
 
 const FID: Record<string, { label: string; cls: string; def: string }> = {
   clean: { label: "clean", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200", def: "A direct one-to-one match — the value carries over as-is." },
@@ -57,6 +59,12 @@ export default function Interop() {
   const [mapping, setMapping] = useState<MapRow[] | null>(null);
   const [a, setA] = useState<Assessment | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [openRows, setOpenRows] = useState<Set<string>>(new Set());
+  const [allOpen, setAllOpen] = useState(false);
+  const [sortKey, setSortKey] = useState<"id" | "component" | "name" | "status">("id");
+  const [sortDir, setSortDir] = useState<1 | -1>(1);
+  const toggleRow = (id: string) => setOpenRows((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const clickSort = (k: "id" | "component" | "name" | "status") => { if (k === sortKey) setSortDir((d) => (d === 1 ? -1 : 1)); else { setSortKey(k); setSortDir(1); } };
 
   useEffect(() => {
     Promise.all([
@@ -69,6 +77,14 @@ export default function Interop() {
   if (!doc || !mapping || !a) return <div className="p-10 text-slate-400">Loading assessment…</div>;
 
   const cov = a.coverage;
+  const sortedItems = [...(cov.items ?? [])].sort((x, y) => {
+    let r = 0;
+    if (sortKey === "id") r = idKey(x.id) - idKey(y.id);
+    else if (sortKey === "status") r = (STATUS_RANK[x.status] ?? 9) - (STATUS_RANK[y.status] ?? 9);
+    else r = String(x[sortKey] ?? "").localeCompare(String(y[sortKey] ?? ""));
+    return r * sortDir || idKey(x.id) - idKey(y.id);
+  });
+  const Sarrow = (k: string) => (sortKey === k ? (sortDir === 1 ? " ▲" : " ▼") : "");
   return (
     <div className="max-w-5xl">
       <header className="mb-4">
@@ -121,36 +137,52 @@ export default function Interop() {
 
       {cov.items && cov.items.length > 0 && (
         <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
-            <span className="text-[12px] font-semibold text-slate-600">All 70 items</span>
-            <span className="text-[11px] text-slate-400">R1–R48 requirements · T1–T10 gates · M1–M12 build core · scroll ↓</span>
+          <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-20">
+            <span className="text-[12px] font-semibold text-slate-600">All 70 items <span className="font-normal text-slate-400">— click a row for the full compare/contrast · sort by any header</span></span>
+            <button onClick={() => setAllOpen((v) => !v)} className="text-[11px] font-medium text-blue-600 hover:text-blue-800">{allOpen ? "Collapse all" : "Expand all"}</button>
           </div>
-          <div className="max-h-[440px] overflow-y-auto">
-            <table className="w-full text-left table-fixed">
-              <thead className="sticky top-0 bg-slate-50 z-10">
-                <tr className="text-[10px] uppercase tracking-wide text-slate-400">
-                  <th className="w-12 px-3 py-2 font-semibold">ID</th>
-                  <th className="w-16 px-2 py-2 font-semibold">Area</th>
-                  <th className="w-48 px-2 py-2 font-semibold">Item</th>
-                  <th className="w-24 px-2 py-2 font-semibold">Coverage</th>
-                  <th className="px-2 py-2 font-semibold">What it means for the integration</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cov.items.map((it) => (
-                  <tr key={it.id} className="border-t border-slate-50 align-top hover:bg-slate-50/60">
-                    <td className="px-3 py-2 text-[12px] font-mono text-slate-600">{it.id}</td>
-                    <td className="px-2 py-2 text-[11px] text-slate-400">{AREA_SHORT[it.area] ?? it.area}</td>
-                    <td className="px-2 py-2 text-[12px] text-slate-700 leading-snug">{it.name}</td>
-                    <td className="px-2 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${CS[it.status]?.cls ?? ""}`}>{CS[it.status]?.label ?? it.status}</span></td>
-                    <td className="px-2 py-2 text-[12px] text-slate-500 leading-snug">{it.note}{it.sourced === false && <span className="text-slate-300" title="status inferred to reconcile the audited totals"> · inferred</span>}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* sortable header */}
+          <div className="px-3 py-1.5 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-100 bg-slate-50 sticky top-[37px] z-10 select-none">
+            <button onClick={() => clickSort("id")} className="w-10 shrink-0 text-left hover:text-slate-600">ID{Sarrow("id")}</button>
+            <button onClick={() => clickSort("component")} className="w-40 shrink-0 text-left hover:text-slate-600 hidden sm:block">Component{Sarrow("component")}</button>
+            <button onClick={() => clickSort("name")} className="flex-1 min-w-0 text-left hover:text-slate-600">Item{Sarrow("name")}</button>
+            <button onClick={() => clickSort("status")} className="w-24 shrink-0 text-left hover:text-slate-600">Coverage{Sarrow("status")}</button>
+            <span className="w-3 shrink-0" />
+          </div>
+          <div className="max-h-[560px] overflow-y-auto divide-y divide-slate-50">
+            {sortedItems.map((it) => {
+              const open = allOpen || openRows.has(it.id);
+              return (
+                <div key={it.id}>
+                  <button onClick={() => toggleRow(it.id)} className="w-full text-left px-3 py-2 flex items-center gap-3 hover:bg-slate-50">
+                    <span className="w-10 shrink-0 font-mono text-[12px] text-slate-600">{it.id}</span>
+                    <span className="w-40 shrink-0 text-[11px] text-slate-500 truncate hidden sm:block">{it.component ?? "—"}</span>
+                    <span className="flex-1 min-w-0 text-[12px] text-slate-700 truncate">{it.name}</span>
+                    <span className={`shrink-0 w-24 text-[10px]`}><span className={`px-1.5 py-0.5 rounded-full ring-1 ${CS[it.status]?.cls ?? ""}`}>{CS[it.status]?.label ?? it.status}</span></span>
+                    <span className="shrink-0 text-slate-300 text-[11px] w-3 text-center">{open ? "▾" : "▸"}</span>
+                  </button>
+                  {open && (
+                    <div className="px-3 pb-3.5 pt-0.5 grid grid-cols-1 md:grid-cols-3 gap-3 bg-slate-50/40">
+                      <div>
+                        <div className="text-[10px] font-semibold uppercase tracking-wide text-blue-600 mb-1">In CIE</div>
+                        <p className="text-[12px] text-slate-600 leading-relaxed">{it.cie ?? it.note}</p>
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 mb-1">In Comhairle</div>
+                        <p className="text-[12px] text-slate-600 leading-relaxed">{it.comhairle ?? "—"}</p>
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-semibold uppercase tracking-wide text-emerald-600 mb-1">What it means for integration</div>
+                        <p className="text-[12px] text-slate-600 leading-relaxed">{it.meaning ?? it.note}{it.sourced === false && <span className="text-slate-300"> · inferred</span>}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
           <div className="px-3 py-1.5 border-t border-slate-100 text-[10px] text-slate-400">
-            Statuses reconcile to the audited totals; “· inferred” marks a status assigned to fit the per-area counts rather than stated in the source doc.
+            Three-column compare/contrast per item. Statuses reconcile to the audited totals; “· inferred” marks a status assigned to fit the per-area counts rather than stated in the source doc.
           </div>
         </div>
       )}

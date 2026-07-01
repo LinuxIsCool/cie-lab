@@ -145,6 +145,32 @@ _COV = [
 ]
 COVERAGE_ITEMS = [{"id": i, "area": a, "status": s, "sourced": src, "name": n, "note": note} for (i, a, s, src, n, note) in _COV]
 
+# Rich per-item detail (cie / comhairle / meaning insight blocks) produced by the
+# enrichment agents, merged in when present (analysis/coverage_detail.json).
+_detail_path = Path(__file__).resolve().parent / "coverage_detail.json"
+if _detail_path.exists():
+    _detail = json.load(open(_detail_path))
+    for _it in COVERAGE_ITEMS:
+        _d = _detail.get(_it["id"])
+        if _d:
+            _it["cie"] = _d.get("cie", "")
+            _it["comhairle"] = _d.get("comhairle", "")
+            _it["meaning"] = _d.get("meaning", "")
+
+# Component (spec subsystem) each item belongs to — a functional grouping across R/T/M.
+_COMPONENT = {
+    "Claim discipline": ["R1", "R2", "R3", "R5", "R6", "T9", "M11"],
+    "Measurement & bridging": ["R7", "R8", "R9", "R10", "T4", "T7", "T8", "M3", "M7", "M10"],
+    "Validity & stability": ["R4", "R11", "R12", "R14", "R27", "T1", "T2", "T3", "T5", "T6", "M8"],
+    "Elicitation & instrument": ["R15", "R16", "R17", "R18", "R19", "R20", "R21", "R22", "M1", "M4", "M5"],
+    "Consent & privacy": ["R23", "R24", "R25", "R26", "R28", "R29", "R30", "T10", "M2"],
+    "Data architecture": ["R13", "R31", "R32", "R33", "R34", "R35", "R36", "R37", "R38", "R39", "R40", "M6", "M9"],
+    "Outreach & operations": ["R41", "R42", "R43", "R44", "R45", "R46", "R47", "R48", "M12"],
+}
+_id2comp = {i: comp for comp, ids in _COMPONENT.items() for i in ids}
+for _it in COVERAGE_ITEMS:
+    _it["component"] = _id2comp.get(_it["id"], "—")
+
 # The integration assessment (grounded in artifacts/2026-06-29-comhairle-compare-contrast §2/§4/§10).
 ASSESSMENT = {
     "decision": (
