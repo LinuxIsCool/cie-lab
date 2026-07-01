@@ -249,12 +249,12 @@ export default function Interop() {
 
       {allRows.length > 0 && (
         <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-100 flex flex-wrap items-center gap-x-3 gap-y-2 justify-between">
-            <span className="text-[12px] font-semibold text-slate-600 shrink-0">
+          <div className="px-3 py-2 border-b border-slate-100">
+            <div className="text-[12px] font-semibold text-slate-600">
               All {allRows.length} items <span className="font-normal text-slate-400">— sort by any header</span>
               {visible.length !== allRows.length && <span className="ml-1 text-slate-400">· {visible.length} shown</span>}
-            </span>
-            <div className="flex flex-wrap items-center gap-1.5">
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…"
                 className="text-[12px] rounded-md border border-slate-200 bg-white px-2 py-1 w-40 text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-300" />
               <select value={fSource} onChange={(e) => setFSource(e.target.value)} className={selCls} style={oStyle(SRC_HUE[fSource])} title="Filter by source">
