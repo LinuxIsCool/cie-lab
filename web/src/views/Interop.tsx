@@ -59,11 +59,8 @@ export default function Interop() {
   const [mapping, setMapping] = useState<MapRow[] | null>(null);
   const [a, setA] = useState<Assessment | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const [openRows, setOpenRows] = useState<Set<string>>(new Set());
-  const [allOpen, setAllOpen] = useState(false);
   const [sortKey, setSortKey] = useState<"id" | "component" | "name" | "status">("id");
   const [sortDir, setSortDir] = useState<1 | -1>(1);
-  const toggleRow = (id: string) => setOpenRows((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
   const clickSort = (k: "id" | "component" | "name" | "status") => { if (k === sortKey) setSortDir((d) => (d === 1 ? -1 : 1)); else { setSortKey(k); setSortDir(1); } };
 
   useEffect(() => {
@@ -128,61 +125,62 @@ export default function Interop() {
             </div>
           ))}
         </div>
-        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px]">
-          {COV.map(({ k, c }) => <span key={k} className="flex items-center gap-1 text-slate-500"><span className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />{k} {cov[k as keyof typeof cov] as number}</span>)}
-          <span className="text-slate-400">· of {cov.total}</span>
-        </div>
         <p className="mt-3 text-[13px] text-slate-600 leading-relaxed">{cov.finding}</p>
+        <div className="mt-3 pt-3 border-t border-slate-100">
+          <div className="text-[11px] font-semibold text-slate-500 mb-2">Every item falls into one of four buckets — how much of it Comhairle already covers:</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2">
+            {[
+              ["satisfies", "Comhairle already delivers this — almost always the shared Pol.is spine (voting, demographic-blind clustering) that CIE also builds on."],
+              ["partial", "Comhairle has a weaker or related form — the mechanism exists, but not to CIE's full standard or guarantee."],
+              ["gap", "A CIE capability Comhairle lacks entirely — the trust, claim-discipline, and validity layer where the two systems most diverge."],
+              ["na", "A CIE program or process step (staffing, sign-offs, field ops), not a platform feature — outside a code-to-code comparison."],
+            ].map(([k, def]) => (
+              <div key={k} className="flex items-start gap-2">
+                <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${CS[k].cls}`}>{CS[k].label}</span>
+                <span className="text-[12px] text-slate-500 leading-snug"><span className="tabular-nums font-semibold text-slate-700">{cov[k as keyof typeof cov] as number}</span> of {cov.total} — {def}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {cov.items && cov.items.length > 0 && (
         <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-20">
-            <span className="text-[12px] font-semibold text-slate-600">All 70 items <span className="font-normal text-slate-400">— click a row for the full compare/contrast · sort by any header</span></span>
-            <button onClick={() => setAllOpen((v) => !v)} className="text-[11px] font-medium text-blue-600 hover:text-blue-800">{allOpen ? "Collapse all" : "Expand all"}</button>
+          <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
+            <span className="text-[12px] font-semibold text-slate-600">All 70 items <span className="font-normal text-slate-400">— sort by any header</span></span>
+            <span className="text-[11px] text-slate-400">scroll ↓ · scroll → for full detail</span>
           </div>
-          {/* sortable header */}
-          <div className="px-3 py-1.5 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-wide text-slate-400 border-b border-slate-100 bg-slate-50 sticky top-[37px] z-10 select-none">
-            <button onClick={() => clickSort("id")} className="w-10 shrink-0 text-left hover:text-slate-600">ID{Sarrow("id")}</button>
-            <button onClick={() => clickSort("component")} className="w-40 shrink-0 text-left hover:text-slate-600 hidden sm:block">Component{Sarrow("component")}</button>
-            <button onClick={() => clickSort("name")} className="flex-1 min-w-0 text-left hover:text-slate-600">Item{Sarrow("name")}</button>
-            <button onClick={() => clickSort("status")} className="w-24 shrink-0 text-left hover:text-slate-600">Coverage{Sarrow("status")}</button>
-            <span className="w-3 shrink-0" />
-          </div>
-          <div className="max-h-[560px] overflow-y-auto divide-y divide-slate-50">
-            {sortedItems.map((it) => {
-              const open = allOpen || openRows.has(it.id);
-              return (
-                <div key={it.id}>
-                  <button onClick={() => toggleRow(it.id)} className="w-full text-left px-3 py-2 flex items-center gap-3 hover:bg-slate-50">
-                    <span className="w-10 shrink-0 font-mono text-[12px] text-slate-600">{it.id}</span>
-                    <span className="w-40 shrink-0 text-[11px] text-slate-500 truncate hidden sm:block">{it.component ?? "—"}</span>
-                    <span className="flex-1 min-w-0 text-[12px] text-slate-700 truncate">{it.name}</span>
-                    <span className={`shrink-0 w-24 text-[10px]`}><span className={`px-1.5 py-0.5 rounded-full ring-1 ${CS[it.status]?.cls ?? ""}`}>{CS[it.status]?.label ?? it.status}</span></span>
-                    <span className="shrink-0 text-slate-300 text-[11px] w-3 text-center">{open ? "▾" : "▸"}</span>
-                  </button>
-                  {open && (
-                    <div className="px-3 pb-3.5 pt-0.5 grid grid-cols-1 md:grid-cols-3 gap-3 bg-slate-50/40">
-                      <div>
-                        <div className="text-[10px] font-semibold uppercase tracking-wide text-blue-600 mb-1">In CIE</div>
-                        <p className="text-[12px] text-slate-600 leading-relaxed">{it.cie ?? it.note}</p>
-                      </div>
-                      <div>
-                        <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 mb-1">In Comhairle</div>
-                        <p className="text-[12px] text-slate-600 leading-relaxed">{it.comhairle ?? "—"}</p>
-                      </div>
-                      <div>
-                        <div className="text-[10px] font-semibold uppercase tracking-wide text-emerald-600 mb-1">What it means for integration</div>
-                        <p className="text-[12px] text-slate-600 leading-relaxed">{it.meaning ?? it.note}{it.sourced === false && <span className="text-slate-300"> · inferred</span>}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+          <div className="max-h-[600px] overflow-auto">
+            <table className="text-left border-collapse" style={{ minWidth: 1180 }}>
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-slate-50 text-[10px] uppercase tracking-wide text-slate-400 border-b border-slate-200">
+                  {([["id", "ID", 44], ["component", "Component", 132], ["name", "Item", 150], ["status", "Coverage", 88]] as const).map(([k, label, w]) => (
+                    <th key={k} style={{ width: w, minWidth: w }} className="px-2.5 py-2 align-bottom">
+                      <button onClick={() => clickSort(k as "id" | "component" | "name" | "status")} className="font-semibold hover:text-slate-600">{label}{Sarrow(k)}</button>
+                    </th>
+                  ))}
+                  <th style={{ minWidth: 240 }} className="px-2.5 py-2 font-semibold align-bottom text-blue-600">In CIE</th>
+                  <th style={{ minWidth: 240 }} className="px-2.5 py-2 font-semibold align-bottom text-slate-500">In Comhairle</th>
+                  <th style={{ minWidth: 240 }} className="px-2.5 py-2 font-semibold align-bottom text-emerald-600">What it means for integration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedItems.map((it) => (
+                  <tr key={it.id} className="border-b border-slate-50 align-top hover:bg-slate-50/50">
+                    <td className="px-2.5 py-2 font-mono text-[12px] text-slate-600 whitespace-nowrap">{it.id}</td>
+                    <td className="px-2.5 py-2 text-[11px] text-slate-500">{it.component ?? "—"}</td>
+                    <td className="px-2.5 py-2 text-[12px] text-slate-700 font-medium">{it.name}</td>
+                    <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${CS[it.status]?.cls ?? ""}`}>{CS[it.status]?.label ?? it.status}</span>{it.sourced === false && <span className="text-slate-300 text-[10px]"> ·inf</span>}</td>
+                    <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{it.cie ?? it.note}</td>
+                    <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{it.comhairle ?? "—"}</td>
+                    <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{it.meaning ?? it.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
           <div className="px-3 py-1.5 border-t border-slate-100 text-[10px] text-slate-400">
-            Three-column compare/contrast per item. Statuses reconcile to the audited totals; “· inferred” marks a status assigned to fit the per-area counts rather than stated in the source doc.
+            Statuses reconcile to the audited totals; “·inf” marks a status inferred to fit the per-area counts rather than stated in the source doc.
           </div>
         </div>
       )}
