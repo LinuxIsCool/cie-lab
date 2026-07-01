@@ -22,7 +22,7 @@ export const groupColor = (g: number) => GROUP_COLORS[g % GROUP_COLORS.length];
 
 export const BADGE: Record<string, { label: string; cls: string }> = {
   "representative-enough": { label: "Bridges across groups", cls: "bg-emerald-100 text-emerald-800 ring-emerald-200" },
-  directional: { label: "Directional", cls: "bg-amber-100 text-amber-800 ring-amber-200" },
+  directional: { label: "Directional", cls: "bg-sky-100 text-sky-800 ring-sky-200" },
   "below-bar": { label: "Below bar", cls: "bg-slate-100 text-slate-500 ring-slate-200" },
 };
 

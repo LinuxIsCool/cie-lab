@@ -4,6 +4,7 @@
 // map: that clusters people by vote; this clusters positions by meaning.
 import { useEffect, useMemo, useState } from "react";
 import { GROUP_COLORS, groupColor } from "../shared";
+import { Commentary, DesignNotes } from "../commentary";
 
 type Node = {
   id: string; type: "theme" | "position" | "voice"; label: string; x: number; y: number; size: number;
@@ -20,7 +21,7 @@ type KG = {
 };
 
 const BADGE_COLOR: Record<string, string> = {
-  "representative-enough": "#059669", directional: "#d97706", "below-bar": "#94a3b8",
+  "representative-enough": "#059669", directional: "#0ea5e9", "below-bar": "#94a3b8",
 };
 const STANCE_COLOR: Record<string, string> = { supports: "#059669", challenges: "#e11d48", neutral: "#94a3b8" };
 const THEME_COLOR = "#334155";
@@ -180,6 +181,29 @@ export default function Graph() {
           </div>
         </div>
       </div>
+
+      <DesignNotes
+        title="Why a graph, and what it's really testing"
+        subtitle="P5 is a Wave-1 probe: a second sensemaking surface over the exact same artifact, built to answer 'can a position/claim graph beat clustering for exploration?'">
+        <Commentary kind="design" title="Two orthogonal reads of one dataset">
+          <p>P0's opinion map clusters <strong>people</strong> by how they voted. P5 clusters <strong>positions</strong> by what they <em>mean</em>. Same votes, same statements — a completely different axis. Putting them side by side in the hub is the whole experiment: does a network of positions-and-voices help a candidate <em>explore</em> the landscape in a way that a ranked list can't? The morphological point is that "sensemaking" is its own axis, and this is one value of it.</p>
+        </Commentary>
+        <Commentary kind="architecture" title="Embeddings decide structure; layout is baked offline">
+          <p>Statement <strong>embeddings</strong> (free TELUS e5) drive k-means themes and the statement↔statement adjacency edges. A small <strong>Fruchterman-Reingold</strong> force simulation runs once in numpy and <em>bakes x/y into the artifact</em>, so the browser stays a dependency-free SVG renderer — the same discipline as P0's opinion map. Compute where the data lives; render where the eyes are.</p>
+        </Commentary>
+        <Commentary kind="methodology" title="Stance comes from the vote, not the model">
+          <p>Each resident voice is linked to its nearest position by embedding, but whether it <span className="font-semibold text-emerald-700">supports</span> or <span className="font-semibold text-rose-600">challenges</span> that position is read from <strong>that person's actual vote</strong> — never inferred by the LLM. The model distills the comment into a short claim (paraphrase) and nothing more. Same contract as the rest of the system: AI phrases, votes decide.</p>
+        </Commentary>
+        <Commentary kind="caveat" title="Soft themes — the honest negative result">
+          <p>Silhouette across every <em>k</em> came back ≈ 0.05–0.11: these generic civic statements form <strong>one diffuse embedding cloud</strong>, not crisp themes. We surface that in the UI instead of hiding it, and lean the view onto the <strong>edge topology + badge coloring + grounded voice-stances</strong>. That's a real finding this probe bought cheaply: embedding-clustering of short civic statements is weak, and richer text or claim-level extraction is where the KG would earn its keep.</p>
+        </Commentary>
+        <Commentary kind="perspective" title="The graph is the substrate P6 can query">
+          <p>Beyond exploration, a position/claim graph is <em>machinery for the chat surface</em>. "Ask the constituency" (P6) can retrieve over a claim graph as easily as over a statement list — so P5 isn't only a view, it's a candidate <strong>knowledge substrate</strong> that a later prototype composes on top of. Wave-1 probes are chosen partly for how they feed Wave-2 surfaces.</p>
+        </Commentary>
+        <Commentary kind="choice" title="A graph for exploring; a dashboard for deciding">
+          <p>These aren't competitors — they're different jobs. The dashboard <strong>ranks and gates</strong> (what can I stand behind?); the graph <strong>opens up structure</strong> (how do these positions and voices relate?). Keeping both alive, rather than forcing one, is exactly the set-based stance: let the campaign's real use decide which surface earns a permanent place.</p>
+        </Commentary>
+      </DesignNotes>
 
       <footer className="mt-8 text-[11px] text-slate-400">
         Structure by free TELUS e5 embeddings · theme names + claim paraphrases by Gemma · stance from votes · $0.
