@@ -219,8 +219,8 @@ export default function Interop() {
               ["gap", "A CIE capability Comhairle lacks entirely — the trust, claim-discipline, and validity layer where the two systems most diverge."],
               ["na", "A CIE program or process step (staffing, sign-offs, field ops), not a platform feature — outside a code-to-code comparison."],
             ].map(([k, def]) => (
-              <div key={k} className="flex items-start gap-2">
-                <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${CS[k].cls}`}>{CS[k].label}</span>
+              <div key={k} className="flex items-start gap-2.5">
+                <span className="shrink-0 w-[62px] pt-px"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${CS[k].cls}`}>{CS[k].label}</span></span>
                 <span className="text-[12px] text-slate-500 leading-snug"><span className="tabular-nums font-semibold text-slate-700">{cov[k as keyof typeof cov] as number}</span> of {cov.total} — {def}</span>
               </div>
             ))}
@@ -238,8 +238,8 @@ export default function Interop() {
               ["watch", "Real and useful, situational — worth tracking, not urgent for the pilot."],
               ["diverges", "Comhairle has it, and CIE deliberately does without — a principled choice."],
             ] as const).map(([k, def]) => (
-              <div key={k} className="flex items-start gap-2">
-                <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${RS[k].cls}`}>{RS[k].label}</span>
+              <div key={k} className="flex items-start gap-2.5">
+                <span className="shrink-0 w-[64px] pt-px"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${RS[k].cls}`}>{RS[k].label}</span></span>
                 <span className="text-[12px] text-slate-500 leading-snug"><span className="tabular-nums font-semibold text-slate-700">{rev[k]}</span> — {def}</span>
               </div>
             ))}
@@ -249,6 +249,19 @@ export default function Interop() {
 
       {allRows.length > 0 && (
         <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden">
+          <div className="px-3 pt-3 pb-2.5 border-b border-slate-100 bg-slate-50/60">
+            <div className="text-[11px] font-semibold text-slate-500 mb-1.5">Reading the item IDs <span className="font-normal text-slate-400">— the prefix names the source and the subsystem it came from</span></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1.5 text-[12px] text-slate-600">
+              <div className="flex items-baseline gap-2">
+                <span className="shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-blue-600 text-white">CIE</span>
+                <span className="leading-snug"><code className="text-slate-700">R</code> requirement · <code className="text-slate-700">T</code> quality gate · <code className="text-slate-700">M</code> build core</span>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-slate-600 text-white">Comhairle</span>
+                <span className="leading-snug"><code className="text-slate-700">CT</code> tools · <code className="text-slate-700">CI</code> identity · <code className="text-slate-700">CS</code> services · <code className="text-slate-700">CD</code> data · <code className="text-slate-700">CF</code> frontend</span>
+              </div>
+            </div>
+          </div>
           <div className="px-3 py-2 border-b border-slate-100">
             <div className="text-[12px] font-semibold text-slate-600">
               All {allRows.length} items <span className="font-normal text-slate-400">— sort by any header</span>
