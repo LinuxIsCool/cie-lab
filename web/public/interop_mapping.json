@@ -129,6 +129,568 @@
       "gap": 35,
       "na": 16,
       "total": 70,
+      "items": [
+        {
+          "id": "R1",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Scope banner on every surface",
+          "note": "CIE stamps an un-removable scope banner on every result and export; Comhairle has no claim-framing layer."
+        },
+        {
+          "id": "R2",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Copy linter bans polling language",
+          "note": "A linter fails the build on margin-of-error language absent a polling frame; Comhairle has no such guard."
+        },
+        {
+          "id": "R3",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Single badge, fixed vocabulary",
+          "note": "Every result carries one badge from a three-value taxonomy; Comhairle surfaces raw Pol.is numbers with no badge."
+        },
+        {
+          "id": "R4",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Validity card on every result",
+          "note": "Per-group counts, smallest-group margin, coverage, and knife-edge flags \u2014 no analog in Comhairle."
+        },
+        {
+          "id": "R5",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Plain-language methods note",
+          "note": "A methods note reachable from every surface; Comhairle ships none."
+        },
+        {
+          "id": "R6",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Candidate claim-language briefing",
+          "note": "A pre-launch briefing and usage agreement with the candidate \u2014 a program step, not a platform feature."
+        },
+        {
+          "id": "R7",
+          "area": "Requirement",
+          "status": "satisfies",
+          "sourced": true,
+          "name": "Aggregates from real votes only",
+          "note": "Comhairle aggregates real Pol.is votes; simulated agreement never enters \u2014 the measurement-integrity floor CIE requires."
+        },
+        {
+          "id": "R8",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Gated bridging badge",
+          "note": "CIE's badge needs GIC\u22650.5 + each group's Wilson>0.5 + 25 votes; Comhairle exposes Pol.is's raw consensus float."
+        },
+        {
+          "id": "R9",
+          "area": "Requirement",
+          "status": "satisfies",
+          "sourced": true,
+          "name": "Groups from response patterns only",
+          "note": "Comhairle's Pol.is clusters on vote patterns with no demographic input \u2014 exactly CIE's rule."
+        },
+        {
+          "id": "R10",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "Bounded, re-derived cluster search",
+          "note": "Comhairle runs Pol.is clustering but doesn't pin a re-derived k-range as a versioned thresholds commit."
+        },
+        {
+          "id": "R11",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Stability gate fails loudly",
+          "note": "CIE blocks artifacts on a failed stability gate; Comhairle renders results live and ungated."
+        },
+        {
+          "id": "R12",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Per-cluster stability \u2192 directional",
+          "note": "Marking unstable sub-clusters directional has no counterpart in Comhairle's output."
+        },
+        {
+          "id": "R13",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Local embeddings, no network",
+          "note": "CIE embeds locally with no egress; Comhairle makes external per-record AI calls."
+        },
+        {
+          "id": "R14",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "Divisive shown beside bridging",
+          "note": "Comhairle can display divisive Pol.is results, but without CIE's guarantee they sit un-subordinated and unsuppressible."
+        },
+        {
+          "id": "R15",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "Genuine pass / not-sure option",
+          "note": "Pol.is offers a pass, though not recorded as CIE's distinct, non-gating value on every item."
+        },
+        {
+          "id": "R16",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Instrument under seven minutes",
+          "note": "A completion-time timing study with a test posse \u2014 a field-research step, not a codebase capability."
+        },
+        {
+          "id": "R17",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Validated item banks + neutral audit",
+          "note": "Wording sourced from validated banks and neutral-audited \u2014 a content/process gate."
+        },
+        {
+          "id": "R18",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Named instrument owner",
+          "note": "A named, resourced instrument owner confirmed before collection \u2014 a staffing gate."
+        },
+        {
+          "id": "R19",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "Curator identity + timestamp",
+          "note": "Comhairle stores statement authorship, but not CIE's enforced curator-identity-before-display check."
+        },
+        {
+          "id": "R20",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Seed cites research source",
+          "note": "Each seed statement citing swing-theme research \u2014 a content-provenance step."
+        },
+        {
+          "id": "R21",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Dial decision recorded",
+          "note": "Recording the elicitation-dial decision before launch \u2014 a process artifact."
+        },
+        {
+          "id": "R22",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Config empty until owner sign-off",
+          "note": "Gating the instrument config on the owner's deliverable \u2014 a process control."
+        },
+        {
+          "id": "R23",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Two-tier unbundled consent",
+          "note": "Comhairle has a single consent boolean; CIE's two independent tiers with contact-off-by-default have no analog."
+        },
+        {
+          "id": "R24",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "AI disclosure at start",
+          "note": "Comhairle uses AI services and can disclose them, but without CIE's red-teamed standalone-screenshot standard."
+        },
+        {
+          "id": "R25",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Consent event pins copy version",
+          "note": "Versioning every consent event to the exact copy shown is absent from Comhairle's model."
+        },
+        {
+          "id": "R26",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Consent compliance review",
+          "note": "A privacy and electoral-compliance sign-off before go/no-go \u2014 a governance step."
+        },
+        {
+          "id": "R27",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "11-participant suppression floor",
+          "note": "Server-side cell suppression below 11, with complementary suppression, is not in Comhairle's ungated render."
+        },
+        {
+          "id": "R28",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Paraphrase-only quotes",
+          "note": "Comhairle stores and serves verbatim statement text \u2014 the opposite of CIE's paraphrase-only egress rule."
+        },
+        {
+          "id": "R29",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Recontact tier live at launch",
+          "note": "A live recontact consent tier has no counterpart in Comhairle."
+        },
+        {
+          "id": "R30",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "Post-results comms to completers",
+          "note": "Comhairle has notifications, but not CIE's session-state rule of 'completed submitters only, after analysis'."
+        },
+        {
+          "id": "R31",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Contract in schema + validator",
+          "note": "CIE implements one record contract in both app schema and pipeline validator; Comhairle has no dual-checked contract."
+        },
+        {
+          "id": "R32",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "No update/delete of raw rows",
+          "note": "Append-only enforced in DB roles; Comhairle uses ordinary mutable Postgres."
+        },
+        {
+          "id": "R33",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Analysis can't read contacts",
+          "note": "A permission-audited wall between analysis and the contact store; Comhairle stores joinable data without it."
+        },
+        {
+          "id": "R34",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Nightly off-box hash chain",
+          "note": "A tamper-evident hash chain that blocks reads on mismatch \u2014 absent from Comhairle."
+        },
+        {
+          "id": "R35",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": true,
+          "name": "Two-class moderation",
+          "note": "Comhairle has a moderation status, but not CIE's two semantics \u2014 toxicity hides yet counts, integrity excludes the session."
+        },
+        {
+          "id": "R36",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Hash-registered run artifacts",
+          "note": "CIE renders immutable per-run artifacts under a versioned run id; Comhairle renders live data."
+        },
+        {
+          "id": "R37",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "Theme labels LLM + human-confirmed",
+          "note": "Comhairle auto-categorizes with AI, but without CIE's recorded human confirmation and 20-contributor floor."
+        },
+        {
+          "id": "R38",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": false,
+          "name": "Label/publish held for provider",
+          "note": "A deliberate hold on the label/publish stage until the provider decision lands \u2014 a CIE build-discipline choice."
+        },
+        {
+          "id": "R39",
+          "area": "Requirement",
+          "status": "gap",
+          "sourced": true,
+          "name": "Single batch LLM over aggregates",
+          "note": "CIE makes one batch pass over PII-scrubbed aggregates; Comhairle makes many per-record external calls."
+        },
+        {
+          "id": "R40",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "Thresholds single source of truth",
+          "note": "Comhairle has config, but not CIE's linted single-source thresholds file with generated constants."
+        },
+        {
+          "id": "R41",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "Unique codes + redemption log",
+          "note": "Comhairle issues participation codes, though not to CIE's 45-bit-entropy + append-only-redemption spec."
+        },
+        {
+          "id": "R42",
+          "area": "Requirement",
+          "status": "partial",
+          "sourced": false,
+          "name": "Funnel report by channel/batch",
+          "note": "Comhairle has participation analytics, but not CIE's delivered/redeemed/consented/completed funnel."
+        },
+        {
+          "id": "R43",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Contact-list provenance documented",
+          "note": "Documenting contact-list provenance before print \u2014 an operations step."
+        },
+        {
+          "id": "R44",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "QR domain warmed + fast landing",
+          "note": "Warming the QR domain and latency-testing the landing page \u2014 a deployment step."
+        },
+        {
+          "id": "R45",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Staging walkthrough",
+          "note": "A production-identical staging walkthrough \u2014 a launch-readiness step."
+        },
+        {
+          "id": "R46",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Load test at 5\u201310k",
+          "note": "A concurrency load test confirming zero loss \u2014 a testing step."
+        },
+        {
+          "id": "R47",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Milestone gates signed",
+          "note": "Funder-signed milestone gates and go/no-go \u2014 a governance step."
+        },
+        {
+          "id": "R48",
+          "area": "Requirement",
+          "status": "na",
+          "sourced": false,
+          "name": "Replication playbook",
+          "note": "A playbook authored alongside the build \u2014 a deliverable, not a platform feature."
+        },
+        {
+          "id": "T1",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": true,
+          "name": "Participation gate",
+          "note": "A minimum-participation floor before any result renders; Comhairle shows Pol.is math live."
+        },
+        {
+          "id": "T2",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": true,
+          "name": "Cell suppression floor",
+          "note": "The 11-participant server-side suppression floor is absent from Comhairle's ungated display."
+        },
+        {
+          "id": "T3",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": false,
+          "name": "Coverage / representativeness gate",
+          "note": "A coverage threshold before results \u2014 Comhairle applies no such gate."
+        },
+        {
+          "id": "T4",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": true,
+          "name": "\u226525 votes per group",
+          "note": "The 25-votes-per-group floor for a group-level claim has no analog in Comhairle."
+        },
+        {
+          "id": "T5",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": true,
+          "name": "Opinion-map stability gate",
+          "note": "CIE blocks an unstable opinion map; Comhairle renders whatever Pol.is returns."
+        },
+        {
+          "id": "T6",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": true,
+          "name": "Per-cluster stability gate",
+          "note": "Per-cluster stability gating (sub-headline \u2192 directional) is absent from Comhairle."
+        },
+        {
+          "id": "T7",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": true,
+          "name": "Per-group Wilson lower bound",
+          "note": "Requiring each group's Wilson 95% lower bound above 0.5 is not enforced by Comhairle."
+        },
+        {
+          "id": "T8",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": true,
+          "name": "Bridging / representativeness badge",
+          "note": "The gated badge itself \u2014 the claim, not the number \u2014 has no Comhairle equivalent."
+        },
+        {
+          "id": "T9",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": true,
+          "name": "Claim-type gate",
+          "note": "CIE's pipeline claim-type gate plus scope banner; Comhairle has no claim-discipline gate."
+        },
+        {
+          "id": "T10",
+          "area": "Quality gate",
+          "status": "gap",
+          "sourced": true,
+          "name": "Paraphrase / verbatim-egress gate",
+          "note": "The export-layer block on verbatim text (substituting a paraphrase) is the opposite of Comhairle's verbatim serving."
+        },
+        {
+          "id": "M1",
+          "area": "Build core",
+          "status": "partial",
+          "sourced": false,
+          "name": "Low-friction web entry",
+          "note": "Comhairle offers web entry and codes, but not CIE's proportionate astroturf-integrity layer as specified."
+        },
+        {
+          "id": "M2",
+          "area": "Build core",
+          "status": "partial",
+          "sourced": false,
+          "name": "Consent + AI disclosure",
+          "note": "Comhairle has a consent boolean and AI services; CIE's two unbundled tiers with contact-off default are a stronger form."
+        },
+        {
+          "id": "M3",
+          "area": "Build core",
+          "status": "satisfies",
+          "sourced": true,
+          "name": "Vote elicitation floor",
+          "note": "Vote agree/disagree/pass on seeded + emergent statements \u2014 Comhairle's wrapped Pol.is is exactly this spine."
+        },
+        {
+          "id": "M4",
+          "area": "Build core",
+          "status": "partial",
+          "sourced": false,
+          "name": "Instrument as a budget",
+          "note": "Comhairle's HeyForm covers surveys, but not CIE's under-seven-minute ascending-load neutral-wording budget."
+        },
+        {
+          "id": "M5",
+          "area": "Build core",
+          "status": "na",
+          "sourced": false,
+          "name": "Named instrument owner",
+          "note": "Resourcing a named instrument owner \u2014 a staffing commitment, not a platform capability."
+        },
+        {
+          "id": "M6",
+          "area": "Build core",
+          "status": "gap",
+          "sourced": true,
+          "name": "Frozen v0 record contract",
+          "note": "CIE's normalized append-only record contract is the seam Comhairle's stub data_model never implements."
+        },
+        {
+          "id": "M7",
+          "area": "Build core",
+          "status": "satisfies",
+          "sourced": true,
+          "name": "Proven analysis core",
+          "note": "PCA\u2192k-means with silhouette-bounded k on response patterns \u2014 Comhairle's Pol.is core matches, validated on blind data."
+        },
+        {
+          "id": "M8",
+          "area": "Build core",
+          "status": "gap",
+          "sourced": true,
+          "name": "Validity card with every result",
+          "note": "The validity card has no counterpart in Comhairle's ungated output."
+        },
+        {
+          "id": "M9",
+          "area": "Build core",
+          "status": "gap",
+          "sourced": true,
+          "name": "Local embeddings + one batch call",
+          "note": "Sovereign local embeddings and one scrubbed batch call; Comhairle's per-record external AI is the opposite posture."
+        },
+        {
+          "id": "M10",
+          "area": "Build core",
+          "status": "partial",
+          "sourced": false,
+          "name": "Candidate bridging dashboard",
+          "note": "Comhairle has participation/admin UIs, but not CIE's bridging-ranked candidate dashboard with per-group support beside every label."
+        },
+        {
+          "id": "M11",
+          "area": "Build core",
+          "status": "gap",
+          "sourced": true,
+          "name": "Scope banner + methods note",
+          "note": "The scope-banner claim-discipline surface is absent from Comhairle."
+        },
+        {
+          "id": "M12",
+          "area": "Build core",
+          "status": "na",
+          "sourced": false,
+          "name": "Contract deltas vs signed agreement",
+          "note": "Checking the build against the signed agreement's contract deltas \u2014 a governance gate."
+        }
+      ],
       "finding": "The two systems agree on the Pol.is spine and diverge on everything CIE adds around it. The only items Comhairle fully satisfies (votes-only aggregation, demographic-blind clustering, the Pol.is tool, the PCA\u2192k-means core) are the Pol.is-derived substrate CIE already re-implements clean-room."
     },
     "cie_gaps": [

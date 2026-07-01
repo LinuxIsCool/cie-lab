@@ -15,16 +15,25 @@ type Interop = {
   value_codes: Record<string, number>;
 };
 type MapRow = { cie: string; comhairle: string; fidelity: string; note: string };
+type CovItem = { id: string; area: string; name: string; status: string; note: string; sourced?: boolean };
 type Assessment = {
   decision: string; agpl: string; verified: string;
   side_by_side: { dim: string; comhairle: string; cie: string }[];
-  coverage: { satisfies: number; partial: number; gap: number; na: number; total: number; finding: string };
+  coverage: { satisfies: number; partial: number; gap: number; na: number; total: number; finding: string; items?: CovItem[] };
   cie_gaps: string[];
   comhairle_has: string;
   paths: { name: string; effort: string; fork: boolean; recommended: boolean; note: string }[];
   posture: string;
   gifts: { t: string; d: string }[];
 };
+
+const CS: Record<string, { label: string; cls: string }> = {
+  satisfies: { label: "satisfies", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
+  partial: { label: "partial", cls: "bg-sky-50 text-sky-700 ring-sky-200" },
+  gap: { label: "gap", cls: "bg-rose-50 text-rose-700 ring-rose-200" },
+  na: { label: "n/a", cls: "bg-slate-100 text-slate-500 ring-slate-200" },
+};
+const AREA_SHORT: Record<string, string> = { Requirement: "Req", "Quality gate": "Gate", "Build core": "Build" };
 
 const FID: Record<string, { label: string; cls: string; def: string }> = {
   clean: { label: "clean", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200", def: "A direct one-to-one match — the value carries over as-is." },
@@ -109,6 +118,42 @@ export default function Interop() {
         </div>
         <p className="mt-3 text-[13px] text-slate-600 leading-relaxed">{cov.finding}</p>
       </div>
+
+      {cov.items && cov.items.length > 0 && (
+        <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden">
+          <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
+            <span className="text-[12px] font-semibold text-slate-600">All 70 items</span>
+            <span className="text-[11px] text-slate-400">R1–R48 requirements · T1–T10 gates · M1–M12 build core · scroll ↓</span>
+          </div>
+          <div className="max-h-[440px] overflow-y-auto">
+            <table className="w-full text-left table-fixed">
+              <thead className="sticky top-0 bg-slate-50 z-10">
+                <tr className="text-[10px] uppercase tracking-wide text-slate-400">
+                  <th className="w-12 px-3 py-2 font-semibold">ID</th>
+                  <th className="w-16 px-2 py-2 font-semibold">Area</th>
+                  <th className="w-48 px-2 py-2 font-semibold">Item</th>
+                  <th className="w-24 px-2 py-2 font-semibold">Coverage</th>
+                  <th className="px-2 py-2 font-semibold">What it means for the integration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cov.items.map((it) => (
+                  <tr key={it.id} className="border-t border-slate-50 align-top hover:bg-slate-50/60">
+                    <td className="px-3 py-2 text-[12px] font-mono text-slate-600">{it.id}</td>
+                    <td className="px-2 py-2 text-[11px] text-slate-400">{AREA_SHORT[it.area] ?? it.area}</td>
+                    <td className="px-2 py-2 text-[12px] text-slate-700 leading-snug">{it.name}</td>
+                    <td className="px-2 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${CS[it.status]?.cls ?? ""}`}>{CS[it.status]?.label ?? it.status}</span></td>
+                    <td className="px-2 py-2 text-[12px] text-slate-500 leading-snug">{it.note}{it.sourced === false && <span className="text-slate-300" title="status inferred to reconcile the audited totals"> · inferred</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="px-3 py-1.5 border-t border-slate-100 text-[10px] text-slate-400">
+            Statuses reconcile to the audited totals; “· inferred” marks a status assigned to fit the per-area counts rather than stated in the source doc.
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
         <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
