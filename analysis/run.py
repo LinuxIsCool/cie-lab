@@ -13,6 +13,7 @@ import gen_synthetic
 import bridging
 import kg
 import interop
+import pni
 
 
 def label_groups(art: dict) -> None:
@@ -65,9 +66,11 @@ def main() -> None:
     print(f"  feeling-heard avg={art['overall_self_codes']['feeling_heard_mean']} "
           f"comment-rate={art['overall_self_codes']['comment_rate']}")
 
-    # P1 interop-export needs no LLM — always emit
+    # P1 interop-export + P4 PNI stories need no LLM — always emit
     print("exporting P1 interop flat-file…")
     interop.build_and_write(ds, art)
+    print("generating P4 PNI narrative set…")
+    pni.build_and_write(seed=a.seed)
 
     # P5 knowledge graph rides the same ds+artifact (needs embeddings, so skip under --no-llm)
     if not a.no_llm:

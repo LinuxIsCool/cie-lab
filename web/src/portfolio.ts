@@ -62,7 +62,7 @@ export const POCS: Poc[] = [
   },
   {
     id: "P4", route: "/p4", short: "PNI depth", title: "PNI Depth",
-    status: "planned", wave: "Wave 2",
+    status: "built", wave: "Built", labPoc: "POC #8",
     question: "Is full Participatory Narrative Inquiry depth worth its methodology cost?",
     why: "Exercises the whole methodology axis (the OpenCivics bet).", cost: "high",
   },

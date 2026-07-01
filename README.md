@@ -65,6 +65,16 @@ withholds P0's additions (AI labels, self-codes, free-text, confidence badges). 
 between P2 and P0 in the hub *is* the experiment: what do the extra layers actually buy?
 Pure subtraction over the existing artifact — no analysis changes. Lives at `#/p2`.
 
+## POC #8 — PNI depth (P4)
+
+The methodology bet, shown at full depth. Where P0 uses *light* self-coding (two ratings
+on the vote), full **Participatory Narrative Inquiry** collects short stories and has each
+teller self-interpret theirs (feeling / agency / time / scope). "Narrative catalysis" then
+plots a **feeling × agency landscape** — grievance, empowerment, and the revealing
+in-between — surfaces the patterns that fall out, and shows a representative story from each
+corner. Honest about the cost (50–100 stories + real participant effort). Synthetic stories,
+computed offline (`analysis/pni.py`, no LLM). Lives at `#/p4`.
+
 ## POC #7 — Hybrid quant+qual (P7)
 
 Reads two signals together, group by group. P0 keeps the votes (quantitative common
