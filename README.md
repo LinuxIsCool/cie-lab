@@ -1,5 +1,10 @@
 # cie-lab
 
+**▶ Live demo: https://linuxiscool.github.io/cie-lab/** — all 11 prototypes (P0–P10). Nine are
+fully static and run in the browser; the two live-AI demos (**P3** conversational, **P6** ask)
+need the local ask-server (`analysis/serve.py`) and will show a "server not running" note on the
+hosted site.
+
 Reserved experimental sandbox for the **Civic Intelligence Engine** prototype portfolio.
 Local-first; we iterate here and **converge late** — only graduating winners to the team repo.
 Free LLM/embedding experimentation via **TELUS** (`claude-llms`, $0). POCs use **synthetic + public**
