@@ -31,9 +31,9 @@ type Assessment = {
 };
 
 const CS: Record<string, { label: string; cls: string }> = {
-  satisfies: { label: "satisfies", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
+  satisfies: { label: "both have", cls: "bg-violet-50 text-violet-700 ring-violet-200" },
   partial: { label: "partial", cls: "bg-sky-50 text-sky-700 ring-sky-200" },
-  gap: { label: "gap", cls: "bg-rose-50 text-rose-700 ring-rose-200" },
+  gap: { label: "CIE adds", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
   na: { label: "n/a", cls: "bg-slate-100 text-slate-500 ring-slate-200" },
 };
 // reverse-view status vocabulary (kept off amber — amber is reserved for commentary cards)
@@ -74,7 +74,7 @@ const HEX: Record<string, [string, string]> = {
 };
 const TYPE_HUE: Record<string, string> = { Requirement: "indigo", "Quality gate": "fuchsia", "Build core": "cyan", "Comhairle feature": "stone" };
 const SRC_HUE: Record<string, string> = { CIE: "blue", Comhairle: "slate" };
-const STATUS_HUE: Record<string, string> = { satisfies: "emerald", partial: "sky", gap: "rose", na: "slate", gain: "emerald", watch: "sky", diverges: "violet" };
+const STATUS_HUE: Record<string, string> = { satisfies: "violet", partial: "sky", gap: "emerald", na: "slate", gain: "emerald", watch: "sky", diverges: "violet" };
 const oStyle = (hue?: string): React.CSSProperties | undefined => (hue && HEX[hue] ? { background: HEX[hue][0], color: HEX[hue][1] } : undefined);
 // id ordering: CIE spec ids (R < T < M) first, then Comhairle-sourced ids (CT/CI/CS/CD/CF, and legacy I/F).
 const ID_RANK: Record<string, number> = { R: 0, T: 1, M: 2, CT: 10, CI: 11, CS: 12, CD: 13, CF: 14, I: 11, F: 14 };
@@ -90,7 +90,7 @@ const FID: Record<string, { label: string; cls: string; def: string }> = {
 };
 const FID_ORDER = ["clean", "rekey", "recast", "lossy", "gap", "dropped"];
 const COV = [
-  { k: "satisfies", c: "#059669" }, { k: "partial", c: "#0ea5e9" }, { k: "gap", c: "#f43f5e" }, { k: "na", c: "#94a3b8" },
+  { k: "satisfies", c: "#7c3aed" }, { k: "partial", c: "#0ea5e9" }, { k: "gap", c: "#059669" }, { k: "na", c: "#94a3b8" },
 ] as const;
 
 function H({ children }: { children: React.ReactNode }) {
@@ -211,12 +211,12 @@ export default function Interop() {
         </div>
         <p className="mt-3 text-[13px] text-slate-600 leading-relaxed">{cov.finding}</p>
         <div className="mt-3 pt-3 border-t border-slate-100">
-          <div className="text-[11px] font-semibold text-slate-500 mb-2">Every item falls into one of four buckets — how much of it Comhairle already covers:</div>
+          <div className="text-[11px] font-semibold text-slate-500 mb-2">Every item falls into one of four buckets — how the two systems line up on it:</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2">
             {[
-              ["satisfies", "Comhairle already delivers this — almost always the shared Pol.is spine (voting, demographic-blind clustering) that CIE also builds on."],
+              ["satisfies", "Both systems deliver this — almost always the shared Pol.is spine (voting, demographic-blind clustering). Common ground, not a CIE advantage."],
               ["partial", "Comhairle has a weaker or related form — the mechanism exists, but not to CIE's full standard or guarantee."],
-              ["gap", "A CIE capability Comhairle lacks entirely — the trust, claim-discipline, and validity layer where the two systems most diverge."],
+              ["gap", "A capability only CIE brings — its trust, claim-discipline, and validity layer. These are CIE's differentiators, not a shortfall."],
               ["na", "A CIE program or process step (staffing, sign-offs, field ops), not a platform feature — outside a code-to-code comparison."],
             ].map(([k, def]) => (
               <div key={k} className="flex items-start gap-2.5">
@@ -327,7 +327,7 @@ export default function Interop() {
             </table>
           </div>
           <div className="px-3 py-1.5 border-t border-slate-100 text-[10px] text-slate-400">
-            <span className="text-blue-600 font-medium">CIE</span> rows are spec items surfaced from studying CIE (satisfies / partial / gap / n·a); <span className="text-slate-600 font-medium">Comhairle</span> rows are features surfaced from studying Comhairle (gain / watch / diverges). “·inf” marks a CIE status inferred to fit the per-area counts.
+            <span className="text-blue-600 font-medium">CIE</span> rows are spec items surfaced from studying CIE (both have / partial / CIE adds / n·a); <span className="text-slate-600 font-medium">Comhairle</span> rows are features surfaced from studying Comhairle (gain / watch / diverges). “·inf” marks a CIE status inferred to fit the per-area counts.
           </div>
         </div>
       )}
