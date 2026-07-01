@@ -1,0 +1,46 @@
+{
+  "mapping": [
+    {
+      "cie": "statement.id",
+      "interop": "statement.id",
+      "comhairle": "Comment.id",
+      "verified": true
+    },
+    {
+      "cie": "statement.text",
+      "interop": "statement.text",
+      "comhairle": "Comment.body",
+      "verified": true
+    },
+    {
+      "cie": "vote.value (agree/disagree/pass)",
+      "interop": "vote.value (+1/-1/0)",
+      "comhairle": "Reaction.kind",
+      "verified": true
+    },
+    {
+      "cie": "vote.participant",
+      "interop": "vote.participant",
+      "comhairle": "Reaction.author",
+      "verified": true
+    },
+    {
+      "cie": "vote.statement",
+      "interop": "vote.statement",
+      "comhairle": "Reaction.target_id",
+      "verified": false
+    },
+    {
+      "cie": "participant.id",
+      "interop": "participant.id",
+      "comhairle": "Participant.id",
+      "verified": true
+    },
+    {
+      "cie": "opinion group (derived)",
+      "interop": "derived.groups[]",
+      "comhairle": "(recomputed by receiver)",
+      "verified": true
+    }
+  ]
+}

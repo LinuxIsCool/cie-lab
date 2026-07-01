@@ -12,6 +12,7 @@ from dataclasses import asdict
 import gen_synthetic
 import bridging
 import kg
+import interop
 
 
 def label_groups(art: dict) -> None:
@@ -63,6 +64,10 @@ def main() -> None:
     print(f"  group labels: {labels}")
     print(f"  feeling-heard avg={art['overall_self_codes']['feeling_heard_mean']} "
           f"comment-rate={art['overall_self_codes']['comment_rate']}")
+
+    # P1 interop-export needs no LLM — always emit
+    print("exporting P1 interop flat-file…")
+    interop.build_and_write(ds, art)
 
     # P5 knowledge graph rides the same ds+artifact (needs embeddings, so skip under --no-llm)
     if not a.no_llm:

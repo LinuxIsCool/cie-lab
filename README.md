@@ -65,6 +65,15 @@ withholds P0's additions (AI labels, self-codes, free-text, confidence badges). 
 between P2 and P0 in the hub *is* the experiment: what do the extra layers actually buy?
 Pure subtraction over the existing artifact — no analysis changes. Lives at `#/p2`.
 
+## POC #5 — Comhairle interop-export (P1)
+
+Makes "interoperate, don't fork" concrete. Exports the **raw** deliberation
+(statements + anonymized participants + votes, not the computed results) as a portable
+`cie.interop.v0` flat-file, so another platform could ingest it and re-run its own
+analysis — lossless because it's the evidence, not the conclusions. Shows a candidate
+field-mapping to Comhairle's grammar with one row honestly marked **pending** (unverified
+against their source). No LLM needed; `run.py` emits it unconditionally. Lives at `#/p1`.
+
 ## Layout
 - `analysis/` — Python (uv): `gen_synthetic.py`, `bridging.py`, `telus.py` (free TELUS client),
   `run.py` (POC #1 pipeline + KG), `ask.py` (POC #2 retrieval + grounding), `serve.py`

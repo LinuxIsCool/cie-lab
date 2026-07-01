@@ -32,7 +32,7 @@ export const POCS: Poc[] = [
   },
   {
     id: "P1", route: "/p1", short: "Comhairle interop-export", title: "Comhairle Interop-Export Adapter",
-    status: "planned", wave: "Wave 1",
+    status: "built", wave: "Built", labPoc: "POC #5",
     question: "Can CIE losslessly-enough speak the Metagov/Comhairle grammar?",
     why: "Retires the fork/adapter axis cheaply; the reversible interop option before any fork temptation.", cost: "~2–4 d",
   },
