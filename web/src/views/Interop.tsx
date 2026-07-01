@@ -81,7 +81,6 @@ export default function Interop() {
   const [fType, setFType] = useState("");          // filter by Type (Requirement / Quality gate / Build core / Comhairle feature)
   const [fComp, setFComp] = useState("");          // filter by Component ("" = all)
   const [fStatus, setFStatus] = useState("");      // filter by Coverage / stance ("" = all)
-  const [density, setDensity] = useState<"detailed" | "concise">("detailed"); // text-cell verbosity
 
   useEffect(() => {
     Promise.all([
@@ -120,7 +119,7 @@ export default function Interop() {
     ...(["satisfies", "partial", "gap", "na"] as const).filter((s) => cieRows.some((r) => r.status === s)),
     ...(["gain", "watch", "diverges"] as const).filter((s) => revRows.some((r) => r.status === s)),
   ];
-  const den = (r: Row, f: "cie" | "comhairle" | "meaning") => (density === "concise" ? ((r[`${f}_s` as keyof Row] as string | undefined) || r[f]) : r[f]);
+  const den = (r: Row, f: "cie" | "comhairle" | "meaning") => (r[`${f}_s` as keyof Row] as string | undefined) || r[f];
   const statusRank = (r: Row) => (r.source === "CIE" ? (STATUS_RANK[r.status] ?? 9) : 4 + (REV_RANK[r.status] ?? 9));
   const term = q.trim().toLowerCase();
   const visible = allRows.filter((r) =>
@@ -240,12 +239,6 @@ export default function Interop() {
               <select value={fStatus} onChange={(e) => setFStatus(e.target.value)} className={selCls} title="Filter by coverage / stance">
                 <option value="">All coverage</option>{statusOpts.map((s) => <option key={s} value={s}>{(CS[s] ?? RS[s]).label}</option>)}
               </select>
-              <div className="flex rounded-md border border-slate-200 overflow-hidden">
-                {(["detailed", "concise"] as const).map((d) => (
-                  <button key={d} onClick={() => setDensity(d)}
-                    className={`text-[11px] px-2 py-1 ${density === d ? "bg-slate-700 text-white" : "bg-white text-slate-500 hover:text-slate-700"}`}>{d === "detailed" ? "Detailed" : "Concise"}</button>
-                ))}
-              </div>
               {(q || fSource || fType || fComp || fStatus) && (
                 <button onClick={() => { setQ(""); setFSource(""); setFType(""); setFComp(""); setFStatus(""); }}
                   className="text-[11px] text-slate-400 hover:text-slate-600 underline">clear</button>
@@ -287,7 +280,7 @@ export default function Interop() {
             </table>
           </div>
           <div className="px-3 py-1.5 border-t border-slate-100 text-[10px] text-slate-400">
-            <span className="text-blue-600 font-medium">CIE</span> rows are spec items surfaced from studying CIE (satisfies / partial / gap / n·a); <span className="text-slate-600 font-medium">Comhairle</span> rows are features surfaced from studying Comhairle (gain / watch / diverges). “·inf” marks a CIE status inferred to fit the per-area counts. Toggle Detailed / Concise for sentence-length notes.
+            <span className="text-blue-600 font-medium">CIE</span> rows are spec items surfaced from studying CIE (satisfies / partial / gap / n·a); <span className="text-slate-600 font-medium">Comhairle</span> rows are features surfaced from studying Comhairle (gain / watch / diverges). “·inf” marks a CIE status inferred to fit the per-area counts.
           </div>
         </div>
       )}
