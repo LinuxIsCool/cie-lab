@@ -38,9 +38,9 @@ const CS: Record<string, { label: string; cls: string }> = {
 };
 // reverse-view status vocabulary (kept off amber — amber is reserved for commentary cards)
 const RS: Record<string, { label: string; cls: string }> = {
-  gain: { label: "gain", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
-  watch: { label: "watch", cls: "bg-sky-50 text-sky-700 ring-sky-200" },
-  diverges: { label: "diverges", cls: "bg-violet-50 text-violet-700 ring-violet-200" },
+  gain: { label: "gain", cls: "bg-teal-50 text-teal-700 ring-teal-200" },
+  watch: { label: "watch", cls: "bg-orange-50 text-orange-700 ring-orange-200" },
+  diverges: { label: "diverges", cls: "bg-rose-50 text-rose-700 ring-rose-200" },
 };
 const RS_ORDER = ["gain", "watch", "diverges"];
 const REV_RANK: Record<string, number> = { gain: 0, watch: 1, diverges: 2 };
@@ -74,7 +74,7 @@ const HEX: Record<string, [string, string]> = {
 };
 const TYPE_HUE: Record<string, string> = { Requirement: "indigo", "Quality gate": "fuchsia", "Build core": "cyan", "Comhairle feature": "stone" };
 const SRC_HUE: Record<string, string> = { CIE: "blue", Comhairle: "slate" };
-const STATUS_HUE: Record<string, string> = { satisfies: "violet", partial: "sky", gap: "emerald", na: "slate", gain: "emerald", watch: "sky", diverges: "violet" };
+const STATUS_HUE: Record<string, string> = { satisfies: "violet", partial: "sky", gap: "emerald", na: "slate", gain: "teal", watch: "orange", diverges: "rose" };
 const oStyle = (hue?: string): React.CSSProperties | undefined => (hue && HEX[hue] ? { background: HEX[hue][0], color: HEX[hue][1] } : undefined);
 // id ordering: CIE spec ids (R < T < M) first, then Comhairle-sourced ids (CT/CI/CS/CD/CF, and legacy I/F).
 const ID_RANK: Record<string, number> = { R: 0, T: 1, M: 2, CT: 10, CI: 11, CS: 12, CD: 13, CF: 14, I: 11, F: 14 };
