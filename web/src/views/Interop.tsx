@@ -15,11 +15,14 @@ type Interop = {
   value_codes: Record<string, number>;
 };
 type MapRow = { cie: string; comhairle: string; fidelity: string; note: string };
-type CovItem = { id: string; area: string; name: string; status: string; note: string; sourced?: boolean; cie?: string; comhairle?: string; meaning?: string; component?: string };
+type CovItem = { id: string; area: string; name: string; status: string; note: string; sourced?: boolean; cie?: string; comhairle?: string; meaning?: string; cie_s?: string; comhairle_s?: string; meaning_s?: string; component?: string };
+// "reverse view" — features Comhairle has that CIE doesn't (mirror of the coverage table)
+type RevItem = { id: string; component: string; name: string; status: string; comhairle: string; cie: string; meaning: string; comhairle_s?: string; cie_s?: string; meaning_s?: string; paths?: string[] };
 type Assessment = {
   decision: string; agpl: string; verified: string;
   side_by_side: { dim: string; comhairle: string; cie: string }[];
   coverage: { satisfies: number; partial: number; gap: number; na: number; total: number; finding: string; items?: CovItem[] };
+  reverse?: { gain: number; watch: number; diverges: number; total: number; finding: string; items: RevItem[] };
   cie_gaps: string[];
   comhairle_has: string;
   paths: { name: string; effort: string; fork: boolean; recommended: boolean; note: string }[];
@@ -33,9 +36,19 @@ const CS: Record<string, { label: string; cls: string }> = {
   gap: { label: "gap", cls: "bg-rose-50 text-rose-700 ring-rose-200" },
   na: { label: "n/a", cls: "bg-slate-100 text-slate-500 ring-slate-200" },
 };
+// reverse-view status vocabulary (kept off amber — amber is reserved for commentary cards)
+const RS: Record<string, { label: string; cls: string }> = {
+  gain: { label: "gain", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
+  watch: { label: "watch", cls: "bg-sky-50 text-sky-700 ring-sky-200" },
+  diverges: { label: "diverges", cls: "bg-violet-50 text-violet-700 ring-violet-200" },
+};
+const RS_ORDER = ["gain", "watch", "diverges"];
+const REV_RANK: Record<string, number> = { gain: 0, watch: 1, diverges: 2 };
 const AREA_SHORT: Record<string, string> = { Requirement: "Req", "Quality gate": "Gate", "Build core": "Build" };
 const STATUS_RANK: Record<string, number> = { satisfies: 0, partial: 1, gap: 2, na: 3 };
-const idKey = (id: string) => { const m = id.match(/^([A-Z]+)(\d+)$/); const g = ({ R: 0, T: 1, M: 2 } as Record<string, number>)[m?.[1] ?? "R"] ?? 9; return g * 100 + (m ? parseInt(m[2], 10) : 0); };
+// id ordering: CIE spec ids (R < T < M) first, then Comhairle-sourced ids (CT/CI/CS/CD/CF, and legacy I/F).
+const ID_RANK: Record<string, number> = { R: 0, T: 1, M: 2, CT: 10, CI: 11, CS: 12, CD: 13, CF: 14, I: 11, F: 14 };
+const idKey = (id: string) => { const m = id.match(/^([A-Z]+)(\d+)$/); const g = ID_RANK[m?.[1] ?? "R"] ?? 99; return g * 1000 + (m ? parseInt(m[2], 10) : 0); };
 
 const FID: Record<string, { label: string; cls: string; def: string }> = {
   clean: { label: "clean", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200", def: "A direct one-to-one match — the value carries over as-is." },
@@ -59,9 +72,16 @@ export default function Interop() {
   const [mapping, setMapping] = useState<MapRow[] | null>(null);
   const [a, setA] = useState<Assessment | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const [sortKey, setSortKey] = useState<"id" | "component" | "name" | "status">("id");
+  type SortKey = "id" | "source" | "type" | "component" | "name" | "status";
+  const [sortKey, setSortKey] = useState<SortKey>("id");
   const [sortDir, setSortDir] = useState<1 | -1>(1);
-  const clickSort = (k: "id" | "component" | "name" | "status") => { if (k === sortKey) setSortDir((d) => (d === 1 ? -1 : 1)); else { setSortKey(k); setSortDir(1); } };
+  const clickSort = (k: SortKey) => { if (k === sortKey) setSortDir((d) => (d === 1 ? -1 : 1)); else { setSortKey(k); setSortDir(1); } };
+  const [q, setQ] = useState("");                 // real-time search over the comparison table
+  const [fSource, setFSource] = useState("");      // filter by Source (CIE / Comhairle)
+  const [fType, setFType] = useState("");          // filter by Type (Requirement / Quality gate / Build core / Comhairle feature)
+  const [fComp, setFComp] = useState("");          // filter by Component ("" = all)
+  const [fStatus, setFStatus] = useState("");      // filter by Coverage / stance ("" = all)
+  const [density, setDensity] = useState<"detailed" | "concise">("detailed"); // text-cell verbosity
 
   useEffect(() => {
     Promise.all([
@@ -74,14 +94,49 @@ export default function Interop() {
   if (!doc || !mapping || !a) return <div className="p-10 text-slate-400">Loading assessment…</div>;
 
   const cov = a.coverage;
-  const sortedItems = [...(cov.items ?? [])].sort((x, y) => {
+  const rev = a.reverse;
+  // one comparison set: CIE spec items (source CIE) + Comhairle-only features (source Comhairle)
+  type Row = {
+    id: string; source: "CIE" | "Comhairle"; type: string; component: string; name: string;
+    status: string; sm: Record<string, { label: string; cls: string }>; sourced?: boolean;
+    cie: string; comhairle: string; meaning: string; cie_s?: string; comhairle_s?: string; meaning_s?: string;
+  };
+  const cieRows: Row[] = (cov.items ?? []).map((it) => ({
+    id: it.id, source: "CIE", type: it.area, component: it.component ?? "—", name: it.name,
+    status: it.status, sm: CS, sourced: it.sourced,
+    cie: it.cie ?? it.note, comhairle: it.comhairle ?? "—", meaning: it.meaning ?? it.note,
+    cie_s: it.cie_s, comhairle_s: it.comhairle_s, meaning_s: it.meaning_s,
+  }));
+  const revRows: Row[] = (rev?.items ?? []).map((it) => ({
+    id: it.id, source: "Comhairle", type: "Comhairle feature", component: it.component, name: it.name,
+    status: it.status, sm: RS,
+    cie: it.cie, comhairle: it.comhairle, meaning: it.meaning,
+    cie_s: it.cie_s, comhairle_s: it.comhairle_s, meaning_s: it.meaning_s,
+  }));
+  const allRows = [...cieRows, ...revRows];
+  const components = Array.from(new Set(allRows.map((r) => r.component))).filter((c) => c && c !== "—").sort();
+  const types = ["Requirement", "Quality gate", "Build core", "Comhairle feature"].filter((t) => allRows.some((r) => r.type === t));
+  const statusOpts = [
+    ...(["satisfies", "partial", "gap", "na"] as const).filter((s) => cieRows.some((r) => r.status === s)),
+    ...(["gain", "watch", "diverges"] as const).filter((s) => revRows.some((r) => r.status === s)),
+  ];
+  const den = (r: Row, f: "cie" | "comhairle" | "meaning") => (density === "concise" ? ((r[`${f}_s` as keyof Row] as string | undefined) || r[f]) : r[f]);
+  const statusRank = (r: Row) => (r.source === "CIE" ? (STATUS_RANK[r.status] ?? 9) : 4 + (REV_RANK[r.status] ?? 9));
+  const term = q.trim().toLowerCase();
+  const visible = allRows.filter((r) =>
+    (!fSource || r.source === fSource) && (!fType || r.type === fType) &&
+    (!fComp || r.component === fComp) && (!fStatus || r.status === fStatus) &&
+    (!term || [r.id, r.name, r.component, r.type, r.source, r.cie, r.comhairle, r.meaning, r.cie_s, r.comhairle_s, r.meaning_s]
+      .some((v) => (v ?? "").toLowerCase().includes(term))));
+  const rows = [...visible].sort((x, y) => {
     let r = 0;
     if (sortKey === "id") r = idKey(x.id) - idKey(y.id);
-    else if (sortKey === "status") r = (STATUS_RANK[x.status] ?? 9) - (STATUS_RANK[y.status] ?? 9);
-    else r = String(x[sortKey] ?? "").localeCompare(String(y[sortKey] ?? ""));
+    else if (sortKey === "status") r = statusRank(x) - statusRank(y);
+    else r = String((x as Record<string, unknown>)[sortKey] ?? "").localeCompare(String((y as Record<string, unknown>)[sortKey] ?? ""));
     return r * sortDir || idKey(x.id) - idKey(y.id);
   });
   const Sarrow = (k: string) => (sortKey === k ? (sortDir === 1 ? " ▲" : " ▼") : "");
+  const selCls = "text-[11px] rounded-md border border-slate-200 bg-white px-1.5 py-1 text-slate-600 focus:outline-none focus:ring-1 focus:ring-slate-300";
   return (
     <div className="max-w-5xl">
       <header className="mb-4">
@@ -144,43 +199,95 @@ export default function Interop() {
         </div>
       </div>
 
-      {cov.items && cov.items.length > 0 && (
+      {rev && rev.items.length > 0 && (
+        <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
+          <div className="text-[13px] font-semibold text-slate-700">The reverse view <span className="font-normal text-slate-400">— {rev.total} features Comhairle ships that CIE has no answer for</span></div>
+          <p className="mt-1.5 text-[13px] text-slate-600 leading-relaxed">{rev.finding}</p>
+          <div className="mt-3 pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-x-5 gap-y-2">
+            {([
+              ["gain", "CIE would genuinely benefit from adopting or borrowing this."],
+              ["watch", "Real and useful, situational — worth tracking, not urgent for the pilot."],
+              ["diverges", "Comhairle has it, and CIE deliberately does without — a principled choice."],
+            ] as const).map(([k, def]) => (
+              <div key={k} className="flex items-start gap-2">
+                <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${RS[k].cls}`}>{RS[k].label}</span>
+                <span className="text-[12px] text-slate-500 leading-snug"><span className="tabular-nums font-semibold text-slate-700">{rev[k]}</span> — {def}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {allRows.length > 0 && (
         <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden">
-          <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
-            <span className="text-[12px] font-semibold text-slate-600">All 70 items <span className="font-normal text-slate-400">— sort by any header</span></span>
-            <span className="text-[11px] text-slate-400">scroll ↓ · scroll → for full detail</span>
+          <div className="px-3 py-2 border-b border-slate-100 flex flex-wrap items-center gap-x-3 gap-y-2 justify-between">
+            <span className="text-[12px] font-semibold text-slate-600 shrink-0">
+              All {allRows.length} items <span className="font-normal text-slate-400">— sort by any header</span>
+              {visible.length !== allRows.length && <span className="ml-1 text-slate-400">· {visible.length} shown</span>}
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…"
+                className="text-[12px] rounded-md border border-slate-200 bg-white px-2 py-1 w-40 text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-300" />
+              <select value={fSource} onChange={(e) => setFSource(e.target.value)} className={selCls} title="Filter by source">
+                <option value="">All sources</option><option value="CIE">CIE</option><option value="Comhairle">Comhairle</option>
+              </select>
+              <select value={fType} onChange={(e) => setFType(e.target.value)} className={selCls} title="Filter by type">
+                <option value="">All types</option>{types.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+              <select value={fComp} onChange={(e) => setFComp(e.target.value)} className={selCls} title="Filter by component">
+                <option value="">All components</option>{components.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+              <select value={fStatus} onChange={(e) => setFStatus(e.target.value)} className={selCls} title="Filter by coverage / stance">
+                <option value="">All coverage</option>{statusOpts.map((s) => <option key={s} value={s}>{(CS[s] ?? RS[s]).label}</option>)}
+              </select>
+              <div className="flex rounded-md border border-slate-200 overflow-hidden">
+                {(["detailed", "concise"] as const).map((d) => (
+                  <button key={d} onClick={() => setDensity(d)}
+                    className={`text-[11px] px-2 py-1 ${density === d ? "bg-slate-700 text-white" : "bg-white text-slate-500 hover:text-slate-700"}`}>{d === "detailed" ? "Detailed" : "Concise"}</button>
+                ))}
+              </div>
+              {(q || fSource || fType || fComp || fStatus) && (
+                <button onClick={() => { setQ(""); setFSource(""); setFType(""); setFComp(""); setFStatus(""); }}
+                  className="text-[11px] text-slate-400 hover:text-slate-600 underline">clear</button>
+              )}
+            </div>
           </div>
           <div className="max-h-[600px] overflow-auto">
-            <table className="text-left border-collapse" style={{ minWidth: 1180 }}>
+            <table className="text-left border-collapse" style={{ minWidth: 1320 }}>
               <thead className="sticky top-0 z-10">
                 <tr className="bg-slate-50 text-[10px] uppercase tracking-wide text-slate-400 border-b border-slate-200">
-                  {([["id", "ID", 44], ["component", "Component", 132], ["name", "Item", 150], ["status", "Coverage", 88]] as const).map(([k, label, w]) => (
+                  {([["id", "ID", 52], ["source", "Source", 72], ["type", "Type", 104], ["component", "Component", 128], ["name", "Item", 150], ["status", "Coverage", 88]] as const).map(([k, label, w]) => (
                     <th key={k} style={{ width: w, minWidth: w }} className="px-2.5 py-2 align-bottom">
-                      <button onClick={() => clickSort(k as "id" | "component" | "name" | "status")} className="font-semibold hover:text-slate-600">{label}{Sarrow(k)}</button>
+                      <button onClick={() => clickSort(k)} className="font-semibold hover:text-slate-600">{label}{Sarrow(k)}</button>
                     </th>
                   ))}
-                  <th style={{ minWidth: 240 }} className="px-2.5 py-2 font-semibold align-bottom text-blue-600">In CIE</th>
-                  <th style={{ minWidth: 240 }} className="px-2.5 py-2 font-semibold align-bottom text-slate-500">In Comhairle</th>
-                  <th style={{ minWidth: 240 }} className="px-2.5 py-2 font-semibold align-bottom text-emerald-600">What it means for integration</th>
+                  <th style={{ minWidth: 230 }} className="px-2.5 py-2 font-semibold align-bottom text-blue-600">In CIE</th>
+                  <th style={{ minWidth: 230 }} className="px-2.5 py-2 font-semibold align-bottom text-slate-500">In Comhairle</th>
+                  <th style={{ minWidth: 230 }} className="px-2.5 py-2 font-semibold align-bottom text-emerald-600">What it means for integration</th>
                 </tr>
               </thead>
               <tbody>
-                {sortedItems.map((it) => (
+                {rows.map((it) => (
                   <tr key={it.id} className="border-b border-slate-50 align-top hover:bg-slate-50/50">
                     <td className="px-2.5 py-2 font-mono text-[12px] text-slate-600 whitespace-nowrap">{it.id}</td>
-                    <td className="px-2.5 py-2 text-[11px] text-slate-500">{it.component ?? "—"}</td>
+                    <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${it.source === "CIE" ? "bg-blue-50 text-blue-700 ring-blue-200" : "bg-slate-100 text-slate-600 ring-slate-300"}`}>{it.source}</span></td>
+                    <td className="px-2.5 py-2 text-[11px] text-slate-500">{it.type}</td>
+                    <td className="px-2.5 py-2 text-[11px] text-slate-500">{it.component}</td>
                     <td className="px-2.5 py-2 text-[12px] text-slate-700 font-medium">{it.name}</td>
-                    <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${CS[it.status]?.cls ?? ""}`}>{CS[it.status]?.label ?? it.status}</span>{it.sourced === false && <span className="text-slate-300 text-[10px]"> ·inf</span>}</td>
-                    <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{it.cie ?? it.note}</td>
-                    <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{it.comhairle ?? "—"}</td>
-                    <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{it.meaning ?? it.note}</td>
+                    <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${it.sm[it.status]?.cls ?? ""}`}>{it.sm[it.status]?.label ?? it.status}</span>{it.sourced === false && <span className="text-slate-300 text-[10px]"> ·inf</span>}</td>
+                    <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{den(it, "cie")}</td>
+                    <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{den(it, "comhairle")}</td>
+                    <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{den(it, "meaning")}</td>
                   </tr>
                 ))}
+                {rows.length === 0 && (
+                  <tr><td colSpan={9} className="px-3 py-6 text-center text-[12px] text-slate-400">No items match — adjust search or filters.</td></tr>
+                )}
               </tbody>
             </table>
           </div>
           <div className="px-3 py-1.5 border-t border-slate-100 text-[10px] text-slate-400">
-            Statuses reconcile to the audited totals; “·inf” marks a status inferred to fit the per-area counts rather than stated in the source doc.
+            <span className="text-blue-600 font-medium">CIE</span> rows are spec items surfaced from studying CIE (satisfies / partial / gap / n·a); <span className="text-slate-600 font-medium">Comhairle</span> rows are features surfaced from studying Comhairle (gain / watch / diverges). “·inf” marks a CIE status inferred to fit the per-area counts. Toggle Detailed / Concise for sentence-length notes.
           </div>
         </div>
       )}

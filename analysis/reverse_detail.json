@@ -1,0 +1,950 @@
+{
+  "items": [
+    {
+      "id": "CT1",
+      "component": "Elicitation methods",
+      "name": "Proposal prioritization scoring",
+      "status": "gain",
+      "comhairle": "The Prioritization tool (api/src/tools/prioritization.rs) lets admins attach a set of typed questions to each user-submitted proposal and collect a rich, per-question score rather than a single agree/disagree. Question types include free Text, a discrete LikertScale with admin-defined value/label categories, and a Continuous slider with configurable min/max values, min/max labels, and sub-steps (defaulting to a -? to 10 range with 10 sub-steps). Each participant's answer set is stored as QuestionResponses tied to (proposal, user), responses upsert so a re-vote replaces the prior one, and a randomize_order flag shuffles proposal presentation to blunt ordering bias. Proposal titles and bodies are localized TextContentIds, and admins can pull raw translation data via withTranslations=true.",
+      "cie": "CIE has no equivalent. Its only elicitation primitive is the Pol.is-style vote matrix of agree/disagree/pass on short statements (spec 07-the-system-by-layer.md, 08-the-build-core.md); there is no notion of a participant-authored proposal carrying multiple scored dimensions, no Likert or continuous-slider capture, and no order-randomization control.",
+      "meaning": "CIE should watch, and likely borrow, the idea that a single deliberation item can carry several scored dimensions instead of one ternary vote \u2014 Likert and continuous scales express intensity and trade-offs that binary voting flattens. Adopting it would require extending CIE's vote-matrix math (its PCA/k-means pipeline assumes ternary cells), so this is a medium-effort gain rather than a drop-in, but the randomize-order bias control and per-question localization are cheap, principled wins CIE lacks today.",
+      "comhairle_s": "Comhairle's Prioritization tool collects multi-dimensional, per-question scores (free text, discrete Likert categories, and a configurable continuous slider with min/max labels and sub-steps) against each participant-submitted proposal, with an order-randomization flag to reduce presentation bias.",
+      "cie_s": "CIE offers only ternary agree/disagree/pass voting on short statements and has no proposal object, no Likert or continuous-slider scoring, and no order-randomization control.",
+      "meaning_s": "CIE should treat Comhairle's Likert-plus-continuous proposal scoring as a gain worth adopting, since intensity and trade-off scales capture signal that binary voting flattens, even though wiring it into CIE's ternary PCA/k-means pipeline is a medium-effort change.",
+      "paths": [
+        "comhairle/api/src/tools/prioritization.rs",
+        "comhairle/api/src/models/proposal.rs",
+        "comhairle/api/src/models/proposal_response.rs"
+      ]
+    },
+    {
+      "id": "CT2",
+      "component": "Elicitation methods",
+      "name": "Quadratic & comparative ranking",
+      "status": "watch",
+      "comhairle": "The Ranking tool (api/src/tools/ranking.rs) defines a distinct modality where participants rank a fixed set of admin-authored options rather than vote on statements. Its RankingType enum offers three sub-modes: Basic ordinal ranking, Quadratic(QuadraticVoting) where a participant spends a budget of credits across options with quadratically increasing cost, and Comparative (pairwise) ranking. Each RankOption has a title and optional details, and the tool carries a prompt framing the choice. The file is clearly work-in-progress (it has unfinished From impls and a mis-named sanitize), but the design intent \u2014 budgeted, preference-intensity-aware ranking of a curated option set \u2014 is explicit.",
+      "cie": "CIE has nothing resembling ranked or budgeted voting. Its listening loop treats every statement independently as an agree/disagree/pass cell; there is no credit budget, no forced ordering, and no pairwise comparison, and the spec's north-star (02-north-star.md) deliberately keeps the flow narrow.",
+      "meaning": "Watch rather than adopt now: quadratic voting is a well-regarded mechanism for surfacing preference intensity and resisting tyranny-of-the-majority, which aligns with CIE's consensus goals, but Comhairle's own implementation is unfinished and CIE's ternary matrix would need a parallel scoring path. It is worth tracking as a future option for the rare campaign that needs prioritization-under-budget, without disturbing CIE's core bridging loop.",
+      "comhairle_s": "Comhairle's Ranking tool lets participants rank a curated option set via Basic ordinal, Quadratic credit-budget, or Comparative pairwise modes, encoding preference intensity that plain voting cannot.",
+      "cie_s": "CIE has no ranked, budgeted, or pairwise voting at all \u2014 every statement is an independent agree/disagree/pass cell.",
+      "meaning_s": "CIE should watch quadratic and comparative ranking as a promising future mechanism for preference-intensity elicitation, while noting Comhairle's implementation is still incomplete and CIE's ternary pipeline would need a separate scoring path.",
+      "paths": [
+        "comhairle/api/src/tools/ranking.rs"
+      ]
+    },
+    {
+      "id": "CT3",
+      "component": "Elicitation methods",
+      "name": "AI thinking-space deepening",
+      "status": "watch",
+      "comhairle": "The Thinking Space tool (api/src/tools/thinking_space.rs) is a guided qualitative-reflection modality. Admins seed root questions, each carrying a hidden intent string that is never shown to participants but is fed to the LLM as question_intent so it can generate sharper follow-ups. A participant answers a root question, the bot (via the bot_service agent) streams AI-generated follow-up questions for a configurable follow_up_rounds_count, and answers accumulate with an AnswerStatus (pending/approved) moderation lifecycle. A dedicated summary agent then distills each user's full question/answer thread into a private, per-user AI summary that the participant can edit; summaries are strictly scoped to their author (other users' summaries return 404, not 403).",
+      "cie": "CIE deliberately does not do open-ended, AI-driven qualitative elicitation. It collects short statements and ternary votes, paraphrases quotes rather than serving verbatim, and quarantines per-record external AI (spec 03-principles-and-commitments.md). There is no Socratic follow-up loop, no per-participant AI summary, and no hidden question-intent channel.",
+      "meaning": "This is a genuine capability gap worth watching: laddered follow-up questioning and private per-participant synthesis capture depth and reasoning that a vote matrix cannot. But adopting it collides with two CIE commitments \u2014 no per-record external AI and paraphrase-only serving \u2014 so any CIE version would need local models and careful consent gating. Track the hidden question-intent pattern and the private-summary scoping as strong design ideas even if the external-LLM plumbing diverges.",
+      "comhairle_s": "Comhairle's Thinking Space runs an LLM-driven Socratic loop that seeds root questions with a hidden admin intent, streams multiple rounds of AI follow-up questions, and produces an editable, strictly-private per-participant AI summary.",
+      "cie_s": "CIE has no open-ended AI questioning or per-participant synthesis; it stays on short statements, ternary votes, and paraphrase-only quotes with no per-record external AI.",
+      "meaning_s": "CIE should watch Thinking Space's laddered follow-up questioning and private per-participant summaries as a real depth gain, while recognizing that any adoption must use local models and consent gating to honor CIE's no-external-per-record-AI and paraphrase-only commitments.",
+      "paths": [
+        "comhairle/api/src/tools/thinking_space.rs",
+        "comhairle/api/src/models/thinking_space_answer.rs",
+        "comhairle/api/src/models/thinking_space_summary.rs"
+      ]
+    },
+    {
+      "id": "CT4",
+      "component": "Facilitation & AI assist",
+      "name": "Agentic elicitation chatbot",
+      "status": "watch",
+      "comhairle": "The Elicitation Bot tool (api/src/tools/elicitation_bot.rs) is a streamed conversational agent that helps a participant articulate and shape their views on a configured topic. Each participant gets a persistent bot_service_user_session (get_or_create) so conversation history is retained, the /elicitation_bot/workflow_step/{id} POST returns a raw SSE byte stream of the LLM reply, and the whole behaviour is defined by a RAGFlow agent graph shipped as a static template (api/src/agent_templates/ragflow-elicitation-bot.json) whose Begin node injects the topic and greets with 'I am here to help you shape your views and opinions.' Session teardown deletes the upstream agent session on tool delete.",
+      "cie": "CIE has light self-coding but no participant-facing conversational agent. It never engages a participant in free dialogue to elicit opinions; input is structured statements and votes, and per-record external AI is explicitly out of scope (spec 03-principles-and-commitments.md).",
+      "meaning": "Watch, leaning diverge on implementation: a topic-scoped elicitation chatbot can lower the barrier for participants who struggle to author a crisp statement, which serves CIE's inclusivity aims (04-who-we-serve.md). But Comhairle backs it with an external RAGFlow LLM per conversation, which cuts directly against CIE's no-external-per-record-AI and data-egress commitments. The interaction pattern is worth tracking; the transport (external agent service, verbatim streaming) is where CIE would principledly diverge.",
+      "comhairle_s": "Comhairle's Elicitation Bot is a persistent, topic-scoped conversational LLM agent (defined by a shipped RAGFlow graph) that streams replies to help each participant shape and articulate their opinions.",
+      "cie_s": "CIE has no participant-facing conversational agent and treats per-record external AI dialogue as out of scope.",
+      "meaning_s": "CIE should watch the topic-scoped elicitation-chatbot interaction as an inclusivity aid while diverging from Comhairle's external-RAGFlow-per-conversation implementation, which conflicts with CIE's no-external-per-record-AI and data-egress commitments.",
+      "paths": [
+        "comhairle/api/src/tools/elicitation_bot.rs",
+        "comhairle/api/src/agent_templates/ragflow-elicitation-bot.json",
+        "comhairle/api/src/bot_service.rs"
+      ]
+    },
+    {
+      "id": "CT5",
+      "component": "Elicitation methods",
+      "name": "Video story testimony",
+      "status": "diverges",
+      "comhairle": "The Stories tool (api/src/tools/stories.rs) is a narrative, media-first elicitation modality: participants record and submit a video Story (each Story links a video_id, an optional transcript_id, a user_id and workflow_step_id), and the tool config carries a max_time cap on recording length and a to_see count controlling how many other participants' stories a user is shown. It pairs with Comhairle's transcription_service so spoken testimony can be transcribed. Handlers are currently stubs but the schema and route surface (get/save story per workflow step) define a peer-to-peer video testimony exchange.",
+      "cie": "CIE deliberately avoids exactly this: it serves paraphrase-only quotes, never verbatim text, and has no media, video, or transcription pipeline (spec 03-principles-and-commitments.md). Serving one participant's raw recorded testimony to others is antithetical to its minimal-egress, quarantine-demographics, paraphrase-first stance.",
+      "meaning": "This is a principled divergence, not a gap CIE should close. Raw video testimony is powerful for community storytelling but carries heavy consent, re-identification, and verbatim-serving risks that CIE explicitly designs against. CIE's paraphrase-only, no-media posture is the intentional choice; the value of Stories (surfacing lived experience) is better realized in CIE through paraphrased representative quotes than through peer-shared video.",
+      "comhairle_s": "Comhairle's Stories tool collects participant video testimony (with recording-length caps, a peer-viewing quota, and optional transcription) and shares each participant's raw recording with others.",
+      "cie_s": "CIE serves only paraphrased quotes and has no video, media, or transcription pipeline by design.",
+      "meaning_s": "CIE should treat Comhairle's peer-shared video testimony as a principled divergence, since raw-media sharing conflicts with CIE's paraphrase-only, minimal-egress, re-identification-averse commitments, and the underlying goal is better met through paraphrased representative quotes.",
+      "paths": [
+        "comhairle/api/src/tools/stories.rs",
+        "comhairle/api/src/transcription_service.rs"
+      ]
+    },
+    {
+      "id": "CT6",
+      "component": "Elicitation methods",
+      "name": "Conversational survey forms",
+      "status": "watch",
+      "comhairle": "The HeyForm tool (api/src/tools/heyform.rs) embeds a full third-party survey/form builder as an elicitation modality, driven through the vendored heyform-rust-sdk (adaptors/heyform-rust-sdk). On setup it programmatically provisions an isolated HeyForm account, workspace, and project, creates a Poll form in conversational (chat-like, one-question-at-a-time) InteractiveMode, injects a hidden comhairle_user_id field so responses tie back to the Comhairle participant, applies custom branded CSS, and publishes a shareable survey URL. Launch clones the preview form's fields into a fresh live form, and delete tears down the upstream poll \u2014 a complete external-form lifecycle.",
+      "cie": "CIE has no structured survey/form capability at all. It captures statements and votes for the bridging loop and nothing else; there is no questionnaire builder, no conversational form mode, and no external form-service integration in scope.",
+      "meaning": "Watch: conversational, one-question-at-a-time surveys are a proven way to collect structured demographic-free intake and closed questions alongside open deliberation, and the hidden-field participant-binding pattern is a clean idea. But CIE's whole value proposition is the bridging analysis, not general survey collection, and pulling in an external form service would add data-egress surface CIE avoids. Track it as an adjacent modality, not a core need.",
+      "comhairle_s": "Comhairle's HeyForm tool provisions and publishes fully branded conversational survey forms via an external service, binding responses back to the participant through a hidden user-id field and managing the form's full create/launch/delete lifecycle.",
+      "cie_s": "CIE has no survey or questionnaire capability and no external form-service integration.",
+      "meaning_s": "CIE should watch conversational survey forms and the hidden-field participant-binding trick as an adjacent intake modality, while noting they sit outside CIE's bridging-focused scope and would add external data-egress surface CIE avoids.",
+      "paths": [
+        "comhairle/api/src/tools/heyform.rs",
+        "comhairle/adaptors/heyform-rust-sdk"
+      ]
+    },
+    {
+      "id": "CT7",
+      "component": "Participant surface",
+      "name": "Deliberative learn pages",
+      "status": "gain",
+      "comhairle": "The Learn tool (api/src/tools/learn.rs) is an informational priming modality that can be dropped into a deliberation as its own step. It holds an ordered list of pages, each page a Markdown block available per-language (LocalizedPage carries a lang plus a requires_validation flag defaulting true, so translated content can be gated on human review before it is shown). Pages reference localized TextContentIds, letting facilitators present balanced background, framing, or educational material to participants before they vote or contribute \u2014 an explicit 'read before you deliberate' surface.",
+      "cie": "CIE has no participant-education surface. The listening loop drops a participant straight into voting and statement contribution; there is no built-in way to present neutral framing or background context as a first-class step, and nothing about staged pre-vote information in the spec.",
+      "meaning": "Adopt-worthy gain: informed deliberation improves signal quality, and a lightweight, localized, review-gated content step is cheap to build and squarely compatible with CIE's principles (no external AI, no mutable per-record egress \u2014 it's static curated text). Presenting shared framing before voting also reduces the noise CIE's clustering has to absorb. The requires_validation-per-locale gate is a nice governance detail CIE could reuse for any human-authored content.",
+      "comhairle_s": "Comhairle's Learn tool presents ordered, per-language Markdown priming pages (with a per-locale requires-validation gate) as a first-class 'read before you deliberate' step in a participation flow.",
+      "cie_s": "CIE drops participants straight into voting with no built-in surface for neutral framing or background education.",
+      "meaning_s": "CIE should adopt a lightweight localized, review-gated learn/priming step, since informed deliberation improves signal quality and static curated content fully respects CIE's no-external-AI and minimal-egress principles.",
+      "paths": [
+        "comhairle/api/src/tools/learn.rs"
+      ]
+    },
+    {
+      "id": "CT8",
+      "component": "Admin & authoring",
+      "name": "Composable multi-tool workflow",
+      "status": "gain",
+      "comhairle": "Comhairle's defining architecture is that a deliberation is not one fixed flow but a composable sequence of heterogeneous elicitation tools. The ToolImpl trait (api/src/tools.rs) defines a uniform lifecycle (setup, sync_data, clone_tool, delete, routes, register_workers, sanitize), and a ToolConfig enum wired with enum_dispatch fans every operation out to the seven concrete tools (Polis, Learn, HeyForm, Stories, ElicitationBot, Prioritization, ThinkingSpace). Each workflow_step (api/src/models/workflow_step.rs) carries one tool's config plus orchestration metadata: step_order, activation_rule, required, is_offline, can_revisit, and request_user_share_permission. A conversation thus chains, say, a Learn page then a Thinking Space then a Polis vote then a Prioritization, as an ordered participant journey.",
+      "cie": "CIE is intentionally a single, sharp flow: vote matrix to PCA to k-means to group-informed consensus to bridging badges to validity cards (spec 08-the-build-core.md). It has no concept of pluggable tools, no ordered multi-step participant journey, and no per-step lifecycle or activation rules \u2014 that narrowness is a stated design commitment (02-north-star.md).",
+      "meaning": "Watch closely, and treat as the single biggest structural idea CIE lacks. CIE's narrowness is a virtue for its core mission, but the ToolImpl/enum_dispatch pattern \u2014 a uniform trait plus dispatch enum that lets new elicitation modalities plug into a staged journey with per-step lifecycle \u2014 is exactly how CIE would grow beyond one flow without becoming a monolith. Even if CIE keeps its single bridging loop, adopting this composition seam would let Learn priming or a follow-up step wrap the vote cleanly. It is a gain in architecture even where the individual tools diverge.",
+      "comhairle_s": "Comhairle composes deliberations as an ordered sequence of interchangeable elicitation tools behind a uniform ToolImpl trait and enum_dispatch ToolConfig, with each workflow step carrying its own lifecycle and activation metadata (order, required, offline, revisitable, share-permission).",
+      "cie_s": "CIE is a single fixed vote-to-bridge-to-validity-card flow with no pluggable tools, staged journey, or per-step lifecycle.",
+      "meaning_s": "CIE should study Comhairle's ToolImpl/enum_dispatch composition seam as the highest-value architectural gain, because a uniform tool trait plus staged workflow steps is how CIE could wrap or extend its bridging loop with additional modalities without abandoning its narrow core.",
+      "paths": [
+        "comhairle/api/src/tools.rs",
+        "comhairle/api/src/models/workflow_step.rs"
+      ]
+    },
+    {
+      "id": "CT9",
+      "component": "Facilitation & AI assist",
+      "name": "AI theme categorization (TTTC)",
+      "status": "diverges",
+      "comhairle": "The Categorization service (api/src/categorization_service.rs) defines a CategorizationService trait whose one job is to take a batch of free-text Comments (each with id, comment text, and speaker) and asynchronously extract opinion themes and generate a report. The shipped implementation, TttcCategorizer (api/src/categorization_service/tttc_categorizer.rs), posts those comments to an external Talk-to-the-City service configured to run gpt-4o with a 'What are the main themes?' question, then receives the finished report via an authenticated webhook (webhook_url + webhook_secret). It is a per-record, external-LLM narrative-clustering pipeline over raw participant text.",
+      "cie": "CIE reaches the same 'what are the themes' goal by a deliberately different route: local embeddings with no per-record egress, PCA and k-means clustering on the vote matrix, and paraphrase-only outputs (spec 03-principles-and-commitments.md, 07-the-system-by-layer.md). It explicitly refuses to ship raw participant text to an external AI service.",
+      "meaning": "Principled divergence. Comhairle's TTTC path sends verbatim participant comments to a third-party gpt-4o service \u2014 precisely the per-record external AI and data egress CIE forbids. CIE should not adopt this mechanism. The useful lesson to watch is the output shape (narrative theme summaries with representative speakers), which CIE already approximates locally; the divergence to defend is that CIE produces those themes from local embeddings and paraphrase, never by shipping raw text off-box.",
+      "comhairle_s": "Comhairle's Categorization service ships raw free-text participant comments to an external Talk-to-the-City gpt-4o pipeline that extracts opinion themes and returns a report via webhook.",
+      "cie_s": "CIE derives themes locally from vote-matrix clustering and local embeddings with no per-record egress and paraphrase-only output, and refuses to send raw participant text to external AI.",
+      "meaning_s": "CIE should treat TTTC-style external AI theme extraction as a principled divergence, since sending verbatim participant comments to a third-party gpt-4o service is exactly the per-record egress CIE forbids, even though the narrative-theme output shape is worth noting.",
+      "paths": [
+        "comhairle/api/src/categorization_service.rs",
+        "comhairle/api/src/categorization_service/tttc_categorizer.rs"
+      ]
+    },
+    {
+      "id": "CT10",
+      "component": "Facilitation & AI assist",
+      "name": "Document-grounded Q&A (RAGFlow)",
+      "status": "watch",
+      "comhairle": "The RAGFlow adaptor (adaptors/ragflow) is a full client for a retrieval-augmented-generation service, exposing datasets, documents, chat sessions, and agent sessions (adaptors/ragflow/src/{dataset,document,chat,agent}). It lets Comhairle upload source documents into a knowledge base and then ground conversational agents \u2014 including the Elicitation Bot and Thinking Space bots \u2014 in that corpus, so participant-facing chat can answer from and cite campaign materials rather than the model's open weights. The agent templates (api/src/agent_templates/) are RAGFlow graph definitions that stitch this retrieval into the elicitation flow.",
+      "cie": "CIE runs local embeddings for its own clustering but has no participant-facing document-Q&A or retrieval-augmented chat. There is no knowledge-base upload, no citation-grounded answering surface, and no agent orchestration over a document corpus in scope.",
+      "meaning": "Watch: grounding an assistant in curated campaign documents so participants can ask 'what does the proposal actually say?' is a legitimately useful facilitation aid and reuses infrastructure (embeddings) CIE already has locally. The divergence to hold is that Comhairle's RAGFlow is an external service; a CIE version would need to stay on local models and local retrieval to respect its no-egress stance. Track the document-grounded-answering pattern; keep the transport local.",
+      "comhairle_s": "Comhairle's RAGFlow adaptor uploads campaign documents into a knowledge base and grounds its participant-facing chat agents in that corpus so answers are retrieval-based and citable rather than free-weight generation.",
+      "cie_s": "CIE uses local embeddings only for its own clustering and offers no participant-facing document-Q&A or retrieval-grounded chat.",
+      "meaning_s": "CIE should watch document-grounded, citable Q&A as a useful facilitation aid that reuses its local embeddings, while keeping any implementation on local retrieval rather than Comhairle's external RAGFlow service to honor its no-egress stance.",
+      "paths": [
+        "comhairle/adaptors/ragflow",
+        "comhairle/api/src/agent_templates/ragflow-elicitation-bot.json",
+        "comhairle/api/src/agent_templates/ragflow-agent-static-dsl-content.json"
+      ]
+    },
+    {
+      "id": "CT11",
+      "component": "Facilitation & AI assist",
+      "name": "Contributed-statement moderation",
+      "status": "watch",
+      "comhairle": "Comhairle governs participant-contributed content with an explicit moderation lifecycle. The wiki_poll_service (api/src/wiki_poll_service.rs) \u2014 the orchestration wrapper around the Pol.is-style poll \u2014 exposes seed comments plus a moderate_comment call with a ModerationStatus of accepted/rejected/pending (mapped to +1/-1/0), and only accepted comments become active in the poll. The same review pattern recurs in Thinking Space, whose answers carry an AnswerStatus (pending/approved) before they count. Together these give facilitators a gate on which participant-submitted statements and answers enter the shared deliberation, with seed comments to bootstrap discussion.",
+      "cie": "CIE's spec centers on the vote/bridge/validity-card math and an append-only trust layer, but does not describe a first-class human moderation queue for incoming participant statements before they enter the matrix. Its safeguards are statistical (Wilson gating, validity cards) rather than an explicit accept/reject/pending review step on contributed content.",
+      "meaning": "Watch, tending toward adopt: any listening system that accepts participant-authored statements needs a way to keep spam, abuse, or duplicate statements out of the shared pool, and Comhairle's simple accepted/rejected/pending gate plus seed comments is a proven pattern. CIE's append-only trust layer is philosophically different (it records rather than deletes), so the fit is nuanced \u2014 CIE could add a moderation status flag that hides rather than mutates, preserving append-only provenance while still gating what participants see. Track it as a governance capability CIE will eventually need.",
+      "comhairle_s": "Comhairle gates participant-contributed statements and answers through an explicit accepted/rejected/pending moderation lifecycle (in wiki_poll_service and Thinking Space) plus seed comments to bootstrap discussion, controlling what enters the shared deliberation.",
+      "cie_s": "CIE relies on statistical safeguards (Wilson gating, validity cards) and an append-only trust layer rather than a first-class accept/reject/pending review queue for incoming statements.",
+      "meaning_s": "CIE should watch, and likely adopt, an explicit statement-moderation gate implemented as a hide-not-delete status flag, since any system accepting participant-authored statements needs spam/abuse control while preserving CIE's append-only provenance.",
+      "paths": [
+        "comhairle/api/src/wiki_poll_service.rs",
+        "comhairle/api/src/models/thinking_space_answer.rs"
+      ]
+    },
+    {
+      "id": "CI1",
+      "component": "Identity & access",
+      "name": "Multi-mode account authentication",
+      "status": "diverges",
+      "comhairle": "Comhairle ships a full account system with four first-class authentication modes, modelled as the `UserAuthType` enum: `email_password` (Argon2-hashed passwords with a 16-char, 3-of-4-category strength policy enforced by zxcvbn), `one_time_passcode` (email magic-link / code login), `annon` (a randomly-named anonymous account that can still log back in via its generated username), and `scot_account` (a placeholder for Scotland's national identity provider). Each mode issues a signed JWT session cookie (`auth-token`, 7-day expiry, HttpOnly/Secure/SameSite=None). The routing surface is broad: `/auth/login`, `/auth/login_annon`, `/auth/login_otp`, `/auth/signup`, `/auth/signup_annon`, `/auth/signup_otp`, `/auth/create_otp`, logout, email verification and password-reset endpoints all live in `api/src/routes/auth.rs`.",
+      "cie": "Deliberately diverges. CIE has no login and no persistent user account at all: constituents enter the conversation through a unique single-use code delivered by mailer or SMS, and a consent decline stores only an anonymous aggregate counter with no participant row (`03-principles-and-commitments.md` 'Anonymous by default'; `04-who-we-serve.md` AC-A2.2). There is no password store, no session identity, and no auth-type concept in the CIE record contract.",
+      "meaning": "Diverge, on principle. CIE's trust model is built on the constituent never having to create an account or reveal who they are; introducing password/OTP/identity login would undercut the 'anonymous by default' commitment and add a PII surface the append-only, PII-quarantined store is designed to avoid. The one component worth tracking for a future 'closing-the-loop' pilot is the OTP magic-link flow, which could re-contact recontact-consented participants without ever storing a password \u2014 but even that belongs in the separate contact store, not an account system.",
+      "comhairle_s": "Comhairle ships a full account system with four first-class authentication modes in its `UserAuthType` enum \u2014 Argon2 email-and-password, one-time-passcode email magic links, re-loggable anonymous accounts, and a ScotAccount placeholder \u2014 each issuing a signed seven-day JWT session cookie across a broad set of `/auth/*` login, signup, verification and password-reset routes.",
+      "cie_s": "CIE deliberately diverges by having no login or persistent account at all, admitting constituents through unique single-use codes delivered by mailer or SMS with no password store, session identity, or auth-type concept in its record contract.",
+      "meaning_s": "This is a principled divergence because multi-mode account authentication would undercut CIE's 'anonymous by default' trust model and add a PII surface the append-only store avoids, though the passwordless one-time-passcode magic-link flow is worth tracking for a future recontact pilot if kept in the separate contact store rather than an account system.",
+      "paths": [
+        "comhairle/api/src/routes/auth.rs",
+        "comhairle/api/src/models/users.rs",
+        "comhairle/api/src/models/otp.rs"
+      ]
+    },
+    {
+      "id": "CI2",
+      "component": "Identity & access",
+      "name": "ScotAccount government OIDC identity",
+      "status": "diverges",
+      "comhairle": "Comhairle reserves a `scot_account` variant in its `UserAuthType` enum (`api/src/models/users.rs`), the hook for integrating ScotAccount \u2014 the Scottish Government's national OpenID-Connect identity broker used to give citizens a single verified login across public services. It sits alongside the working password/OTP/anonymous modes as a planned high-assurance identity path, so a participant could in principle be authenticated as a real, verified Scottish resident rather than a self-asserted account.",
+      "cie": "Deliberately diverges. CIE has no OIDC integration and no verified-identity path; the spec's integrity layer is calibrated to 'one-person shared-link scenarios, not coordinated bot attacks' and relies on unique single-use codes with sufficient entropy rather than proving who the participant is (`04-who-we-serve.md`, R11).",
+      "meaning": "Diverge for the pilot, watch for the roadmap. Verified national identity is the opposite of CIE's anonymity guarantee and would defeat the small-cell/paraphrase protections that assume no participant is individually identifiable. However, a government-grade identity broker is exactly what a future high-stakes deployment (binding referenda, statutory consultations) might require, so it is worth tracking as the boundary case where CIE's anonymity model would have to be renegotiated rather than extended.",
+      "comhairle_s": "Comhairle reserves a `scot_account` variant in its `UserAuthType` enum as a planned high-assurance hook for ScotAccount, the Scottish Government's national OpenID-Connect identity broker, so a participant could in principle be authenticated as a real, verified Scottish resident rather than a self-asserted account.",
+      "cie_s": "CIE deliberately diverges by having no ScotAccount OpenID-Connect integration or verified-identity path, since its integrity layer relies on high-entropy unique single-use codes calibrated for one-person shared-link scenarios rather than proving who the participant is.",
+      "meaning_s": "Verified national identity via ScotAccount is the opposite of CIE's anonymity guarantee and would defeat its small-cell and paraphrase protections, but it is worth watching as the boundary case a future high-stakes deployment such as a binding referendum might require CIE to renegotiate its anonymity model to accommodate.",
+      "paths": [
+        "comhairle/api/src/models/users.rs"
+      ]
+    },
+    {
+      "id": "CI3",
+      "component": "Identity & access",
+      "name": "Anonymous to account upgrade",
+      "status": "diverges",
+      "comhairle": "Comhairle lets a participant who started anonymously convert into a full, durable account without losing their history. `upgrade_account` in `api/src/models/users.rs` takes an existing `annon` user, validates a new password, and flips the row in-place to `email_password` while attaching a username and email \u2014 the same user id (and therefore all their prior participation) carries forward. It is exposed to users and guarded so only accounts currently of type `annon` can be upgraded.",
+      "cie": "Deliberately diverges. CIE never links a submission to an identity: the raw layer is append-only and anonymous, and the two-tier consent design keeps any contact detail in a separate, default-off store that is 'never exported alongside response content' (`03-principles-and-commitments.md`). There is no mechanism to attach a name/email back onto an existing participant record.",
+      "meaning": "Diverge, on principle. The whole point of CIE's architecture is that an anonymous contribution can never later be de-anonymised, so an in-place 'promote this anonymous person to a named account, keeping their answers' operation is precisely the linkage the record contract forbids. The legitimate need it gestures at \u2014 turning a one-off participant into an ongoing relationship \u2014 is met in CIE by the recontact consent tier, which stores contact info beside a consent flag but structurally apart from response content, never by mutating the response record itself.",
+      "comhairle_s": "Comhairle's `upgrade_account` function lets a participant who started anonymously convert into a full, durable account by validating a new password and flipping the `annon` row in-place to `email_password` with an attached username and email, so the same user id and all prior participation carry forward.",
+      "cie_s": "CIE deliberately diverges by never linking a submission to an identity, keeping the raw layer append-only and anonymous and holding any contact detail in a separate default-off store that is never exported alongside response content, so there is no way to attach a name or email onto an existing participant record.",
+      "meaning_s": "In-place anonymous-to-account upgrade is precisely the de-anonymising linkage CIE's record contract forbids, and the legitimate need it gestures at \u2014 turning a one-off participant into an ongoing relationship \u2014 is instead met by CIE's recontact consent tier that stores contact info structurally apart from response content rather than by mutating the response record.",
+      "paths": [
+        "comhairle/api/src/models/users.rs"
+      ]
+    },
+    {
+      "id": "CI4",
+      "component": "Identity & access",
+      "name": "Resource-scoped role matrix",
+      "status": "watch",
+      "comhairle": "Comhairle implements a real role-based access-control matrix. The `resource_role` table (`UserResourceRole`) grants a user one of four roles \u2014 `Owner`, `Contributor`, `Translator`, `Moderator` \u2014 scoped to a specific resource of kind `Organisation` or `Conversation`. Enforcement is done with a compile-time-typed Axum extractor `RequiredRole<Resource, Roles>` in `api/src/routes/auth.rs`: a handler declares e.g. `RequiredRole<Conversation, (Owner, Moderator)>` and the extractor resolves the current user, reads the `conversation_id` from the path, and rejects with `UserNotAuthorized` unless the user holds one of the listed roles on that resource. A separate config-driven super-admin allowlist (`is_user_admin`) gates platform-wide operations.",
+      "cie": "Absent as an application-layer feature; CIE instead enforces authority at the database-role layer. The candidate 'shall be able to publish derived results views and withhold results' but 'shall have no mechanism to delete or alter any raw submission,' and 'this authority model is enforced by database roles, not application-layer access controls' (`04-who-we-serve.md`, D-07). There is no per-user, per-resource permission table.",
+      "meaning": "Watch. CIE is intentionally single-campaign, so a full four-role-by-two-resource matrix is overkill today, and CIE's DB-role enforcement is actually stronger for the one invariant that matters (nobody, including the candidate, can mutate raw data). But the moment CIE grows a facilitation/authoring surface with multiple staff \u2014 an instrument owner drafting questions, a moderator handling flags, a translator localising prompts \u2014 the typed `RequiredRole` pattern is a clean, auditable template to borrow, because it keeps authorization declarative at each endpoint rather than scattered in handler bodies.",
+      "comhairle_s": "Comhairle implements a real role-based access-control matrix in which its `resource_role` table grants Owner, Contributor, Translator, or Moderator roles scoped to a specific Organisation or Conversation, enforced by a compile-time-typed `RequiredRole<Resource, Roles>` Axum extractor plus a config-driven super-admin allowlist.",
+      "cie_s": "CIE has no such application-layer permission table and instead enforces authority at the database-role layer, where the candidate may publish or withhold derived results views but has no mechanism to delete or alter any raw submission.",
+      "meaning_s": "A full four-role-by-two-resource matrix is overkill for single-campaign CIE and its database-role enforcement is stronger for the invariant that nobody may mutate raw data, but the typed `RequiredRole` extractor is a clean, auditable template worth watching for the day CIE grows a multi-staff facilitation or authoring surface.",
+      "paths": [
+        "comhairle/api/src/routes/auth.rs",
+        "comhairle/api/src/models/users.rs"
+      ]
+    },
+    {
+      "id": "CI5",
+      "component": "Multi-org & tenancy",
+      "name": "Multi-organisation tenancy",
+      "status": "watch",
+      "comhairle": "Comhairle is multi-tenant around a first-class `Organisation` resource. Organizations are CRUD-managed (`api/src/routes/organizations.rs`), and every conversation and role grant hangs off an organisation or conversation id through the `resource_role` table, so data and permissions are scoped per-tenant: an Owner of Organisation A cannot act on Organisation B's conversations. This lets a single deployed instance host many independent councils/campaigns side by side, each with its own members, roles, conversations and content.",
+      "cie": "Absent by design. CIE is scoped to exactly one campaign in one district (NC-12) per deployment; the spec frames replication as standing up a fresh instance from a clean checkout via the playbook, not as adding a tenant to a shared instance (`04-who-we-serve.md`, civic-innovator archetype).",
+      "meaning": "Watch. For the pilot, single-tenant is simpler and reduces the blast radius of any data-isolation bug \u2014 a real virtue given CIE's privacy stakes. But CIE's own north star is a replicable product that many campaigns run, and 'one instance per deployer' does not scale operationally. If CIE ever offers a hosted service, the organisation-as-tenant-boundary pattern (every row and every role grant scoped to a tenant id) is the reference design to adopt, and adopting it early is far cheaper than retrofitting tenant isolation onto an append-only store later.",
+      "comhairle_s": "Comhairle is multi-tenant around a first-class `Organisation` resource where every conversation and role grant hangs off an organisation or conversation id, so a single deployed instance can host many independent councils and campaigns side by side, each with isolated members, roles, conversations, and content.",
+      "cie_s": "CIE is absent this capability by design, scoped to exactly one campaign in one district per deployment and framing replication as standing up a fresh instance from a clean checkout rather than adding a tenant to a shared instance.",
+      "meaning_s": "Single-tenant is simpler and reduces the blast radius of any data-isolation bug for the privacy-sensitive pilot, but because CIE's north star is a replicable product that many campaigns run, the organisation-as-tenant-boundary pattern is worth watching and far cheaper to adopt early than to retrofit onto an append-only store later.",
+      "paths": [
+        "comhairle/api/src/routes/organizations.rs",
+        "comhairle/api/src/routes/organizations/dto.rs",
+        "comhairle/api/src/models/users.rs"
+      ]
+    },
+    {
+      "id": "CI6",
+      "component": "Engagement & outreach",
+      "name": "Typed invitations with accept tracking",
+      "status": "watch",
+      "comhairle": "Comhairle has a structured invitation system (`api/src/routes/invites.rs`, `api/src/models/invites.rs`). An `Invite` carries a typed target \u2014 `Email(address)`, `User(uuid)` for an existing member, `SingleUse` (a link anyone can use but only once), or `Open` (a link many people can accept) \u2014 and a lifecycle status (`Pending`/`Open`/`Accepted`/`Rejected`). Recipients hit `/accept_invite` or `/reject_invite`, email invites trigger notification mail through the mailer, an invite can auto-register event attendance on accept, and `get_stats_for_invite` reports uptake. Invites are validated (`is_still_valid`, `is_for_user`) so an email invite can only be redeemed by its intended address.",
+      "cie": "Partially present but much narrower. CIE's outreach layer delivers unique single-use codes by mailer/SMS and its integrity layer treats shared links as the primary threat (`04-who-we-serve.md`, R11). It has the single-use-code concept but no typed invite object, no accept/reject state machine, and no open/multi-use link type.",
+      "meaning": "Watch, selectively. The `SingleUse` invite maps cleanly onto CIE's unique-code model, and the accept-tracking + `get_stats_for_invite` idea is genuinely useful for CIE's outreach-sizing story (knowing redemption rate feeds the participation-target math). But the `Open`/multi-use link type directly conflicts with CIE's integrity calibration and must not be adopted \u2014 an open link is exactly the shared-link attack vector the single-use code is designed to prevent. Adopt the invite-status + stats plumbing; leave open links out.",
+      "comhairle_s": "Comhairle has a structured invitation system whose `Invite` carries a typed target \u2014 email address, existing user, single-use link, or open multi-use link \u2014 plus a Pending/Open/Accepted/Rejected lifecycle, validated redemption, accept/reject endpoints, mailer notifications, optional event-attendance registration, and a `get_stats_for_invite` uptake report.",
+      "cie_s": "CIE is only partially present and much narrower here, delivering unique single-use codes by mailer or SMS and treating shared links as its primary threat, so it has the single-use-code concept but no typed invite object, accept/reject state machine, or open multi-use link type.",
+      "meaning_s": "The single-use invite and its accept-tracking `get_stats_for_invite` reporting are worth selectively adopting because redemption-rate data feeds CIE's participation-target math, but the open multi-use link type must be left out as it is exactly the shared-link attack vector CIE's single-use codes are designed to prevent.",
+      "paths": [
+        "comhairle/api/src/routes/invites.rs",
+        "comhairle/api/src/models/invites.rs",
+        "comhairle/api/src/routes/invites/dto.rs"
+      ]
+    },
+    {
+      "id": "CI7",
+      "component": "Localization",
+      "name": "Multilingual UI (8 languages, incl. RTL)",
+      "status": "gain",
+      "comhairle": "Comhairle's participant UI is fully internationalised. Its inlang/Paraglide project (`ui/packages/comhairle/project.inlang/settings.json`) declares eight language tags \u2014 `en`, `gd` (Scottish Gaelic), `cy` (Welsh), `zh`, `es`, `fr`, `ar` (Arabic, right-to-left), `pt` \u2014 with a per-language message catalogue under `ui/packages/comhairle/messages/{lang}.json` and lint rules for missing/empty/identical patterns. Every static string in the interface is a keyed message resolved at build/render time against the visitor's chosen language.",
+      "cie": "Absent / open decision. CIE is English-only, and Spanish support (decision D-31) is explicitly unresolved and 'blocked on district confirmation,' flagged as 'a constituent-archetype equity issue with legal dimensions' under Section 203 of the Voting Rights Act (`04-who-we-serve.md`, OQ-04-02). There is no i18n framework in the CIE build.",
+      "meaning": "Adopt. This is a clear gain, not a divergence: CIE's own spec names an English-only instrument as a systematic exclusion of non-English constituents and an open ethical/legal risk, so multilingual UI is a capability CIE wants rather than one it declines. Comhairle demonstrates a production-proven approach (keyed message catalogues, a source language, missing-translation linting, and even RTL support) that CIE could lift almost wholesale to resolve D-31 and make the consent gate and conversation reachable in a participant's own language \u2014 which the spec notes matters for statistical validity as well as equity, because a confusing or foreign-language screen suppresses exactly the underrepresented voices CIE most needs.",
+      "comhairle_s": "Comhairle's participant UI is fully internationalised through an inlang/Paraglide project that declares eight language tags including Scottish Gaelic, Welsh, and right-to-left Arabic, with per-language keyed message catalogues and lint rules for missing, empty, or identical translations resolved against the visitor's chosen language.",
+      "cie_s": "CIE is English-only with no i18n framework, and its Spanish-support decision is explicitly unresolved and blocked on district confirmation, flagged as a constituent-archetype equity issue with legal dimensions under Section 203 of the Voting Rights Act.",
+      "meaning_s": "Multilingual UI is a clear gain to adopt because CIE's own spec names an English-only instrument as a systematic exclusion and legal risk, and Comhairle's production-proven keyed-catalogue, source-language, missing-translation-linting, and RTL approach could be lifted almost wholesale to make the consent gate and conversation reachable in a participant's own language for both equity and statistical validity.",
+      "paths": [
+        "comhairle/ui/packages/comhairle/project.inlang/settings.json",
+        "comhairle/ui/packages/comhairle/messages/gd.json",
+        "comhairle/ui/packages/comhairle/messages/ar.json"
+      ]
+    },
+    {
+      "id": "CI8",
+      "component": "Localization",
+      "name": "Localizable persistent content model",
+      "status": "gain",
+      "comhairle": "Beyond static UI strings, Comhairle localises author-created database content. A `TextContent` row holds a canonical string plus its `primary_locale`, and a one-to-many `TextTranslation` set holds per-locale renderings (`api/src/models/translations.rs`). Any localisable field is stored as a `TextContentId` reference rather than a raw string \u2014 for example a `Region`'s `name` field is a `TextContentId`, and `region::get_localized_by_id` / `list` resolve the right translation for the request locale. The chosen locale is read from a `COMHAIRLE_LOCALE` cookie by the `LocaleExtractor` and threaded through queries so list/detail endpoints return content already localised (`api/src/routes/regions.rs`, `api/src/routes/translations.rs`).",
+      "cie": "Absent. CIE has no localised-content data model; its content (questions, statements, consent copy) is authored and served in a single language, consistent with the English-only instrument posture (`04-who-we-serve.md`).",
+      "meaning": "Adopt if CIE localises. Static-UI i18n (I7) only covers chrome; the substance CIE serves \u2014 the consent disclosure, the questions, the statements a constituent votes on \u2014 is author-created content that must also be translatable if the equity goal is to be met. Comhairle's 'store an id, resolve a translation per request locale' pattern is the missing half, and it composes well with CIE's paraphrase-only and append-only rules because translations are additive rows keyed to an immutable source. This is a genuine gain: without it, a multilingual UI would still present English questions.",
+      "comhairle_s": "Comhairle localises author-created database content by storing every localisable field as a `TextContentId` reference to a canonical `TextContent` row with a `primary_locale` and a one-to-many set of per-locale `TextTranslation` renderings, resolved for the request locale read from a `COMHAIRLE_LOCALE` cookie and threaded through queries so endpoints return content already localised.",
+      "cie_s": "CIE is absent this capability, having no localised-content data model and authoring and serving its questions, statements, and consent copy in a single language consistent with its English-only instrument posture.",
+      "meaning_s": "Because static-UI translation alone would still present English questions, Comhairle's 'store an id, resolve a translation per request locale' content model is the genuine gain to adopt if CIE localises, and it composes cleanly with CIE's paraphrase-only and append-only rules since translations are additive rows keyed to an immutable source.",
+      "paths": [
+        "comhairle/api/src/models/translations.rs",
+        "comhairle/api/src/routes/regions.rs",
+        "comhairle/api/src/routes/translations.rs"
+      ]
+    },
+    {
+      "id": "CI9",
+      "component": "Facilitation & AI assist",
+      "name": "Machine translation with human-validation gate",
+      "status": "watch",
+      "comhairle": "Comhairle can auto-translate content and track how trustworthy each translation is. `auto_translate` / `auto_translate_all` (`api/src/routes/translations.rs`) call a pluggable `TranslationService`; the shipped implementation `GoogleTranslateService` POSTs each string to the Google Cloud Translation API (`api/src/translation_service.rs`). Every `TextTranslation` records two governance flags \u2014 `ai_generated` and `requires_validation` \u2014 so machine output is marked and can be routed to a human (the `Translator` role from the RBAC matrix) for sign-off before it is trusted. Admin-only endpoints let a staffer generate all languages for a piece of content in one call.",
+      "cie": "Absent, and the mechanism partly diverges. CIE runs no translation service; more importantly its principles forbid per-record external AI egress \u2014 it uses local embeddings 'so no per-record egress' happens and keeps verbatim text in the raw store only (`02`/`03` principles; T10 paraphrase-only). Shipping each string to Google's API is exactly the per-record external call CIE avoids.",
+      "meaning": "Watch, with a caveat. The valuable, adoptable idea is the human-validation gate: marking machine output `ai_generated`/`requires_validation` and requiring a human to confirm before it goes live is precisely the disclosure-and-oversight discipline CIE already applies to its LLM conversation layer, and it fits CIE's culture of structural safeguards. The delivery mechanism, however, should diverge: rather than Google Translate's per-record egress, a CIE localisation feature would want a local or batch-translated pipeline so participant-adjacent content is not streamed to a third-party API, preserving the no-per-record-egress commitment.",
+      "comhairle_s": "Comhairle can auto-translate content through a pluggable `TranslationService` (shipped as `GoogleTranslateService` POSTing each string to the Google Cloud Translation API) while marking every machine-produced `TextTranslation` with `ai_generated` and `requires_validation` flags so it can be routed to a human Translator for sign-off before it is trusted.",
+      "cie_s": "CIE is absent this and the mechanism partly diverges, since it runs no translation service and its principles forbid the per-record external AI egress that shipping each string to Google's API entails, relying instead on local embeddings and keeping verbatim text in the raw store only.",
+      "meaning_s": "The adoptable idea is the human-validation gate of marking machine output `ai_generated`/`requires_validation` and requiring human confirmation, which matches CIE's disclosure-and-oversight discipline, but the delivery mechanism should diverge toward a local or batch-translation pipeline rather than Google's per-record egress to preserve CIE's no-per-record-egress commitment.",
+      "paths": [
+        "comhairle/api/src/translation_service.rs",
+        "comhairle/api/src/routes/translations.rs",
+        "comhairle/api/src/models/translations.rs"
+      ]
+    },
+    {
+      "id": "CI10",
+      "component": "Analytics & representativeness",
+      "name": "Demographic recruitment targets",
+      "status": "diverges",
+      "comhairle": "Comhairle records recruitment quotas per demographic bucket. A `RecruitmentTarget` (`api/src/models/recruitment_target.rs`) stores, per workflow, a `metric` (a demographic dimension, e.g. age band or region), a `bucket` (a value within that dimension), and a `target_count` \u2014 the number of participants wanted from that bucket. It upserts on the `(workflow_id, metric, bucket)` key so targets can be revised, and admin endpoints (`api/src/routes/recruitment_targets.rs`) manage them, with the OpenAPI summary describing it as 'the target number of participants for a given demographic.' This lets organisers steer outreach toward a demographically balanced sample.",
+      "cie": "Deliberately diverges. CIE quarantines demographics from the analysis lane and explicitly does not claim to represent the district \u2014 participation is 'opt-in, invitation-only, and self-selected,' the constituent archetype is 'explicitly non-representative,' and a scope banner states this on every surface (`04-who-we-serve.md`). CIE has no per-demographic recruitment-quota model.",
+      "meaning": "Diverge, on principle \u2014 with a narrow watch. Steering recruitment by demographic bucket implies the deployment is trying to build a representative sample, a claim CIE's methodology (AAPOR non-probability guidance, Meng's Big Data Paradox) refuses to make, so importing quota-steering wholesale would invite exactly the over-claiming the scope banner exists to prevent. The one adjacent thing CIE does care about is representativeness *auditing* (the Validity Card, T2 small-cell floor) and outreach *sizing* (hitting an overall n): a stripped-down 'how many invitations to send' target is compatible, but per-demographic quotas that shape who is recruited are not.",
+      "comhairle_s": "Comhairle records recruitment quotas per demographic bucket via a `RecruitmentTarget` that stores a metric, a bucket, and a target_count per workflow \u2014 upserting on the workflow/metric/bucket key and managed by admin endpoints \u2014 so organisers can steer outreach toward a demographically balanced sample.",
+      "cie_s": "CIE deliberately diverges by quarantining demographics from the analysis lane and having no per-demographic recruitment-quota model, explicitly declaring participation opt-in, invitation-only, self-selected, and non-representative on a scope banner shown on every surface.",
+      "meaning_s": "Per-demographic recruitment quotas are a principled divergence because steering toward a representative sample makes exactly the claim CIE's non-probability methodology refuses, though a stripped-down overall 'how many invitations to send' sizing target is compatible with CIE's representativeness auditing and outreach sizing and worth a narrow watch.",
+      "paths": [
+        "comhairle/api/src/models/recruitment_target.rs",
+        "comhairle/api/src/routes/recruitment_targets.rs"
+      ]
+    },
+    {
+      "id": "CI11",
+      "component": "Multi-org & tenancy",
+      "name": "Geographic region entities",
+      "status": "watch",
+      "comhairle": "Comhairle models geography as first-class, localised, filterable data. A `Region` (`api/src/models/region.rs`) has a localised `name` (a `TextContentId`, so it renders in the visitor's language) and a `region_type` of `Official` (a recognised administrative area) or `Custom` (a bespoke boundary an organiser draws). Regions are CRUD-managed, paginated, filterable and orderable (`api/src/routes/regions.rs`, `RegionFilterOptions`/`RegionOrderOptions`), letting conversations and recruitment be scoped to defined places and letting the same instance operate across many council areas.",
+      "cie": "Absent. CIE operates within a single fixed district (NC-12, ~80,000 people) and hard-codes that scope into its re-identification thresholds (T2 = 11 per cell, T10 paraphrase-only are 'calibrated to this district scale specifically'); there is no region entity or geographic hierarchy (`04-who-we-serve.md`).",
+      "meaning": "Watch. Single-district is correct for the pilot and is baked into CIE's privacy calibration, so a general region model adds nothing today. But CIE's spec itself notes that 'district size changes re-identification risk thresholds' for future deployers, which means a replicable product eventually needs a way to declare its geographic scope and adjust thresholds accordingly. Comhairle's `Official`/`Custom` region typing and localised region names are a useful reference for that future 'where does this deployment operate' primitive \u2014 worth tracking, not building now.",
+      "comhairle_s": "Comhairle models geography as first-class, localised, filterable data through a `Region` entity carrying a localised name and an Official-or-Custom region type, CRUD-managed and paginated with filter and order options so conversations and recruitment can be scoped to defined places across many council areas.",
+      "cie_s": "CIE is absent this capability, operating within a single fixed district whose scale is hard-coded into its re-identification thresholds, with no region entity or geographic hierarchy.",
+      "meaning_s": "A general region model adds nothing to the single-district pilot whose scope is baked into CIE's privacy calibration, but because the spec notes that district size changes re-identification thresholds for future deployers, Comhairle's Official/Custom region typing and localised names are worth watching as a reference for a future 'where does this deployment operate' primitive.",
+      "paths": [
+        "comhairle/api/src/models/region.rs",
+        "comhairle/api/src/routes/regions.rs",
+        "comhairle/api/src/routes/regions/dto.rs"
+      ]
+    },
+    {
+      "id": "CI12",
+      "component": "Identity & access",
+      "name": "API keys for programmatic access",
+      "status": "watch",
+      "comhairle": "Comhairle issues API keys for machine-to-machine access. An admin calls `POST /api_keys` (`api/src/routes/api_keys.rs`) to mint a key; the key is hashed at rest and, on each request, the `resolve_user_from_request` path in `api/src/routes/auth.rs` accepts an `Authorization: Bearer <key>`, hashes it, looks up the owning user, and authenticates the request as that user \u2014 so external scripts and integrations can act through the same RBAC checks as a logged-in session. Key creation is deliberately un-traced to keep secrets out of logs.",
+      "cie": "Absent. CIE exposes no programmatic third-party API surface; its data-sharing story is a one-way export of derived, suppressed artifacts, and there is no bearer-token/API-key auth path in the record contract (`03-principles-and-commitments.md`, one-way export).",
+      "meaning": "Watch, low priority. CIE's narrowness means it has little need for machine clients today, and adding a bearer-token surface widens the attack surface against an append-only, PII-quarantined store \u2014 so declining it is reasonable. The pattern becomes relevant only if CIE later needs trusted automation (e.g. a scheduled representativeness audit or an export pipeline pulling derived artifacts); at that point Comhairle's hash-at-rest, admin-gated, log-suppressed key model is a sound reference, and any CIE version should be scoped to derived/export data only, never to the raw store.",
+      "comhairle_s": "Comhairle issues admin-minted API keys for machine-to-machine access that are hashed at rest and, when presented as an `Authorization: Bearer` token, hashed and resolved to the owning user so external scripts act through the same RBAC checks as a logged-in session, with key creation deliberately un-traced to keep secrets out of logs.",
+      "cie_s": "CIE is absent this capability, exposing no programmatic third-party API surface and no bearer-token auth path, since its data-sharing story is a one-way export of derived, suppressed artifacts.",
+      "meaning_s": "Declining programmatic API keys is reasonable and low priority because CIE has little need for machine clients and a bearer-token surface would widen the attack surface against its append-only, PII-quarantined store, though Comhairle's hash-at-rest, admin-gated, log-suppressed key model is a sound reference if CIE later needs trusted automation scoped strictly to derived or export data.",
+      "paths": [
+        "comhairle/api/src/routes/api_keys.rs",
+        "comhairle/api/src/routes/auth.rs",
+        "comhairle/api/src/models/api_key.rs"
+      ]
+    },
+    {
+      "id": "CS1",
+      "component": "Media & transcription",
+      "name": "Audio-to-sensemaking pipeline",
+      "status": "gain",
+      "comhairle": "Comhairle turns a recorded meeting or breakout room into an analysable transcript automatically. The admin route in routes/audio_recordings.rs mints signed upload URLs for a main room plus any number of breakout rooms and records an audio_recording row. A durable multi-stage worker (worker_service/process_video_call_transcriptions.rs) then runs transcribe_recording, which pulls the file from object storage, calls a pluggable Transcriber (transcription_service.rs, with an Amazon Transcribe implementation) that yields timestamped, speaker-labelled TranscriptEvents, and chains via apalis GoTo into generate_sensemaking_report to distil the transcript into structured Comments/a report.",
+      "cie": "Absent. CIE is a text-first Pol.is-style vote-on-statements loop; its spec (07-the-system-by-layer.md) covers a vote matrix, PCA, k-means and GIC, with no audio capture, speech-to-text, or diarization anywhere in the build core.",
+      "meaning": "CIE should watch-to-adopt this as the on-ramp for offline and in-person deliberation. Face-to-face community meetings are exactly the settings CIE claims to serve, and a transcript pipeline lets spoken input feed the same statement/consensus machinery. The caution is CIE's paraphrase-only and no-per-record-egress commitments: any adopted transcriber would need to run locally or be treated as a trusted subprocessor, and quotes would still be paraphrased rather than served verbatim.",
+      "comhairle_s": "Comhairle auto-transcribes recorded meeting and breakout-room audio into timestamped, speaker-labelled transcripts and chains them into a sensemaking report via a staged background worker.",
+      "cie_s": "CIE has no audio capture, speech-to-text, or diarization at all; its listening loop is entirely text-vote based.",
+      "meaning_s": "CIE should treat an audio-to-transcript on-ramp as a high-value adoption target for in-person deliberation, provided the transcriber runs locally and quotes stay paraphrased.",
+      "paths": [
+        "comhairle/api/src/transcription_service.rs",
+        "comhairle/api/src/transcription_service/amazon_transcriber.rs",
+        "comhairle/api/src/routes/audio_recordings.rs",
+        "comhairle/api/src/worker_service/process_video_call_transcriptions.rs"
+      ]
+    },
+    {
+      "id": "CS2",
+      "component": "Engagement & outreach",
+      "name": "Event lifecycle & attendance",
+      "status": "gain",
+      "comhairle": "Comhairle models real-world and video events end-to-end. routes/events.rs and routes/event_attendances.rs create events, register attendees with a role (models/event_attendance.rs stores user_id, event_id, role), and issue confirmations. The mailer (mailer.rs) generates iCal calendar attachments via the icalendar crate and sends event_registration_invite, event_confirmation and event_reminder emails, resolving each event into the attendee's timezone (LocalizedEvent/ResolveTimeZone). Events also link to the transcription pipeline, so a registered video call can be recorded and processed.",
+      "cie": "Absent. CIE's spec has no concept of scheduled events, RSVPs, attendance roles, or calendar invitations; participation is an anonymous asynchronous voting session, not a convened gathering.",
+      "meaning": "This is a genuine gain for CIE's outreach layer. The phased Bloom pattern (bloom-03: Open Poll then Live Conversations then Solutions Forum) depends on being able to convene the 30-50 residents for the deliberation stage, which requires exactly this event+RSVP+reminder scaffolding. CIE can borrow the model without compromising its analytical core, since events sit outside the vote/consensus pipeline.",
+      "comhairle_s": "Comhairle runs full event scheduling with role-based RSVPs, timezone-localized reminders, and iCal calendar attachments, wired to record video calls for transcription.",
+      "cie_s": "CIE has no events, RSVPs, or calendar invitations; participation is anonymous asynchronous voting with no convened gathering.",
+      "meaning_s": "CIE should adopt an event-and-RSVP layer to support Bloom's phased poll-to-live-conversation-to-forum civic process, which requires convening named participants.",
+      "paths": [
+        "comhairle/api/src/routes/events.rs",
+        "comhairle/api/src/routes/event_attendances.rs",
+        "comhairle/api/src/models/event_attendance.rs",
+        "comhairle/api/src/mailer.rs"
+      ]
+    },
+    {
+      "id": "CS3",
+      "component": "Engagement & outreach",
+      "name": "Templated transactional mailer",
+      "status": "gain",
+      "comhairle": "Comhairle ships a full transactional email subsystem. mailer.rs defines a ComhairleMailer trait sending via lettre/SMTP, rendering MiniJinja HTML templates (email_templates/: welcome, verify_email, password_reset, one_time_passcode, conversation_invite, event_confirmation, event_reminder, conversation_broadcast) that all extend a shared email_layout.html and have a locals folder for localization. Admins can configure the transactional copy at runtime through routes/email_template_configs.rs, which stores per-type EmailTemplateConfig rows with typed slots and schemas (conversation invite, event registration invite/confirmation).",
+      "cie": "Absent. CIE's spec describes no outbound email, no SMTP integration, and no templating; a clean-room listening loop produces analysis, not correspondence.",
+      "meaning": "CIE will need transactional email the moment it does two-tier consent, magic-link auth, or any recontact, so this is a concrete adopt target. The runtime-configurable, per-organization, localizable template store is the part worth borrowing rather than hard-coding, because civic hosts expect to control voice and language. It touches nothing in CIE's analytical commitments.",
+      "comhairle_s": "Comhairle sends localized, admin-configurable transactional emails (invites, confirmations, verification, password reset, OTP, broadcasts) via a MiniJinja+SMTP mailer with a runtime template-config store.",
+      "cie_s": "CIE's spec includes no outbound email, SMTP, or templating of any kind.",
+      "meaning_s": "CIE should adopt a templated, localizable mailer since consent, magic-link auth, and recontact all require outbound email the current spec cannot produce.",
+      "paths": [
+        "comhairle/api/src/mailer.rs",
+        "comhairle/api/src/email_templates/",
+        "comhairle/api/src/routes/email_template_configs.rs",
+        "comhairle/api/src/models/email_template_config.rs"
+      ]
+    },
+    {
+      "id": "CS4",
+      "component": "Realtime & notifications",
+      "name": "Scheduled & automated emails",
+      "status": "gain",
+      "comhairle": "Comhairle sends time-based email automatically without an operator in the loop. worker_service.rs registers an apalis-cron CronStream; retrieve_and_enqueue_scheduled_emails (worker_service/scheduled_emails.rs) periodically queries list_upcoming_scheduled_emails and enqueues a SendScheduledEmailJob per due recipient, and send_scheduled_email renders the configured template, attaches any iCal body, marks the scheduled_email row sent, and completes the tracked job. This is what drives event reminders and any future drip/recontact sequence.",
+      "cie": "Absent. CIE has no scheduler, no cron, and no deferred-send concept; its spec is a synchronous analysis pipeline over a vote matrix with no time-triggered outbound actions.",
+      "meaning": "A scheduled-send loop is the mechanical prerequisite for Bloom's recontact tier (bloom-07 'Stay in touch') and for phased-process nudges reminding participants when Live Conversations open. CIE should watch-to-adopt: the value is high for engagement, but any recontact must be gated behind CIE's explicit two-tier consent so reminders only reach people who opted into follow-up.",
+      "comhairle_s": "Comhairle uses an apalis-cron worker to periodically find due scheduled emails and enqueue-and-send them automatically, powering event reminders and drip/recontact sequences.",
+      "cie_s": "CIE has no scheduler, cron, or deferred-send mechanism; it is a synchronous analysis pipeline with no time-triggered outbound actions.",
+      "meaning_s": "CIE should adopt a consent-gated scheduled-send loop to enable Bloom-style recontact and phased-process reminders, sending only to opted-in participants.",
+      "paths": [
+        "comhairle/api/src/worker_service/scheduled_emails.rs",
+        "comhairle/api/src/worker_service.rs",
+        "comhairle/api/src/models/scheduled_email.rs"
+      ]
+    },
+    {
+      "id": "CS5",
+      "component": "Realtime & notifications",
+      "name": "In-app notifications over WebSocket",
+      "status": "gain",
+      "comhairle": "Comhairle has a first-class in-app notification system plus a realtime transport. routes/notifications.rs exposes unread lists and unread counts per user backed by models/notification_delivery.rs and models/notification.rs (typed Info/Warning/Success/Error, scoped Site or Conversation). websockets.rs runs an Axum WebSocket hub with a DashMap connection registry, an authenticated RequiredUser upgrade, typed WebSocketMessage/NotificationLevel messages, and a pluggable per-domain handler trait, so notifications and other events can be pushed live rather than polled.",
+      "cie": "Absent. CIE's spec has no per-user notification store and no realtime channel; results are computed and shown, not delivered as an evolving stream of user-addressed events.",
+      "meaning": "For CIE this is situational-but-real (watch). A participant surface benefits from 'your group's consensus shifted' or 'new bridging statement' nudges, and a WebSocket hub could also power live result updates during an open poll. It is orthogonal to CIE's analytical guarantees, so adopting it carries little principled tension beyond keeping delivered payloads to gated/paraphrased claims rather than raw verbatim.",
+      "comhairle_s": "Comhairle stores typed per-user in-app notifications (unread counts, site/conversation scope) and pushes them live through an authenticated Axum WebSocket hub with pluggable per-domain handlers.",
+      "cie_s": "CIE has no per-user notification store and no realtime channel; it computes and displays results rather than streaming user-addressed events.",
+      "meaning_s": "CIE could adopt a WebSocket notification hub to push consensus-shift nudges and live poll updates, keeping delivered payloads to gated, paraphrased claims.",
+      "paths": [
+        "comhairle/api/src/routes/notifications.rs",
+        "comhairle/api/src/models/notification_delivery.rs",
+        "comhairle/api/src/websockets.rs",
+        "comhairle/api/src/websockets/messages.rs"
+      ]
+    },
+    {
+      "id": "CS6",
+      "component": "Admin & authoring",
+      "name": "Durable background job queue",
+      "status": "gain",
+      "comhairle": "Comhairle runs heavy and deferred work off the request path on a durable queue. ComhairleWorkerService (worker_service.rs) wraps apalis RedisStorage queues for document processing, transcription, and scheduled email, and every job is mirrored into a tracked Job row (models/job.rs) that admins can list, inspect, and delete via routes/jobs.rs with filter/order/pagination. Failures are recorded against the job (ok_or_record_failure) so operators see why a job died, and multi-step flows chain with apalis GoTo.",
+      "cie": "Absent. CIE's spec assumes a synchronous, in-process analysis run over the vote matrix; there is no queue, no Redis, no operator-visible job ledger, and no retry/failure-record surface for long-running work.",
+      "meaning": "This is infrastructure CIE will need as soon as any step is expensive or asynchronous (embedding batches, re-clustering, report generation, transcription). The operator-facing tracked-job ledger with recorded failure reasons is the borrow-worthy part, since it gives a listening tool auditable, debuggable background processing. It is compatible with CIE's append-only leanings if job records are treated as an immutable event log.",
+      "comhairle_s": "Comhairle offloads transcription, document, and email work to durable apalis/Redis queues, mirroring each into an admin-visible Job ledger with recorded failure reasons and multi-step chaining.",
+      "cie_s": "CIE assumes synchronous in-process analysis with no queue, no Redis, and no operator-visible job ledger for long-running work.",
+      "meaning_s": "CIE should adopt a durable job queue with an auditable job-ledger once embedding, re-clustering, or report steps become expensive or asynchronous.",
+      "paths": [
+        "comhairle/api/src/worker_service.rs",
+        "comhairle/api/src/routes/jobs.rs",
+        "comhairle/api/src/models/job.rs"
+      ]
+    },
+    {
+      "id": "CS8",
+      "component": "Engagement & outreach",
+      "name": "Outcome & impact tracking",
+      "status": "gain",
+      "comhairle": "Comhairle records what actually changed as a result of a deliberation and attaches it to the report. routes/report_impacts.rs and models/report_impact.rs let admins create ReportImpact entries (title, details, kind) linked to a report, and FullReportDto (models/report.rs) surfaces impacts alongside the report so participants can see concrete outcomes their input produced. This is the 'you shaped this / here is what happened next' close-the-loop layer.",
+      "cie": "Absent. CIE's spec ends at validity-carded consensus output; there is no structure for recording downstream decisions, actions taken, or impact attributable to a listening session.",
+      "meaning": "Closing the loop is a strong engagement gain and aligns with Bloom's 'What comes next' framing (bloom-04/08). Showing participants the tangible result of their contribution is a major driver of trust and repeat participation, and impact records pair naturally with CIE's append-only trust layer as immutable outcome events. CIE should adopt an impact/outcome model as the missing tail of its pipeline.",
+      "comhairle_s": "Comhairle records concrete post-deliberation outcomes as titled, typed ReportImpact entries attached to a report, closing the loop so participants see what their input produced.",
+      "cie_s": "CIE's pipeline ends at validity-carded consensus with no structure for recording downstream decisions or attributable impact.",
+      "meaning_s": "CIE should adopt an outcome/impact model as the missing tail of its pipeline, storing impacts as immutable events in its append-only trust layer to build participant trust.",
+      "paths": [
+        "comhairle/api/src/routes/report_impacts.rs",
+        "comhairle/api/src/models/report_impact.rs",
+        "comhairle/api/src/models/report.rs"
+      ]
+    },
+    {
+      "id": "CS9",
+      "component": "Engagement & outreach",
+      "name": "Facilitator & participant feedback",
+      "status": "gain",
+      "comhairle": "Comhairle captures structured feedback on a deliberation from both sides. routes/feedback.rs creates feedback tied to a conversation, and FullReportDto (models/report.rs) splits it into facilitator_feedback and participant_feedback vectors surfaced with the report. This gives a distinct experience/quality self-code channel separate from the substantive vote data, letting hosts learn how the process felt to run and to join.",
+      "cie": "Deferred. CIE's spec mentions a light self-code of 'feeling heard' as a participant sentiment signal, but there is no built component for structured, role-split feedback capture on a session; it is an intended-but-unbuilt idea.",
+      "meaning": "This is a build-it gain that operationalizes something CIE already wants. Bloom ships the same pattern as an end-of-poll NPS self-code (bloom-05), confirming it is product-standard. CIE should adopt a lightweight feedback capture that stores the experience signal separately from the analytical vote matrix, so 'feeling heard' can be reported without contaminating consensus computation.",
+      "comhairle_s": "Comhairle captures role-split facilitator and participant feedback on each conversation as a separate experience/quality channel surfaced alongside the report.",
+      "cie_s": "CIE only sketches a light 'feeling heard' self-code in its spec and has no built structured feedback-capture component.",
+      "meaning_s": "CIE should build lightweight feedback capture that stores the experience signal separately from the vote matrix, realizing its deferred 'feeling heard' self-code (a Bloom-standard pattern).",
+      "paths": [
+        "comhairle/api/src/routes/feedback.rs",
+        "comhairle/api/src/models/report.rs"
+      ]
+    },
+    {
+      "id": "CS11",
+      "component": "Persistence & storage",
+      "name": "Object storage & media library",
+      "status": "watch",
+      "comhairle": "Comhairle has a general blob layer for uploaded files. bulk_storage_service.rs abstracts an object store issuing signed read/write URLs (get_write_file_url), used by audio recordings, resources.rs (signed upload URLs for supporting documents), and routes/media.rs, which is a full media library with multipart upload, content-type-typed rows (models/media.rs), and filter/order/pagination listing. This underpins images, attachments, background documents, and recordings across the platform.",
+      "cie": "Absent, and partly by design. CIE's spec centers on a vote matrix and derived analysis and avoids mutable storage and per-record external egress; it has no notion of a general file/blob store or a media library.",
+      "meaning": "This is watch-with-caution. CIE genuinely needs somewhere to keep background documents and (if it adopts CS1 transcription) recordings, so a signed-URL object layer is useful. But CIE's discipline around mutable storage and egress means it should scope any blob layer narrowly to non-analytical assets (host-provided materials, media) and keep it well away from the append-only trust layer and the vote data, rather than adopting a broad mutable media CRUD surface as-is.",
+      "comhairle_s": "Comhairle provides a signed-URL object store and a typed media library (multipart upload, filterable listing) backing recordings, resources, and images platform-wide.",
+      "cie_s": "CIE has no general blob store or media library and deliberately avoids mutable storage and per-record egress.",
+      "meaning_s": "CIE should adopt only a narrowly-scoped signed-URL blob layer for non-analytical host materials and recordings, keeping it separate from its append-only vote and trust data.",
+      "paths": [
+        "comhairle/api/src/bulk_storage_service.rs",
+        "comhairle/api/src/routes/media.rs",
+        "comhairle/api/src/routes/resources.rs",
+        "comhairle/api/src/models/media.rs"
+      ]
+    },
+    {
+      "id": "CS12",
+      "component": "Engagement & outreach",
+      "name": "Mass participant broadcast email",
+      "status": "gain",
+      "comhairle": "Comhairle can send an announcement to a conversation's participants at once. The conversation_broadcast.html template (email_templates/) renders host-authored body copy inside the shared email_layout, and the mailer plus email_template_config machinery supply the recipient resolution and consented-recipient handling (models/conversation_email_notification_recipients.rs) so a host can reach everyone who joined with updates, next-step invites, or results links.",
+      "cie": "Absent. CIE's spec has no broadcast/announcement channel to participants; once analysis is produced there is no built path to proactively email the cohort that took part.",
+      "meaning": "Broadcast is the operational realization of Bloom's 'Stay in touch' and 'What's next' tiers (bloom-07/08): telling participants when results are published or when the next phase opens. CIE should adopt a consent-gated broadcast, drawing recipients only from those who opted into follow-up, so it can move people through a phased poll-to-conversation process without breaking its two-tier consent model.",
+      "comhairle_s": "Comhairle lets a host broadcast a templated announcement email to all consented participants of a conversation for updates, next-step invites, and results links.",
+      "cie_s": "CIE has no participant broadcast channel; after analysis there is no built path to proactively email the cohort that took part.",
+      "meaning_s": "CIE should adopt a consent-gated broadcast that emails only follow-up opt-ins, realizing Bloom's 'Stay in touch'/'What's next' tiers within its two-tier consent model.",
+      "paths": [
+        "comhairle/api/src/email_templates/conversation_broadcast.html",
+        "comhairle/api/src/models/conversation_email_notification_recipients.rs",
+        "comhairle/api/src/mailer.rs"
+      ]
+    },
+    {
+      "id": "CD1",
+      "component": "Data model & provenance",
+      "name": "Tool-agnostic interchange grammar",
+      "status": "watch",
+      "comhairle": "Comhairle defines a small, deliberately generic vocabulary for describing any deliberation regardless of which underlying tool produced it: Statement, Reaction, Group, Participant, plus supporting types (StatementRole, ReactionType, Generator, AlgorithmDescriptor). This is captured as a JSON Schema in data_model/schema.json ('AllTypes') and is clearly intended to be the common pool that all seven tools normalise into. CRITICAL HEAD CAVEAT: this grammar is DEFINED but entirely UNPOPULATED. The data_model crate itself is a stub (data_model/src/main.rs is a literal 'Hello, world!' with no dependencies in Cargo.toml), the grammar types (Statement, Reaction, Generator, AlgorithmDescriptor) are referenced NOWHERE in api/src, and the ToolImpl::sync_data hook that would move tool output into this pool is a no-op default that NO tool overrides (verified: zero 'fn sync_data' bodies exist in api/src/tools/). In practice each tool persists to its own aux tables instead.",
+      "cie": "CIE has no single tool-agnostic interchange grammar. Its data lives in a purpose-built vote-matrix / statement / group schema tuned for the one Pol.is-style listening loop it runs, per the spec's system-by-layer and build-core docs. It has never needed to normalise across heterogeneous elicitation tools because it deliberately ships exactly one flow.",
+      "meaning": "Worth tracking rather than adopting today. The IDEA of a universal Statement/Reaction/Group/Participant vocabulary is genuinely attractive as a future north star if CIE ever hosts more than one elicitation method, and Comhairle has already done the hard modelling work in schema.json. But because Comhairle's own implementation of it is aspirational and unwired, CIE gains a design reference, not a proven component. CIE should watch whether Comhairle ever populates it before treating it as validated.",
+      "comhairle_s": "Comhairle declares a universal deliberation vocabulary (Statement, Reaction, Group, Participant, Generator, AlgorithmDescriptor) in data_model/schema.json, but the grammar is defined-only: the crate is a hello-world stub, no api code references the types, and the sync_data pooling hook is an unimplemented no-op in every tool.",
+      "cie_s": "CIE runs a single purpose-built listening schema and has no tool-agnostic interchange grammar because it deliberately ships exactly one elicitation flow.",
+      "meaning_s": "CIE should treat Comhairle's universal Statement/Reaction/Group vocabulary as an inspiring but unproven design reference to watch, not a component to adopt, since Comhairle itself has left the grammar unwired.",
+      "paths": [
+        "data_model/schema.json",
+        "data_model/src/main.rs",
+        "data_model/Cargo.toml",
+        "api/src/tools.rs"
+      ]
+    },
+    {
+      "id": "CD2",
+      "component": "Data model & provenance",
+      "name": "Generator / algorithm provenance model",
+      "status": "gain",
+      "comhairle": "Every first-class object in Comhairle's interchange grammar records WHO or WHAT produced it via a Generator tagged union with three arms: Participant(uuid), Host(uuid), or Algorithm(AlgorithmDescriptor). AlgorithmDescriptor carries an id, a free-text 'kind', and a string->string 'metadata' map describing how the algorithm was configured (data_model/schema.json). Statements go further and separate two provenance facts: 'made_by' (who authored the content) and 'role_classified_by' (who or what assigned its role/label) \u2014 so a human can write a sentence while an algorithm labels it a 'Belief', and both facts are retained. This is a clean, machine-readable answer to 'is this datum human, host, or AI-generated, and under what algorithm configuration?'",
+      "cie": "CIE tracks provenance more narrowly. Its append-only trust layer and light self-coding record system events, but per the spec it does not model a first-class Generator=Participant|Host|Algorithm distinction attached to each statement/reaction, nor an AlgorithmDescriptor capturing the exact algorithm configuration that produced a derived object. Distinguishing human-authored from AI-classified content at the row level is not an explicit CIE primitive today.",
+      "meaning": "A strong adopt candidate. As CIE adds AI assistance (paraphrasing, clustering summaries, GIC-derived consensus statements), the ability to stamp each derived object with 'Algorithm{kind, metadata}' and to split authorship from classification is exactly the kind of auditable provenance CIE's trust-first posture wants. It is cheap to borrow because it is a pure data-shape idea, and it complements \u2014 rather than conflicts with \u2014 CIE's append-only trust layer.",
+      "comhairle_s": "Comhairle stamps each grammar object with a Generator union of Participant, Host, or Algorithm (the latter carrying an AlgorithmDescriptor of kind plus a configuration metadata map), and even splits a statement's content-authorship (made_by) from its role-classification (role_classified_by).",
+      "cie_s": "CIE has an append-only trust layer but no first-class per-row Generator distinction separating human-authored, host, and specific-algorithm-configured content.",
+      "meaning_s": "CIE should adopt Comhairle's Generator/AlgorithmDescriptor provenance shape so every AI-derived paraphrase, cluster, or consensus statement is auditably tagged with the algorithm and config that produced it, distinct from who authored the underlying text.",
+      "paths": [
+        "data_model/schema.json"
+      ]
+    },
+    {
+      "id": "CD3",
+      "component": "Data model & provenance",
+      "name": "Multi-tool conversation container",
+      "status": "gain",
+      "comhairle": "Comhairle models a deliberation as a nested container: a Conversation (api/src/models/conversation.rs) owns one or more Workflows (api/src/models/workflow.rs), each Workflow is an ordered list of WorkflowSteps (api/src/models/workflow_step.rs), and each step embeds a polymorphic ToolConfig. ToolConfig is a tagged enum with seven arms \u2014 Polis, Learn, HeyForm, Stories, ElicitationBot, Prioritization, ThinkingSpace (api/src/tools.rs) \u2014 stored as JSONB via a DbJsonBEnum macro. WorkflowStep also carries orchestration metadata: step_order, an ActivationRule, required/can_revisit flags, is_offline, and a preview_tool_config. So a single civic 'conversation' can chain a survey, then a Pol.is vote, then a prioritisation exercise, as a first-class sequenced object rather than as separate unrelated activities.",
+      "cie": "CIE's data model is scoped to one campaign-listening flow: a vote matrix feeding PCA -> k-means -> group-informed consensus. Per the spec it has no notion of a multi-step, multi-tool workflow container that sequences heterogeneous elicitation activities under one conversation with activation rules and per-step tool configs.",
+      "meaning": "Watch closely, adopt selectively. CIE is intentionally a single sharp flow, so wholesale adoption would violate its 'narrow and sharp' commitment. But the container SHAPE \u2014 Conversation -> Workflow -> Step(ToolConfig) with ordering and activation rules \u2014 is the natural growth path if CIE ever wants to bracket its listening loop with a consent gate, a demographic-light intake, or a results-review step. It is a proven pattern for sequencing civic activities and is worth keeping in the back pocket.",
+      "comhairle_s": "Comhairle nests Conversation over Workflow over ordered WorkflowSteps, each embedding one of seven polymorphic ToolConfig variants (Polis, Learn, HeyForm, Stories, ElicitationBot, Prioritization, ThinkingSpace) with per-step activation rules, so one civic conversation can sequence a survey, a vote, and a prioritisation as a single first-class object.",
+      "cie_s": "CIE's schema covers only its single vote-matrix listening loop and has no multi-step, multi-tool workflow container sequencing heterogeneous elicitation activities.",
+      "meaning_s": "CIE should keep Comhairle's Conversation-Workflow-Step container pattern in reserve as the natural way to eventually bracket its core listening loop with consent, intake, and review steps without abandoning its single-flow focus.",
+      "paths": [
+        "api/src/models/conversation.rs",
+        "api/src/models/workflow.rs",
+        "api/src/models/workflow_step.rs",
+        "api/src/tools.rs"
+      ]
+    },
+    {
+      "id": "CD4",
+      "component": "Persistence & storage",
+      "name": "Per-tool aux tables, no common pool",
+      "status": "watch",
+      "comhairle": "Despite declaring the universal grammar (CD1), Comhairle in practice persists each tool's data into its own dedicated auxiliary tables rather than a shared Statement/Reaction store. The clearest example is polis_statement_aux (migration 20260611155735), which holds Pol.is-specific rows keyed by workflow_step_id and user_id: zid, polis_conversation_id, polis_statement_id, themes[], statement_text, moderation_status/reason, is_seed, and visible_statement_when_submitted. Other tools have their own tables (thinking_space_answer, thinking_space_summary, thinking_space_follow_up_question, proposal, proposal_response). There is no interchange table; the tool-agnostic pool exists only as an unused schema, so cross-tool analytics must reconcile heterogeneous per-tool tables by hand.",
+      "cie": "CIE stores its listening loop in one coherent purpose-built schema rather than a constellation of per-tool aux tables, because it only runs one tool. It therefore does not face the reconciliation tax, but it also has no worked example of federating multiple tools' data.",
+      "meaning": "Instructive as an anti-pattern to avoid. Comhairle demonstrates the failure mode of defining an interchange grammar but never routing tools through it: the aspirational common pool decays into a pile of tool-specific aux tables. If CIE ever adds a second elicitation surface, the lesson is to wire the shared model on day one (via something like sync_data) rather than let per-tool tables proliferate first.",
+      "comhairle_s": "In practice Comhairle persists each tool to its own aux tables (for example polis_statement_aux with zid, polis_statement_id, themes, statement_text and moderation_status) with no shared interchange table, so the declared universal pool decays into tool-specific silos.",
+      "cie_s": "CIE keeps its single listening loop in one coherent purpose-built schema and has no per-tool aux-table sprawl, but also no worked multi-tool federation.",
+      "meaning_s": "CIE should read Comhairle's per-tool aux-table sprawl as a cautionary tale: if a second elicitation surface is ever added, route it through a shared model immediately rather than letting tool-specific tables accumulate first.",
+      "paths": [
+        "api/migrations/20260611155735_create_polis_statement_aux_table.sql",
+        "api/src/models/polis_statement_aux.rs",
+        "api/src/tools.rs"
+      ]
+    },
+    {
+      "id": "CD5",
+      "component": "Persistence & storage",
+      "name": "Mutable Postgres with cascade deletes",
+      "status": "diverges",
+      "comhairle": "Comhairle uses conventional mutable Postgres. Rows carry updated_at columns that are rewritten in place (Conversation, WorkflowStep, UserProfile, polis_statement_aux all have created_at + updated_at), update paths issue SQL UPDATE mutating existing rows (for example user_profile update by field), and referential integrity is enforced with hard ON DELETE CASCADE (polis_statement_aux references workflow_step and comhairle_user 'ON DELETE CASCADE', so deleting a step or user destroys the dependent statement rows). History is not preserved; the latest write wins and deletes are destructive.",
+      "cie": "CIE deliberately avoids mutable storage. Per its principles-and-commitments spec it runs an append-only trust layer with a hash-chain, so records are added, never overwritten, and nothing is silently destroyed by a cascade. This is a core, principled CIE commitment for auditability and tamper-evidence.",
+      "meaning": "A principled divergence, not a gap. Comhairle's in-place mutation and cascade deletion are a normal, pragmatic web-app choice, but they are exactly what CIE rejects to guarantee that a civic record's history is auditable and tamper-evident. CIE should NOT adopt mutable Postgres semantics; the contrast is useful mainly to articulate WHY CIE pays the cost of append-only + hash-chaining. If interoperating with Comhairle, CIE must treat Comhairle rows as mutable snapshots, not immutable facts.",
+      "comhairle_s": "Comhairle uses mutable Postgres with in-place updated_at rewrites and hard ON DELETE CASCADE foreign keys (deleting a workflow step or user destroys its polis_statement_aux rows), so history is not preserved and the latest write wins.",
+      "cie_s": "CIE deliberately uses an append-only, hash-chained trust layer where records are never overwritten and deletes are never destructive.",
+      "meaning_s": "CIE should keep diverging from Comhairle's mutable, cascade-deleting Postgres because append-only hash-chaining is a principled choice for tamper-evident civic records, and must treat any imported Comhairle rows as mutable snapshots rather than immutable facts.",
+      "paths": [
+        "api/src/models/conversation.rs",
+        "api/src/models/user_profile.rs",
+        "api/migrations/20260611155735_create_polis_statement_aux_table.sql",
+        "api/src/db.rs"
+      ]
+    },
+    {
+      "id": "CD6",
+      "component": "Analytics & representativeness",
+      "name": "Joinable demographics & reports",
+      "status": "diverges",
+      "comhairle": "Comhairle stores participant demographics in a user_profile table (api/src/models/user_profile.rs) with ethnicity, age, gender, zipcode, and political_party, gated only by a boolean 'consented' flag, and keyed directly to user_id. These fields are freely JOINed to participation and conversation data to produce reports: get_demographic_report aggregates ethnicity, banded age ranges, and gender counts for a workflow (filtered to consented users), and get_demographics_for_export emits per-user rows (user_id, ethnicity, age, gender, zipcode, political_party) joined across user_profile -> comhairle_user -> user_participation -> workflow. Demographics are thus first-class, row-level joinable attributes of an identifiable participant.",
+      "cie": "CIE deliberately quarantines demographics. Per its principles/who-we-serve spec, personally identifying and demographic attributes are held apart from the deliberation data and are not joinable per-record to a participant's votes; representativeness is handled without exposing individual demographic rows. This is an explicit privacy commitment, not an unbuilt feature.",
+      "meaning": "A principled divergence. Comhairle's joinable demographics power exactly the kind of representativeness breakdowns civic clients ask for, and the demographic-report aggregation is a nice worked example \u2014 but doing it by JOINing identifiable user_profile rows to participation is precisely the PII exposure CIE refuses. CIE should NOT adopt the joinable model; if it wants representativeness, it must reproduce the OUTPUT (aggregate breakdowns) through its PII-quarantine boundary (e.g. aggregate-only, differential-privacy-style, or unlinkable cohort counts) rather than borrow the schema.",
+      "comhairle_s": "Comhairle keeps participant demographics (ethnicity, age, gender, zipcode, political_party) in a consent-flagged user_profile table keyed to user_id and JOINs them to participation to produce demographic reports and per-user demographic exports.",
+      "cie_s": "CIE deliberately quarantines demographics so PII is not joinable per-record to a participant's votes, as an explicit privacy commitment.",
+      "meaning_s": "CIE should keep diverging from Comhairle's row-level joinable demographics and, if representativeness output is needed, reproduce only aggregate breakdowns across its PII-quarantine boundary rather than adopt the identifiable-join schema.",
+      "paths": [
+        "api/src/models/user_profile.rs"
+      ]
+    },
+    {
+      "id": "CD7",
+      "component": "Persistence & storage",
+      "name": "Verbatim statement text storage",
+      "status": "diverges",
+      "comhairle": "Comhairle stores participant utterances verbatim. The polis_statement_aux table was extended (migration 20260612104027) with a NOT NULL statement_text column holding the full submitted text, plus a moderation_status enum (accepted/rejected/pending), and it also retains visible_statement_when_submitted \u2014 a verbatim snapshot of what the participant saw at submission time. The model (api/src/models/polis_statement_aux.rs) surfaces these raw strings directly. The stored and served content is the participant's exact words.",
+      "cie": "CIE is paraphrase-only. Per its principles-and-commitments spec, participant statements are not served verbatim; quotes are paraphrased before display to reduce re-identification and quotation risk. Storing and serving exact submitted text the way polis_statement_aux does is deliberately outside CIE's model.",
+      "meaning": "A principled divergence with an interop implication. Comhairle's verbatim storage is standard for a Pol.is-style tool and enables faithful moderation and audit, but it is exactly the raw-text serving CIE avoids. CIE should not adopt verbatim serving; more importantly, any pipeline that ingests Comhairle statement_text must run CIE's paraphrase step at the boundary, because Comhairle hands over exact words that CIE's own surface is committed never to show unmodified.",
+      "comhairle_s": "Comhairle stores and serves participant utterances verbatim, with polis_statement_aux holding a NOT NULL statement_text plus a visible_statement_when_submitted snapshot of the exact words shown at submission.",
+      "cie_s": "CIE is paraphrase-only and deliberately never serves participant statements verbatim, to reduce re-identification and quotation risk.",
+      "meaning_s": "CIE should keep diverging from Comhairle's verbatim text storage and must apply its paraphrase step at any boundary that ingests Comhairle's statement_text, since Comhairle hands over exact words CIE is committed never to show unmodified.",
+      "paths": [
+        "api/migrations/20260612104027_add_statement_text_and_moderation_status_to_polis_statement_aux.sql",
+        "api/src/models/polis_statement_aux.rs"
+      ]
+    },
+    {
+      "id": "CD8",
+      "component": "Persistence & storage",
+      "name": "Timestamped SQL migration discipline",
+      "status": "watch",
+      "comhairle": "Comhairle carries a disciplined, forward-only schema history: 91 timestamped SQL migration files in api/migrations/ (e.g. 20260611155735_create_polis_statement_aux_table.sql), applied at startup by db.rs via sqlx::migrate! against Postgres. Each schema change is a small, named, individually reviewable step \u2014 creating tables, adding single columns, adding CHECK constraints, adding search indexes, tightening uniqueness \u2014 giving a legible, auditable evolution of the production data model over time. The naming convention embeds a sortable timestamp so ordering is unambiguous.",
+      "cie": "CIE is a clean-room prototype portfolio (cie-lab) and, per its build-core spec and POC README, is not yet organised around a long-lived, timestamped, forward-only relational migration chain of this scale. Its schema evolution discipline is lighter, matching its earlier build stage.",
+      "meaning": "Watch and borrow the practice as CIE hardens. The migration discipline is not a data-model feature per se but an operational capability: 91 reviewable, ordered, startup-applied migrations is what production-grade schema stewardship looks like, and it is the maturity bar CIE will need to clear as it moves from prototype to deployed civic infrastructure. Even under append-only storage, CIE benefits from the same named, ordered, auditable change log for its own tables.",
+      "comhairle_s": "Comhairle maintains 91 timestamped, forward-only SQL migration files applied at startup via sqlx::migrate!, giving a legible, individually reviewable, auditable history of its production schema.",
+      "cie_s": "CIE is a clean-room prototype not yet organised around a long-lived, timestamped relational migration chain of comparable scale.",
+      "meaning_s": "CIE should adopt Comhairle's named, ordered, startup-applied migration discipline as the schema-stewardship maturity bar to clear when moving from prototype to deployed civic infrastructure.",
+      "paths": [
+        "api/migrations/",
+        "api/src/db.rs"
+      ]
+    },
+    {
+      "id": "CD9",
+      "component": "Data model & provenance",
+      "name": "Reaction lacks target id and timestamp",
+      "status": "watch",
+      "comhairle": "Comhairle's Reaction type (data_model/schema.json) records id, entity_type (the KIND of thing reacted to: Participant/Statement/Group/Reaction), made_by (a Generator), and the reaction payload (ReactionType: SimpleVote / Score / QuadraticVote). Precisely and notably, it carries NEITHER a field identifying WHICH specific entity the reaction targets (only the entity_type, not a target uuid) NOR any timestamp for when the reaction occurred. So at the grammar level a vote knows it is 'a SimpleVote on some Statement by participant X' but not on which statement or when. (Ordering/temporal and target-linkage facts live implicitly in tool-specific tables like polis_statement_aux instead.) This is a real modelling gap in the interchange grammar as written at HEAD.",
+      "cie": "CIE's vote model is built around a vote matrix in which each vote is intrinsically tied to a specific statement id and is temporally ordered, because clustering (PCA/k-means) and Wilson-gated bridging depend on knowing exactly which statement each vote lands on. A target-less, timestamp-less reaction would be unusable for CIE's core math.",
+      "meaning": "A caution for any future adoption of the grammar, and a concrete fix to contribute. If CIE ever borrows Comhairle's interchange grammar (CD1), it must first add a target-entity uuid and a timestamp to Reaction, because CIE's PCA/k-means/GIC/Wilson pipeline is meaningless without per-vote target linkage and ordering. This is a specific, HEAD-accurate improvement CIE could feed back to Comhairle's team.",
+      "comhairle_s": "Comhairle's Reaction grammar type records the kind of entity reacted to (entity_type), the reactor (made_by), and the vote payload, but carries neither a target-entity uuid identifying which entity is reacted to nor any timestamp of when the reaction occurred.",
+      "cie_s": "CIE's vote matrix requires every vote to be tied to a specific statement id and temporally ordered, since PCA, k-means, and Wilson-gated bridging depend on it.",
+      "meaning_s": "CIE should note that Comhairle's Reaction type omits a target-entity id and timestamp, and would need both added before the grammar could feed CIE's clustering and bridging math, making this a concrete improvement CIE could contribute back.",
+      "paths": [
+        "data_model/schema.json",
+        "api/src/models/polis_statement_aux.rs"
+      ]
+    },
+    {
+      "id": "CD10",
+      "component": "Localization",
+      "name": "Normalized localized-text indirection",
+      "status": "gain",
+      "comhairle": "Comhairle does not store user-facing strings inline on domain rows; instead every localizable field is a TextContentId \u2014 a newtype wrapper over a UUID (api/src/models/translations.rs) \u2014 that points into a separate translations store (TextContent, carrying a primary_locale, a TextFormat, and per-locale content). The Conversation model shows this throughout: title, short_description, description, privacy_policy, faqs, thank_you_message, call_to_action are all TextContentId references rather than strings, and a Translatable derive macro plus supported_languages[] / primary_locale fields wire multilingual delivery. This content-addressed indirection means one civic conversation can be served in many languages without duplicating or forking the domain row.",
+      "cie": "CIE's prototype is a single-language listening loop; per its POC README and spec it has no normalized localized-text layer where every display string is a UUID reference resolved per-locale against a translations table. Multilingual delivery is not a modelled concern at CIE's current stage.",
+      "meaning": "A clean adopt candidate if CIE ever needs multilingual civic deployments. The TextContentId pattern \u2014 store a stable UUID on the domain row, resolve the actual text per locale in a side table \u2014 is a tidy, low-coupling way to add i18n without touching core schema, and it aligns with CIE's instinct to keep content indirection clean. It is also compatible with paraphrase-only serving, since the resolved text can itself be a paraphrase. Worth borrowing wholesale if localization enters scope.",
+      "comhairle_s": "Comhairle references every user-facing string as a TextContentId UUID that resolves per-locale against a separate TextContent translations store, so one conversation's title, description, and policies can be served in many languages without duplicating the domain row.",
+      "cie_s": "CIE is a single-language prototype with no normalized localized-text layer resolving display strings per locale.",
+      "meaning_s": "CIE should adopt Comhairle's TextContentId indirection (stable UUID on the row, per-locale text in a side table) if multilingual civic deployments enter scope, since it adds i18n without disturbing core schema and stays compatible with paraphrase-only serving.",
+      "paths": [
+        "api/src/models/translations.rs",
+        "api/src/models/conversation.rs"
+      ]
+    },
+    {
+      "id": "CD11",
+      "component": "Elicitation methods",
+      "name": "Rich reaction union (quadratic/score)",
+      "status": "watch",
+      "comhairle": "Comhairle's ReactionType grammar arm (data_model/schema.json) models three distinct vote semantics as a tagged union: SimpleVote (Positive / Negative / Neutral, i.e. agree / disagree / neutral), Score (a generic int32 rating), and QuadraticVote (a QuadVote carrying both an integer 'amount' and a float 'cost'). This means the interchange grammar can, in principle, represent Pol.is-style binary voting, Likert/score rating, AND quadratic voting (where expressing stronger preference costs quadratically more) under one uniform Reaction shape.",
+      "cie": "CIE's core is a Pol.is-style vote matrix of agree / disagree / pass over statements; per its spec and POC that binary/ternary signal is exactly what PCA, k-means, and group-informed consensus consume. Score-based and quadratic-voting reaction types are not part of CIE's modelled elicitation vocabulary.",
+      "meaning": "Watch, situational. CIE's clustering math is deliberately tuned to the simple agree/disagree/pass matrix, so richer reaction types would complicate the core pipeline and are not an urgent gain. But the grammar-level demonstration that Score and QuadraticVote can coexist with SimpleVote under one Reaction shape is a useful reference if CIE ever wants a preference-intensity signal (e.g. quadratic voting for budget-style prioritisation) as an adjunct to the listening loop. Track it; don't adopt now.",
+      "comhairle_s": "Comhairle's ReactionType union represents three vote semantics under one shape: SimpleVote (agree/disagree/neutral), Score (a generic integer rating), and QuadraticVote (an amount plus a quadratic cost).",
+      "cie_s": "CIE's core consumes only a Pol.is-style agree/disagree/pass vote matrix, and score-based or quadratic reactions are not in its elicitation vocabulary.",
+      "meaning_s": "CIE should track Comhairle's unified Score/QuadraticVote/SimpleVote reaction union as a reference for adding a preference-intensity signal later, but not adopt it now since its clustering math is tuned to the simple agree/disagree/pass matrix.",
+      "paths": [
+        "data_model/schema.json"
+      ]
+    },
+    {
+      "id": "CD12",
+      "component": "Data model & provenance",
+      "name": "Typed statement roles & threading",
+      "status": "watch",
+      "comhairle": "Comhairle's Statement type (data_model/schema.json) is not a flat opinion string: it carries a StatementRole classifying the statement's argumentative function \u2014 Question, Belief, Fact, Evidence, Refutation, or Summary \u2014 plus an optional 'in_response_to' uuid that threads one statement as a reply to another, and a 'role_classified_by' Generator recording who/what assigned the role. Together these give the grammar the bones of an argument graph: typed nodes (belief vs fact vs evidence), reply edges (in_response_to), and derived 'Summary' nodes that can represent the output of a grouping or consensus process, all with provenance on the classification.",
+      "cie": "CIE's statements are essentially untyped opinion units fed into the vote matrix; per its spec the intelligence comes from clustering votes and computing group-informed consensus and bridging, not from typing each statement as question/belief/fact/evidence/refutation or threading statements into an argument graph. Statement-role semantics are not a CIE primitive.",
+      "meaning": "Watch, with long-term upside. CIE's power is deliberately in the vote-geometry (PCA/k-means/GIC/bridging), so it does not need statement typing to function, and adding it would be scope creep today. But the typed-role + in_response_to + role_classified_by structure is a compelling reference if CIE ever wants to layer argument-structure or evidence-linking on top of its consensus output \u2014 notably the 'Summary' role maps neatly onto CIE's own group-informed consensus statements, which are exactly algorithm-generated summaries of a grouping. Track it as a future enrichment path.",
+      "comhairle_s": "Comhairle's Statement type carries a StatementRole (Question, Belief, Fact, Evidence, Refutation, Summary), an in_response_to reply link, and a role_classified_by provenance tag, giving the grammar the bones of a typed, threaded argument graph.",
+      "cie_s": "CIE treats statements as untyped opinion units for its vote matrix, deriving intelligence from vote-clustering rather than from statement typing or argument threading.",
+      "meaning_s": "CIE should track Comhairle's typed StatementRole and in_response_to threading as a future enrichment path, noting the 'Summary' role maps neatly onto CIE's algorithm-generated group-informed consensus statements, without adopting it now as scope creep.",
+      "paths": [
+        "data_model/schema.json"
+      ]
+    },
+    {
+      "id": "CF1",
+      "component": "Analytics & representativeness",
+      "name": "Recruitment targets by demographic bucket",
+      "status": "diverges",
+      "comhairle": "Comhairle lets an admin set explicit recruitment quotas per workflow through a full CRUD REST surface (api/src/routes/recruitment_targets.rs) backed by a recruitment_target table (api/src/models/recruitment_target.rs). Each target is a (metric, bucket, target_count) triple \u2014 e.g. metric 'age', bucket '18-24', target_count 40 \u2014 with an ON CONFLICT upsert keyed on (workflow_id, metric, bucket) so a host can declare 'I want this many participants of each demographic slice'. This is the data backbone for sample-quota-driven, representativeness-aware recruitment.",
+      "cie": "CIE deliberately quarantines demographics: its spec (03-principles-and-commitments.md, 08-the-build-core.md) commits to a demographics-free vote matrix and never storing per-participant demographic buckets, so there is no equivalent of a (metric, bucket, target_count) quota table anywhere in cie-lab.",
+      "meaning": "This is a principled divergence, not a gap. CIE's bridging/consensus math derives legitimacy from opinion structure (PCA + k-means groups) rather than from demographic weighting, and holding no demographic buckets is what lets it make its no-per-record-egress and consent-minimal promises. The honest tension: quota-based recruitment is a recognised way to defend representativeness claims, so CIE trades a recruitment-side representativeness lever for its demographic-quarantine guarantee, and should be able to explain that trade to a host who asks 'how do you know your sample is representative?'.",
+      "comhairle_s": "Comhairle's recruitment_targets REST surface lets a host set per-workflow demographic quotas as (metric, bucket, target_count) rows, e.g. 40 participants aged 18-24.",
+      "cie_s": "CIE stores no demographic buckets at all, so it has no recruitment-quota table to set or track sample composition against.",
+      "meaning_s": "This is a principled demographic-quarantine divergence: CIE gives up quota-based recruitment representativeness in exchange for its demographics-free, low-egress guarantees, and must explain that trade to hosts.",
+      "paths": [
+        "api/src/routes/recruitment_targets.rs",
+        "api/src/models/recruitment_target.rs",
+        "api/src/routes/recruitment_targets/dto.rs"
+      ]
+    },
+    {
+      "id": "CF2",
+      "component": "Analytics & representativeness",
+      "name": "Localized region reference taxonomy",
+      "status": "diverges",
+      "comhairle": "Comhairle ships a first-class, admin-managed geographic taxonomy: a regions REST surface (api/src/routes/regions.rs) with paginated list/filter/order, create/update/delete, and locale-aware output via a LocalizedRegionDto and a LocaleExtractor. Regions are reference data that participants and recruitment can be tagged against, giving hosts a controlled vocabulary of places (constituencies, council areas, etc.) to slice reach and target outreach geographically.",
+      "cie": "CIE has no geographic reference taxonomy in cie-lab; because place-of-residence is a demographic-style attribute, its demographics-quarantine stance (03-principles-and-commitments.md) means it neither stores nor slices participants by region.",
+      "meaning": "A deliberate divergence in the same spirit as CF1: geographic breakdown is exactly the kind of per-participant attribute CIE avoids serving or storing. Worth flagging as a watch-adjacent tension, because civic listening buyers often expect 'where are these voices from?' maps; CIE's answer is that opinion-group structure, not geography, carries the analytic weight, and any geographic framing would live outside the quarantined core.",
+      "comhairle_s": "Comhairle ships an admin-managed, locale-aware regions taxonomy (regions.rs, LocalizedRegionDto) that participants and recruitment can be tagged and sliced against geographically.",
+      "cie_s": "CIE holds no region reference data and never slices participants by place, treating geography as a quarantined demographic attribute.",
+      "meaning_s": "This is a deliberate divergence: CIE forgoes geographic breakdowns of participation to keep its demographics-free core, unlike Comhairle's controlled region vocabulary.",
+      "paths": [
+        "api/src/routes/regions.rs",
+        "api/src/routes/regions/dto.rs"
+      ]
+    },
+    {
+      "id": "CF3",
+      "component": "Admin & authoring",
+      "name": "Multi-step conversation design studio",
+      "status": "gain",
+      "comhairle": "Comhairle's admin surface is a genuine conversation-authoring studio, not a single-poll form. The design route (ui/.../admin/conversations/[conversation_id]/design/step/[step_id]/+page.svelte) lets a host assemble an ordered sequence of workflow steps, each backed by a different elicitation tool, with dedicated per-tool authoring panels \u2014 PolisManage, LearnManage, HeyFormManage, ThinkingSpaceManage, ElicitationBotManage, LivedExperienceManage, Prioritization \u2014 plus a shared CommonStepConfig. A Polis step alone exposes Configure / Setup / Statements / Participants / Moderate subtabs. This is a full drag-together participant-journey builder.",
+      "cie": "CIE ships a thin participation scaffold around one fixed campaign-listening flow (02-north-star.md, 04-who-we-serve.md); cie-lab has no notion of an admin composing a multi-step journey from a palette of interchangeable elicitation tools.",
+      "meaning": "A clear gain to borrow selectively. CIE intentionally stays 'narrow and sharp' (ONE flow), so it should not adopt the whole multi-tool studio \u2014 but the pattern of a step-ordered authoring UI with a per-step config panel and a preview/live split is exactly what CIE will need the moment a host wants to bracket its poll with an intro, a consent step, and a close-out. Adopt the authoring scaffold shape; keep the single-method core.",
+      "comhairle_s": "Comhairle's admin design studio lets a host order multiple workflow steps and configure each with a tool-specific panel (PolisManage, LearnManage, etc.) plus Polis Configure/Setup/Statements/Participants/Moderate subtabs.",
+      "cie_s": "CIE offers only a thin scaffold around one fixed listening flow, with no admin builder for composing a multi-step participant journey.",
+      "meaning_s": "Worth borrowing the step-ordered authoring-panel-with-preview pattern for wrapping CIE's poll in intro/consent/close-out steps, while keeping CIE's single-method core.",
+      "paths": [
+        "ui/packages/comhairle/src/routes/(admin)/admin/conversations/[conversation_id]/design/step/[step_id]/+page.svelte",
+        "ui/packages/comhairle/src/routes/(admin)/admin/conversations/[conversation_id]/design/+page.svelte"
+      ]
+    },
+    {
+      "id": "CF4",
+      "component": "Admin & authoring",
+      "name": "Curated report authoring with public toggle",
+      "status": "gain",
+      "comhairle": "Comhairle treats the results write-up as an authored, publishable artifact. The reports surface (api/src/routes/reports.rs) generates a report for a conversation, lets an admin update it (PartialReport), and exposes a FullReportDto that stitches together a human summary, ordered section_configs (ReportSectionConfigs, one per workflow step \u2014 api/src/models/report.rs), facilitator/participant feedback and report_impacts. Crucially the Report carries an is_public flag, so a host explicitly decides when the narrative goes live to the public.",
+      "cie": "CIE produces analysis outputs (bridging badges, GIC, validity cards) but cie-lab has no concept of an editable, host-curated report document with a summary, per-section configuration, and an explicit public/private publish switch.",
+      "meaning": "A strong gain. CIE's validity-carded claims are more rigorous than Comhairle's raw statement lists, but rigor without a curated, host-approved narrative is hard to hand to a campaign or council. Adopting an authored report layer \u2014 summary + ordered sections + is_public gate \u2014 would let CIE wrap its gated claims in a publishable story while preserving its 'paraphrase-only, gated-claim' discipline inside each section.",
+      "comhairle_s": "Comhairle's reports API produces a host-editable report with a summary, per-step section_configs, feedback, impacts, and an is_public publish toggle.",
+      "cie_s": "CIE emits bridging/validity analysis but has no editable, host-curated report document with sections and a public/private publish switch.",
+      "meaning_s": "Adopt an authored report layer (summary + ordered sections + public gate) so CIE can publish its gated claims as a host-approved narrative.",
+      "paths": [
+        "api/src/routes/reports.rs",
+        "api/src/routes/reports/dto.rs",
+        "api/src/models/report.rs"
+      ]
+    },
+    {
+      "id": "CF5",
+      "component": "Participant surface",
+      "name": "Participant context and explainer tabs",
+      "status": "gain",
+      "comhairle": "Before and during a conversation, Comhairle wraps the participant flow in a set of context tabs at ui/.../(public)/conversations/[conversation_id]/[[preview]]/ \u2014 faq, privacy, workflow, invite and report sub-routes plus the main join page, all sharing a layout. This mirrors, almost tab-for-tab, Bloom's shipped Open Poll context surface (CONTEXT / HOW IT WORKS / YOUR HOST / WHAT'S NEXT / FAQ from /tmp/bloom/CATALOG.md), giving a participant a place to understand what an open deliberation is, who is hosting, how their data is used, and what happens next.",
+      "cie": "CIE's spec insists on consent-forward, understandable participation, but cie-lab's thin participation scaffold ships no equivalent participant-facing FAQ / privacy / how-it-works / what's-next context surface.",
+      "meaning": "A clear, low-risk gain that Bloom proves is product-standard. CIE already commits to two-tier consent and paraphrase-only quoting; surfacing those commitments to the participant through explicit FAQ/privacy/how-it-works tabs turns CIE's principles into visible trust signals. This is content and IA work, not core-engine work, so it can be adopted without touching the quarantined analysis layer.",
+      "comhairle_s": "Comhairle wraps each conversation in participant context tabs (FAQ, privacy, workflow, invite, report) mirroring Bloom's CONTEXT/HOW IT WORKS/FAQ surface.",
+      "cie_s": "CIE ships no participant-facing FAQ, privacy, or how-it-works context tabs around its listening flow.",
+      "meaning_s": "Adopt participant context/explainer tabs to turn CIE's consent and paraphrase-only principles into visible, Bloom-standard trust signals without touching the core engine.",
+      "paths": [
+        "ui/packages/comhairle/src/routes/(public)/conversations/[conversation_id]/[[preview]]/+layout.svelte",
+        "ui/packages/comhairle/src/routes/(public)/conversations/[conversation_id]/[[preview]]/faq",
+        "ui/packages/comhairle/src/routes/(public)/conversations/[conversation_id]/[[preview]]/privacy",
+        "ui/packages/comhairle/src/routes/(public)/conversations/[conversation_id]/[[preview]]/workflow"
+      ]
+    },
+    {
+      "id": "CF6",
+      "component": "Participant surface",
+      "name": "Public narrative results page",
+      "status": "gain",
+      "comhairle": "Comhairle ships a polished, public-facing results narrative (ui/.../(public)/waves/report/+page.svelte) that reads like a story: engagement stats, consensus / broad-agreement / divisive statement cards, 'emerging opinion groups' with plain-language descriptions, a BeeswarmChart plotting participants by PCA position, statement cards annotated per opinion group, and AiCallout explainer blocks. The underlying report-data.json is built from PCA positions, k-means groups, group_informed_consensus and representative_comments \u2014 i.e. it renders the same bridging/consensus family of results CIE computes, but as a consumer-readable public page.",
+      "cie": "CIE has a candidate bridging dashboard, but cie-lab's surface is analyst-facing; it lacks a public, narrative, plain-language results page that walks a lay reader through 'where we agree, where we diverge, and which groups emerged'.",
+      "meaning": "A gain in presentation, adjacent to what CIE already computes. CIE's outputs are arguably more defensible (Wilson-gated bridging, validity cards) than Comhairle's raw beeswarm, so the opportunity is to borrow the storytelling IA \u2014 engagement \u2192 agreement \u2192 differences \u2192 groups \u2192 deeper look \u2014 and pour CIE's gated claims into it. Bloom's public results page confirms this framing is product-expected.",
+      "comhairle_s": "Comhairle's public waves/report page narrates results as engagement stats, consensus/divisive statement cards, emerging opinion groups, and a PCA beeswarm chart for lay readers.",
+      "cie_s": "CIE's bridging dashboard is analyst-facing and lacks a public plain-language 'where we agree/diverge/which groups emerged' results narrative.",
+      "meaning_s": "Borrow Comhairle's engagement-to-groups storytelling IA and pour CIE's Wilson-gated bridging and validity claims into a public narrative results page.",
+      "paths": [
+        "ui/packages/comhairle/src/routes/(public)/waves/report/+page.svelte",
+        "ui/packages/comhairle/src/lib/types/report.ts",
+        "ui/packages/comhairle/src/lib/components/report/BeeswarmChart.svelte"
+      ]
+    },
+    {
+      "id": "CF7",
+      "component": "Analytics & representativeness",
+      "name": "Live participation funnel dashboard",
+      "status": "watch",
+      "comhairle": "The admin monitor page (ui/.../admin/conversations/[conversation_id]/monitor/+page.svelte) gives a host a live operational dashboard: total users, a DailyStatsChart of signups over time, and per-workflow-step StatProgressIndicator cards showing how many participants started vs completed each step, framed as 'identify any sticking points' and 'check out your reach'. It is a recruitment-and-progress funnel view over the whole participant journey, using workflowStats.stepStats and signupStats.",
+      "cie": "cie-lab focuses on the analysis pipeline (vote matrix \u2192 PCA \u2192 clusters \u2192 bridging) and has no host-facing operational dashboard tracking signup-over-time or per-step start/complete drop-off for a running conversation.",
+      "meaning": "A watch item: valuable but situational, and cleanly separable from CIE's core. Because it counts participation events rather than demographic attributes, a funnel dashboard is fully compatible with CIE's demographics quarantine \u2014 it would just need to source counts from CIE's append-only trust/event layer. Worth adopting once CIE runs live campaigns and hosts ask 'how is turnout going and where are people dropping off?'.",
+      "comhairle_s": "Comhairle's admin monitor page shows total users, a daily-signups chart, and per-step started-vs-completed drop-off indicators as a live participation funnel.",
+      "cie_s": "CIE has no host-facing operational dashboard tracking signups over time or per-step completion drop-off for a running conversation.",
+      "meaning_s": "Track as a demographics-safe funnel dashboard CIE can source from its append-only event layer once it runs live campaigns and hosts need turnout and drop-off visibility.",
+      "paths": [
+        "ui/packages/comhairle/src/routes/(admin)/admin/conversations/[conversation_id]/monitor/+page.svelte",
+        "ui/packages/comhairle/src/lib/components/StatProgressIndicator.svelte",
+        "ui/packages/comhairle/src/lib/components/DailyStatsChart.svelte"
+      ]
+    },
+    {
+      "id": "CF8",
+      "component": "Engagement & outreach",
+      "name": "Invite management with QR open links",
+      "status": "gain",
+      "comhairle": "Comhairle has a dedicated invites admin surface (ui/.../admin/conversations/[conversation_id]/invites/+page.svelte, api/src/routes/invites.rs) offering two recruitment channels: targeted email invites (EmailInviteForm / EmailInvitesList) and shareable open invite links rendered as scannable QR codes (svelte-qrcode) with copy-to-clipboard, human-readable invite labels (InviteLabelDialog), and an OpenInviteStatsBarChart tracking uptake per link. This is a real outreach toolkit for driving and attributing participation across print, in-person and digital channels.",
+      "cie": "cie-lab has no invitation or link-attribution surface; its participation scaffold assumes participants simply arrive, with no per-channel invite links, QR codes, or invite-level uptake tracking.",
+      "meaning": "A gain that maps directly to Bloom's 'help bring everyone into the fold' share tier. Invite links and QR codes are pure recruitment plumbing with no demographic content, so they sit comfortably beside CIE's principles; adopting labelled open-invite links with per-link uptake stats would give CIE hosts a way to run and measure multi-channel recruitment without compromising the quarantined core.",
+      "comhairle_s": "Comhairle's invites surface offers targeted email invites plus labelled open invite links as scannable QR codes with per-link uptake charts.",
+      "cie_s": "CIE has no invitation, QR, or per-link attribution surface \u2014 participants are assumed to simply arrive.",
+      "meaning_s": "Adopt labelled open-invite links with QR codes and per-link uptake stats to give CIE hosts demographics-free multi-channel recruitment, matching Bloom's share tier.",
+      "paths": [
+        "ui/packages/comhairle/src/routes/(admin)/admin/conversations/[conversation_id]/invites/+page.svelte",
+        "api/src/routes/invites.rs",
+        "ui/packages/comhairle/src/lib/components/OpenInviteStatsBarChart.svelte"
+      ]
+    },
+    {
+      "id": "CF9",
+      "component": "Admin & authoring",
+      "name": "Participant knowledge-base documents",
+      "status": "watch",
+      "comhairle": "Comhairle lets a host upload background documents to a conversation and expose them to participants. documents.rs (api/src/routes/documents.rs) handles multipart upload, async parsing (parse_status), access control (public+live conversations or participants/owner/admin), and a knowledge-base admin tab; the design authoring UI filters to documents with parse_status === 'DONE' so a step can be grounded in uploaded material, and those documents feed the RAG-backed elicitation bot. It is a content-management layer for briefing participants and grounding AI assistance in host-supplied source material.",
+      "cie": "CIE deliberately avoids per-record external AI and mutable document stores; cie-lab has no participant document library or RAG grounding layer, keeping embeddings local and the pipeline free of per-record egress (08-the-build-core.md, 03-principles-and-commitments.md).",
+      "meaning": "A watch item shading toward divergence. The document-as-content-briefing idea (give participants the background reading) is benign and could be adopted as static content. But the way Comhairle wires documents into a RAG-backed bot is precisely the per-record external-AI pattern CIE avoids, so CIE should adopt at most the briefing-material surface and explicitly not the retrieval-augmented-generation grounding, or it undermines its no-per-record-egress commitment.",
+      "comhairle_s": "Comhairle lets hosts upload parsed documents that brief participants and ground its RAG-backed elicitation bot (documents.rs, knowledge-base tab).",
+      "cie_s": "CIE keeps embeddings local and avoids per-record external AI, so it has no participant document library or RAG grounding layer.",
+      "meaning_s": "Watch: CIE could adopt the static participant-briefing surface but must avoid Comhairle's RAG grounding, which is the per-record external-AI pattern CIE forbids.",
+      "paths": [
+        "api/src/routes/documents.rs",
+        "ui/packages/comhairle/src/routes/(admin)/admin/conversations/[conversation_id]/knowledge-base/+page.svelte"
+      ]
+    },
+    {
+      "id": "CF10",
+      "component": "Participant surface",
+      "name": "Per-conversation notification and recontact preferences",
+      "status": "gain",
+      "comhairle": "Comhairle gives each participant granular, per-conversation communication controls (api/src/routes/user_conversation_preferences.rs): receive_updates_by_notification, receive_updates_by_email, and \u2014 notably \u2014 receive_similar_conversation_updates_by_email / _by_notification, an explicit opt-in to be recontacted about related conversations. This is a self-service consent-to-followup tier, stored per user per conversation and editable from the participant settings surface.",
+      "cie": "cie-lab has no participant-managed communication preferences or recontact opt-in; its consent model is about data use, not an ongoing per-conversation notification and re-engagement channel.",
+      "meaning": "A gain that operationalises exactly the recontact tier Bloom ships as 'stay in touch' (bloom-07 in /tmp/bloom/CATALOG.md). It fits CIE's two-tier consent ethos well: an explicit, granular, participant-editable opt-in for follow-up and similar-conversation updates is consent-forward by design. Adopting it gives CIE a principled re-engagement channel without any demographic capture.",
+      "comhairle_s": "Comhairle stores per-conversation participant preferences for email/notification updates plus an explicit opt-in to be recontacted about similar conversations.",
+      "cie_s": "CIE has no participant-managed notification preferences or recontact opt-in beyond its data-use consent model.",
+      "meaning_s": "Adopt granular participant-editable notification and recontact opt-ins (Bloom's 'stay in touch' tier) as a consent-forward re-engagement channel with no demographic capture.",
+      "paths": [
+        "api/src/routes/user_conversation_preferences.rs",
+        "api/src/routes/user_conversation_preferences/dto.rs"
+      ]
+    },
+    {
+      "id": "CF11",
+      "component": "Elicitation methods",
+      "name": "Multi-method participant step renderer",
+      "status": "watch",
+      "comhairle": "Comhairle's participant workflow-step page (ui/.../workflow/[workflow_id]/s/[workflow_step_id]/+page.svelte) is a polymorphic renderer: a single participant screen dispatches to whichever tool a step is configured with \u2014 Polis, HeyForm, Learn, LivedExperience, ThinkingSpace, ElicitationBot or Prioritization \u2014 with per-tool loading skeletons and a live/preview split. The tool catalogue (api/src/tools/) additionally includes ranking (basic, quadratic and comparative voting) and stories, so a participant can move through vote-on-statements, ranked/quadratic prioritisation, structured storytelling and guided learning within one journey.",
+      "cie": "CIE is intentionally ONE campaign-listening flow (02-north-star.md); cie-lab renders a single Pol.is-style vote/submit surface and has no polymorphic step renderer that swaps in ranked voting, quadratic prioritisation, storytelling or learning modules.",
+      "meaning": "A watch item, held in tension with CIE's 'narrow and sharp' identity. CIE should not chase feature parity across seven elicitation tools \u2014 that breadth is exactly what CIE trades away for depth and defensibility. But the client-side pattern (a step contract that a participant renderer dispatches on) is worth noting for the day CIE adds even a second method (e.g. a prioritisation pass after bridging), so it can grow without a rewrite.",
+      "comhairle_s": "Comhairle's participant step page polymorphically renders whichever tool a step uses (Polis, ranking/quadratic, stories, learning, prioritisation) within one journey.",
+      "cie_s": "CIE deliberately renders a single Pol.is-style flow with no multi-method participant renderer.",
+      "meaning_s": "Watch the step-contract renderer pattern for future extensibility, but do not chase Comhairle's seven-method breadth \u2014 depth over breadth is CIE's deliberate trade.",
+      "paths": [
+        "ui/packages/comhairle/src/routes/(public)/conversations/[conversation_id]/[[preview]]/workflow/[workflow_id]/s/[workflow_step_id]/+page.svelte",
+        "api/src/tools/ranking.rs",
+        "api/src/tools/stories.rs"
+      ]
+    },
+    {
+      "id": "CF12",
+      "component": "Participant surface",
+      "name": "Post-participation feedback and thank-you flow",
+      "status": "gain",
+      "comhairle": "Comhairle closes the participant journey with a dedicated thank-you route (ui/.../workflow/[workflow_id]/thank_you/) and a feedback capture surface (api/src/routes/feedback.rs) whose entries flow back into the report as facilitator_feedback / participant_feedback (FullReportDto, api/src/models/report.rs). Together with the report's report_impacts, this gives every conversation an explicit end-of-flow moment for participants to reflect and for the host to gather experience signal.",
+      "cie": "cie-lab has no defined end-of-flow completion surface or post-participation feedback capture; its scaffold ends at the analysis pipeline rather than at a participant reflection/thank-you step.",
+      "meaning": "A gain that lines up with Bloom's completion pattern \u2014 the 'thank you' screen and the 1-to-10 experience self-code (bloom-05/-08 in /tmp/bloom/CATALOG.md), which is itself analogous to CIE's own 'feeling heard' light self-code. Adopting a thank-you + lightweight feedback step gives CIE a natural, low-friction place to capture its feeling-heard signal and route participants to next actions, all without collecting demographics.",
+      "comhairle_s": "Comhairle ends each journey with a thank-you route plus feedback capture that flows back into the report as participant/facilitator feedback.",
+      "cie_s": "CIE has no end-of-flow completion surface or post-participation feedback capture beyond its analysis pipeline.",
+      "meaning_s": "Adopt a thank-you plus lightweight feedback step (Bloom's completion + experience self-code) as the natural home for CIE's demographics-free 'feeling heard' signal and next-action routing.",
+      "paths": [
+        "ui/packages/comhairle/src/routes/(public)/conversations/[conversation_id]/[[preview]]/workflow/[workflow_id]/thank_you",
+        "api/src/routes/feedback.rs",
+        "api/src/models/report.rs"
+      ]
+    }
+  ]
+}

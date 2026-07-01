@@ -1,0 +1,352 @@
+{
+  "R1": {
+    "cie": "The scope banner stamps an unremovable community-listening disclaimer verbatim on every screen, chart, and export, so a number's framing always travels with it and can never be mistaken for a representative poll.",
+    "comhairle": "Comhairle has no claim-framing layer at all, rendering the raw Pol.is consensus and divisiveness values with no wrapper text or disclaimer.",
+    "meaning": "Because Comhairle offers nowhere to attach a system-enforced banner, the obligation stays on the CIE side, so integration is safe only while CIE remains the presentation surface."
+  },
+  "R2": {
+    "cie": "The copy linter scans all user-facing wording at build time and fails the build loudly on statistical-polling phrases like 'margin of error' unless a genuine polling frame with n=384 and a documented audit is confirmed.",
+    "comhairle": "Comhairle has no such guard; text is authored freely by hosts and tools, and its only language machinery is translation and internationalisation, not claim discipline.",
+    "meaning": "This continuous-integration control would have to be rebuilt from scratch inside Comhairle, so content authoring and linting should stay inside CIE's own pipeline."
+  },
+  "R3": {
+    "cie": "The single badge attaches exactly one label per result drawn from a fixed three-value vocabulary of representative-enough, directional, or below-bar, worded identically on every surface.",
+    "comhairle": "Comhairle surfaces the raw Pol.is numbers as bare floats with no badge layer, leaving trustworthiness entirely for the reader to judge.",
+    "meaning": "Since Comhairle's data model has no field to carry a trust badge, CIE must compute and attach it before any number is shown, keeping CIE the owner of interpretation and Comhairle the owner of raw numbers."
+  },
+  "R4": {
+    "cie": "The validity card attaches a nutrition-label of diagnostics to every result, showing per-group counts, the smallest-group margin, coverage, flagged-record counts, and knife-edge flags whenever a number sits within 0.05 of a decision threshold.",
+    "comhairle": "Comhairle has no analog, rendering the Pol.is math live and ungated so a fragile result and a robust one look identical to the reader.",
+    "meaning": "With nothing in Comhairle's interchange grammar to hold it, the validity card stays a CIE-rendered artifact, so Comhairle can consume headline numbers but not the reliability apparatus behind them."
+  },
+  "R5": {
+    "cie": "The plain-language methods note is a jargon-free explainer of how opinion groups are found, what bridging means, and what each badge means, reachable from every results surface.",
+    "comhairle": "Comhairle ships no such note, offering only host-authored conversation framing rather than a standardised, per-surface methods explainer.",
+    "meaning": "This documentation-and-UX artifact must be supplied by CIE itself, and integration neither helps nor hurts as long as CIE renders the results that carry it."
+  },
+  "R6": {
+    "cie": "The candidate claim-language briefing is a pre-launch program step in which the candidate is briefed on what the tool can and cannot claim and signs a results-usage agreement.",
+    "comhairle": "Because this is an offline agreement between operator and candidate, Comhairle neither provides nor lacks it, since no platform implements a person-to-person briefing and signature.",
+    "meaning": "Integration is irrelevant here, as the guarantee is carried by whoever runs the pilot, a reminder that several CIE trust guarantees are governance and process rather than software features."
+  },
+  "R7": {
+    "cie": "The real-votes-only rule requires every reported aggregate to be computed exclusively from human votes and self-codes, with simulated or AI-generated agreement never entering, verified by test.",
+    "comhairle": "Comhairle satisfies this on the vote path, aggregating real participant votes through the wrapped Pol.is math server so the reported consensus is never synthesised.",
+    "meaning": "This is shared common ground, so a CIE-to-Comhairle export of vote-derived aggregates preserves measurement integrity on both sides and is a safe foundation to build interoperability on."
+  },
+  "R8": {
+    "cie": "The gated bridging badge refuses to call a statement common ground on a raw number alone, requiring group-informed consensus at or above 0.5, each group's Wilson 95% lower bound above 0.5, and at least 25 votes per group.",
+    "comhairle": "Comhairle exposes Pol.is's raw group-informed-consensus float directly, with no Wilson lower bound, no minimum-votes gate, and no regression discipline.",
+    "meaning": "This is the single most important divergence, since both systems compute the same quantity but only CIE wraps it in a defensible statistical gate, so CIE must remain the arbiter of what counts as a bridge."
+  },
+  "R9": {
+    "cie": "The response-patterns-only clustering derives opinion groups solely from how people voted, running PCA then k-means on the vote matrix alone, never from demographics or any external attribute.",
+    "comhairle": "Comhairle satisfies this, clustering purely on vote patterns via the wrapped math server while storing any demographics separately from the clustering.",
+    "meaning": "The algorithms agree, but Comhairle keeps joinable identity data adjacent in a way CIE's privacy model would not, so interoperating on the clustering itself is safe while the surrounding demographic data warrants watching."
+  },
+  "R10": {
+    "cie": "The bounded cluster-count search limits the number of opinion groups to a small calibrated range, re-derives it on real district text, and pins any change as a versioned, reviewed thresholds commit that is the single source of truth.",
+    "comhairle": "Comhairle's wrapped Pol.is does perform a bounded k-search, but it does not pin a re-derived k-range as a governed, auditable thresholds file under its own control.",
+    "meaning": "The mechanism exists on both sides but the governance does not, so CIE can consume Comhairle's clustering yet still needs its own threshold discipline to keep results reproducible and defensible."
+  },
+  "R11": {
+    "cie": "The stability gate checks whether re-running the clustering would return roughly the same groups and fails loudly, producing no manifest, no artifact, and no dashboard path to unstable results at all.",
+    "comhairle": "Comhairle renders Pol.is results live and ungated, with no reproducibility check standing between computation and display.",
+    "meaning": "Comhairle will happily display fragile results that CIE would suppress, so CIE must gate before it exports and this discipline cannot be delegated to Comhairle."
+  },
+  "R12": {
+    "cie": "The per-cluster stability marking measures robustness for each group and tags the shakier, non-headline clusters as directional so readers weight them accordingly.",
+    "comhairle": "Comhairle has no per-cluster stability marking and no directional tier, presenting every cluster the math server returns on equal footing.",
+    "meaning": "This fine-grained trust nuance would flatten on export, since Comhairle has no field to express that one particular group is less reliable than the others."
+  },
+  "R13": {
+    "cie": "The local-embeddings rule records which embedding model each run used and runs it on the same machine with no network calls, ensuring raw constituent text never leaves the box.",
+    "comhairle": "Comhairle makes external, per-record AI calls through its bot, RAGFlow document Q&A, categorization, and translation services, the opposite egress-heavy posture.",
+    "meaning": "This is a direct architectural conflict, so the boundary must stay explicit: CIE can export scrubbed aggregates, but routing raw text through Comhairle's AI services would violate its zero-egress rule."
+  },
+  "R14": {
+    "cie": "The divisive-beside-bridging rule requires majority-only and divisive results to display un-subordinated on the same surface as bridging results, unsuppressible even by the candidate.",
+    "comhairle": "Comhairle can compute and return a divisiveness value, but offers no guarantee those results sit un-subordinated and cannot be hidden from a candidate view.",
+    "meaning": "The capability exists but the enforced fairness contract does not, so CIE's no-suppression pledge only holds while CIE controls the presentation surface."
+  },
+  "R15": {
+    "cie": "The genuine pass / not-sure option lets participants vote agree, disagree, or explicitly pass as a co-equal, recorded value on every item, with no item ever gating progress.",
+    "comhairle": "Comhairle's Pol.is integration offers a pass button, but does not guarantee CIE's stricter promise that pass is stored as a distinct, analysable value on every item with no gating.",
+    "meaning": "This is a low-risk alignment task rather than net-new construction, since the pass mechanic already flows through Comhairle and the work is hardening it to CIE's standard."
+  },
+  "R16": {
+    "cie": "The under-seven-minute instrument requirement caps the full question set at seven minutes on a mid-range phone, verified by an actual timing study run with the independent test posse rather than the engineers who built it.",
+    "comhairle": "Comhairle can host an instrument of any length but has no notion of a certified completion-time budget or an external timing sign-off, since this human study lives in no codebase.",
+    "meaning": "Whichever system hosts the instrument, a separate operational timing study must still be scheduled and recorded, and neither platform removes that need."
+  },
+  "R17": {
+    "cie": "The validated-item-banks rule sources question wording from tested academic election-survey banks and passes a neutral-language audit by the instrument owner, logged before the go/no-go decision.",
+    "comhairle": "Comhairle stores statement text and themes but has no concept of a validated source bank or a recorded neutral-language audit, since a statement is just a string with a moderation status.",
+    "meaning": "This content-and-process gate is unresolved by any software swap, so reaching CIE's rigor means adding an editorial pipeline and audit log around whichever tool holds the questions."
+  },
+  "R18": {
+    "cie": "The named-instrument-owner rule hard-blocks data collection until a specific accountable person with a signed deliverable and confirmed working hours is in place.",
+    "comhairle": "Comhairle has organizations and users but nothing binding a named, hours-confirmed owner to a hard block on collection, so it will run whether or not one is designated.",
+    "meaning": "This staffing gate lives in project governance rather than either platform, so someone must enforce the 'no named owner, no collection' rule administratively."
+  },
+  "R19": {
+    "cie": "The curator-identity rule requires every statement to carry a curator identity and timestamp before display, enforced in both the ingest validator and the rendering query.",
+    "comhairle": "Comhairle already stores authorship, seed flags, timestamps, and moderation status, but does not gate on curator identity before a statement is shown.",
+    "meaning": "This is a partial where the data model is already ahead, so integration adds a validator and a filtered render query that refuse any statement lacking a curator, atop fields Comhairle already has."
+  },
+  "R20": {
+    "cie": "The seed-source-citation rule requires each starter seed statement to cite the swing-theme research source it came from, stored in the statement catalog.",
+    "comhairle": "Comhairle marks whether a statement is a seed and tags its themes, but has no field to cite the research source behind a seed.",
+    "meaning": "This content-provenance step is a small schema extension, since Comhairle's seed and theme fields are a natural home for the citation, though the sourcing discipline itself remains human."
+  },
+  "R21": {
+    "cie": "The dial-decision record freezes the elicitation tuning, including seed count, submission policy, and cross-pollination criteria, as a closed and documented pre-launch decision artifact.",
+    "comhairle": "Comhairle has the configurable moving parts a dial would set but no single recorded decision artifact that freezes and documents those choices before launch.",
+    "meaning": "The parameters map onto Comhairle's existing knobs, but the act of recording the closed decision is a procedural governance habit neither platform ships."
+  },
+  "R22": {
+    "cie": "The config-sign-off rule keeps the instrument's configuration file empty until the owner's deliverable lands and requires the owner's sign-off recorded in the commit that populates it.",
+    "comhairle": "This source-control discipline has no representation in Comhairle's application code, so enforcement would live in the team's git workflow and review policy rather than any Rust module.",
+    "meaning": "Adopting this means a commit-and-review convention around config, enforced by people and git, orthogonal to which platform hosts the instrument."
+  },
+  "R23": {
+    "cie": "The two-tier unbundled consent asks participation and contact consent as separate independent choices with contact off by default, storing only an anonymous daily counter, no row, event, or code linkage, when someone declines.",
+    "comhairle": "Comhairle models consent as a single boolean with demographics gated by that one flag, with no separation of participation from contact and an ordinary profile row even for decliners.",
+    "meaning": "This true gap requires reworking Comhairle's consent model into two independent flags and, harder, changing how declines are stored so no linkable row is created, which is substantive data-model work."
+  },
+  "R24": {
+    "cie": "The AI-disclosure rule discloses AI involvement at conversation start and again on the visualization, in candidate-approved wording red-teamed to read honestly even as a standalone screenshot.",
+    "comhairle": "Comhairle uses AI services and could show a notice, but lacks CIE's approved, red-teamed, screenshot-proof disclosure pinned to those two specific moments.",
+    "meaning": "The gap is about rigor and placement rather than capability, so integration is mostly authoring the copy, running the screenshot red-team, and pinning the disclosure, a content-and-review task."
+  },
+  "R25": {
+    "cie": "The consent-copy-version rule pins every consent event to the exact version of the consent copy the participant actually saw, recorded as an immutable append-only event.",
+    "comhairle": "Comhairle's single consent boolean captures no consent-copy version and lives in mutable Postgres, so a past agreement cannot be reconstructed if the wording changed.",
+    "meaning": "Closing this gap means adding a consent-copy version reference to each record and ideally moving to append-only consent events, a meaningful schema and data-lifecycle change."
+  },
+  "R26": {
+    "cie": "The consent-compliance review requires the consent language to pass a documented privacy and electoral-compliance sign-off, kept on file, before the go/no-go decision.",
+    "comhairle": "This governance and legal review step has no home in Comhairle's codebase, which will run regardless of whether such a review happened.",
+    "meaning": "A filed privacy and electoral-compliance review remains a manual precondition to launch that the platform choice does not affect."
+  },
+  "R27": {
+    "cie": "The 11-participant suppression floor blocks any quote, drill-down, or demographic cut backed by fewer than 11 people, executed server-side at the artifact layer with complementary suppression so hidden cells cannot be inferred by subtraction.",
+    "comhairle": "Comhairle's demographic reporting aggregates and returns breakdowns with no minimum-cell-size gate or complementary suppression, so a handful-sized cut is shown as-is.",
+    "meaning": "This sourced gap requires inserting server-side suppression logic into Comhairle's export path, blanking or coarsening anything under 11 including the second-order inference protection."
+  },
+  "R28": {
+    "cie": "The paraphrase-only egress rule requires every displayed quote to be a human-reviewed, labeled paraphrase, with verbatim participant text never leaving the raw store, guarded by an export-layer test.",
+    "comhairle": "Comhairle does the opposite, storing and serving verbatim statement text with no paraphrase step, no 'paraphrase' label, and no export-layer test.",
+    "meaning": "Reconciling these opposite egress philosophies is one of the more consequential integration pieces, requiring a human paraphrase-and-review stage and an export test between the raw store and any display."
+  },
+  "R29": {
+    "cie": "The recontact tier is a separate opt-in, defaulting off, that permits emailing a participant for future rounds, and must be live the day the first pilot launches or that first wave's permission is permanently foreclosed.",
+    "comhairle": "Comhairle records consent as a single boolean with plenty of email plumbing but no standalone, versioned recontact permission.",
+    "meaning": "Because this consent concept has no matching field in Comhairle, CIE must remain the system of record for consent, and the recontact flag stays behind in CIE's quarantined store on export."
+  },
+  "R30": {
+    "cie": "The completers-only comms rule sends the results message only to participants whose session reached the completed state and only after the analysis run finishes, enforced through session state rather than a fragile manual process.",
+    "comhairle": "Comhairle has a real notification and email subsystem but no built-in constraint tying a results email to per-participant completion plus post-analysis readiness.",
+    "meaning": "This partial lets an integrated system reuse Comhairle's mailer as the delivery pipe while CIE computes the eligible recipient set and hands over a finalized list."
+  },
+  "R31": {
+    "cie": "The dual-enforced record contract enforces one identical response definition in both the app's database schema and the pipeline's validator, with any divergence written down as a numbered README entry rather than allowed to drift.",
+    "comhairle": "Comhairle has a storage schema and a separate interchange grammar, but these are not cross-checked copies of one contract, since the interchange schema is an unwired stub with no pipeline-side validator.",
+    "meaning": "This contract is the seam that makes interoperability possible, but because Comhairle's interchange schema is a stub, integration means CIE serializing outward into that grammar as a lossy, one-way export with CIE staying authoritative."
+  },
+  "R32": {
+    "cie": "The append-only rule makes raw rows insert-only, granting no role UPDATE or DELETE on the raw tables, proven live at first database bring-up and logged in the go/no-go checklist.",
+    "comhairle": "Comhairle runs ordinary mutable Postgres with no append-only roles or guard triggers, and its statement aux table exposes update and upsert operations.",
+    "meaning": "This foundational architecture divergence has no counterpart to inherit, a core reason CIE stays the system of record while Comhairle can at best be a downstream interop consumer."
+  },
+  "R33": {
+    "cie": "The PII-quarantine wall gives the analysis database role no read access to the contact table, confirmed by a permission audit, so buggy or compromised analysis code structurally cannot pull identifiers into results.",
+    "comhairle": "Comhairle stores demographic and contact-adjacent data in one profile and joins it directly into analysis queries, so joinability is a feature there, the exact opposite of the wall.",
+    "meaning": "This is a direct values tension, so CIE must never export joinable PII into Comhairle's model, and the opposing philosophies about linking identity and opinion should be surfaced with the Comhairle team."
+  },
+  "R34": {
+    "cie": "The nightly off-box hash chain fingerprints the data each night chained to the prior night, writes those fingerprints to storage the app cannot reach, and blocks dashboard reads entirely on any mismatch.",
+    "comhairle": "Comhairle has no hash chain or equivalent tamper-evidence, which combined with its mutable Postgres means a silent alteration of past rows would go undetected.",
+    "meaning": "This CIE-only tamper-evidence cannot survive a move into Comhairle storage, another reason the export mapping is lossy in exactly the direction that matters."
+  },
+  "R35": {
+    "cie": "The two-class moderation separates a toxicity flag, which hides a statement from display while its votes still count, from an integrity flag, which excludes a whole bad-faith session, writing only to a separate enrichment table that never alters raw rows.",
+    "comhairle": "Comhairle has a single accept/reject/pending moderation axis, so both CIE semantics collapse into one decision that would either discard legitimate votes or admit bad-faith ones.",
+    "meaning": "Collapsing the two classes silently corrupts the statistics the spec warns about, so an export must state its moderation-filter policy up front, and a richer moderation entity is one proposed upstream contribution."
+  },
+  "R36": {
+    "cie": "The hash-registered run artifacts capability writes every pipeline run's outputs as fixed, hash-registered files stamped with a run id encoding code version, instrument version, parameters, and an input watermark, and the dashboard renders these frozen runs rather than the live database.",
+    "comhairle": "Comhairle renders live data straight from its mutable Postgres store and has no concept of a frozen, hash-registered run artifact, so re-running or editing upstream data silently changes what the dashboard shows.",
+    "meaning": "Because CIE would export a specific, identified run rather than a live feed and Comhairle has nowhere to preserve that run's identity or immutability, this reinforces CIE staying the system of record."
+  },
+  "R37": {
+    "cie": "The LLM-plus-human-confirmed theme labels capability has an LLM propose cluster labels but records a named human's confirmation of each one, and hedges any theme with fewer than 20 contributors as merely emerging and directional.",
+    "comhairle": "Comhairle auto-categorizes contributions with its AI categorization service but records no human-confirmation step tied to reviewer identity and applies no 20-contributor floor, making this a partial rather than full match.",
+    "meaning": "CIE's label provenance and directional-only status are CIE-side metadata that Comhairle's interchange grammar cannot express, so labels map to Comhairle Group entities with algorithm provenance but lose the human-confirmation detail."
+  },
+  "R38": {
+    "cie": "The hold-label-and-publish-for-provider rule deliberately leaves the pipeline's label and publish stages unimplemented, writing no placeholder or fake LLM output, until the decision about which LLM provider to use has actually landed.",
+    "comhairle": "Comhairle is a mature production system already shipping AI-backed labeling, summarization, and Q&A against real providers, so it has no such hold, making this item less a Comhairle lack than a snapshot of CIE's earlier build stage.",
+    "meaning": "This is mainly a sequencing note: any export or adapter work depending on labeled themes must wait for CIE's provider decision, signaling that CIE's AI-output surface is intentionally not-yet-wired by discipline rather than by a gap Comhairle must fill."
+  },
+  "R39": {
+    "cie": "The single-batch-LLM-over-aggregates rule makes exactly one external LLM call, a single batch pass over PII-scrubbed aggregates, with deliberately no per-record calls, verified by both code review and network-traffic capture.",
+    "comhairle": "Comhairle takes the opposite posture, making many per-record external AI calls across its RAGFlow bot, categorization, translation, and transcription services as a normal part of orchestration.",
+    "meaning": "Routing CIE data through Comhairle's per-record AI paths would violate CIE's single-scrubbed-egress guarantee, making this a strong argument for the export-first, CIE-as-system-of-record posture where CIE controls exactly what reaches an external model."
+  },
+  "R40": {
+    "cie": "The thresholds single-source-of-truth rule keeps every tuning number in one authoritative file from which code constants are generated and checked in, with a linter rejecting any threshold literal hardcoded elsewhere.",
+    "comhairle": "Comhairle has reasonable configuration in a top-level config module plus per-service configs but not CIE's linted single-source thresholds discipline with code-generated, lint-guarded constants, so it rates partial.",
+    "meaning": "This is largely an internal-quality property rather than an interoperability seam, so even if CIE's bridging analysis became a Comhairle adapter its thresholds file would remain the authority for those numbers."
+  },
+  "R41": {
+    "cie": "The unique-codes-and-redemption-log capability specs each participation code to carry at least 45 bits of entropy, uses first-redemption-counts semantics, and writes every redemption to an append-only, tamper-evident log, with print feasibility confirmed in writing beforehand.",
+    "comhairle": "Comhairle issues invites keyed by UUID with a mutable status and accept count rather than CIE's entropy floor, first-redemption semantics, and append-only redemption log, so participation codes exist but not to CIE's fraud-resistant spec.",
+    "meaning": "Because CIE's entropy floor and append-only redemption log have no matching enforcement in Comhairle's invite model, CIE keeps ownership of code generation and redemption logging while Comhairle's invite mechanism could at most coexist as a separate path."
+  },
+  "R42": {
+    "cie": "The funnel-report-by-channel-and-batch capability tracks participation through delivered, redeemed, consented, and completed stages broken out by outreach channel and mailing batch, feeding the representativeness audit.",
+    "comhairle": "Comhairle offers useful pieces such as daily response stats, recruitment targets, and demographic breakdowns but not the staged delivered-to-completed funnel segmented by channel and batch, so it rates partial.",
+    "meaning": "Because CIE's funnel is defined around its own consented and completed stages, CIE computes the authoritative funnel from its own records while Comhairle's recruitment stats could at most complement a representativeness view."
+  },
+  "R43": {
+    "cie": "The contact-list-provenance capability is an operations gate requiring the campaign, before printing any QR mailer, to document where the contact list came from, whether those people consented to contact, and the rule used to select them.",
+    "comhairle": "Comhairle is orchestration software with no concept of who was invited or how a contact list was assembled, because recruitment happens entirely outside the platform, so there is no equivalent gate to check.",
+    "meaning": "This reminds integrators that even a flawless Comhairle-produced opinion map cannot be stood behind unless the human recruitment process feeding it is documented first, an obligation that stays with the campaign regardless of engine."
+  },
+  "R44": {
+    "cie": "The warmed-QR-domain-and-fast-landing capability requires the public web address behind the QR code to be chosen, reputation-warmed against spam filters, and speed-tested to load in under three seconds on a mid-range phone before committing to print.",
+    "comhairle": "Comhairle serves its frontend and API, but the choice, warming, and latency of the public QR domain are deployment and infrastructure concerns outside its application logic, so the repo encodes no such budget or warming step.",
+    "meaning": "Integrating means someone must still own the operational plumbing of registering and warming the domain and confirming fast mobile loads, since without it the participation numbers every quality gate assumes will never materialize."
+  },
+  "R45": {
+    "cie": "The staging-walkthrough capability requires a full dress rehearsal on a production-identical staging environment where the team deliberately views the system in its honest low-participation state, seeing suppressed cells and confidence badges, and resolves or waives feedback before launch.",
+    "comhairle": "Because Comhairle renders Pol.is output live and ungated, it has no low-N honest state to rehearse, showing whatever number the analysis returns with no suppression chips or badges to preview.",
+    "meaning": "A Comhairle-based pilot would need CIE's gating layer added just so a meaningful staging walkthrough could exist, since you cannot rehearse the suppression-and-badge experience on a system that never suppresses or badges anything."
+  },
+  "R46": {
+    "cie": "The load-test-at-5-to-10k capability pushes thousands of simultaneous submissions through the production configuration and confirms no data is lost, the append-only store stays intact, and the landing page holds its speed budget under heavy traffic.",
+    "comhairle": "Load and concurrency behavior are properties of a specific deployment rather than the Comhairle source, which ships no load-test harness or append-only integrity assertion of the kind CIE specifies.",
+    "meaning": "If Comhairle were the runtime this test would still need running against that stack, and its storage layer would need to prove append-only integrity under load to satisfy CIE's data-honesty commitment."
+  },
+  "R47": {
+    "cie": "The signed-milestone-gates capability is a governance process where the funder signs off on a sequence of milestones and the final go/no-go requires every MUST-level criterion green, a scope-versus-budget review, and a decision log with no open blocking item.",
+    "comhairle": "This is a project-management and funder-governance process entirely outside any software, so Comhairle neither tracks milestones nor enforces sign-offs and has nothing in its codebase corresponding to it.",
+    "meaning": "Whatever software runs the pilot, the milestone-gate process belongs to the program, and a Comhairle deployment could not truthfully pass the every-MUST-green check until the statistical guardrails it currently lacks were added and shown green."
+  },
+  "R48": {
+    "cie": "The replication-playbook capability requires a playbook written alongside the build that separates pilot-specific details from reusable steps, carries the candidate-communication protocol, and measures deployment time per pilot as the key replication metric.",
+    "comhairle": "A playbook is a written deliverable rather than a platform feature, so Comhairle has no analog, though its reusable open-source orchestration is exactly the kind of asset such a playbook would lean on to cut deployment time.",
+    "meaning": "Comhairle could become the reusable technical substrate the playbook points to, shrinking per-pilot setup time, but the playbook must still document the CIE gating that Comhairle does not provide out of the box."
+  },
+  "T1": {
+    "cie": "The participation gate renders no result until a minimum number of people (roughly 100 for the opinion map) have taken part, showing an honest statement-level fallback below that floor so a handful of votes are never over-read as the district's view.",
+    "comhairle": "Comhairle applies no participation floor, surfacing Pol.is's group-informed-consensus numbers live regardless of how few people have voted, so a three-person conversation renders a full-looking result.",
+    "meaning": "This is the first and most basic gate Comhairle lacks, so before a candidate could stand behind a Comhairle-produced map CIE's participation floor would have to be wrapped around it to withhold display until the sample is large enough to mean anything."
+  },
+  "T2": {
+    "cie": "The cell suppression floor hides any breakdown computed from fewer than 11 people, enforced server-side at the artifact-serving layer so no chart component ever receives sub-threshold data.",
+    "comhairle": "Comhairle has no suppression floor, rendering a cell built from two respondents exactly as it renders one built from two thousand because it forwards Pol.is output without a privacy threshold.",
+    "meaning": "Integrating Comhairle safely requires inserting CIE's suppression floor between the analysis and any client, since otherwise a tiny subgroup's data could be exposed and re-identified, a privacy-and-liability gate a candidate cannot skip."
+  },
+  "T3": {
+    "cie": "The coverage and representativeness gate asks whether enough themes or slices of the conversation have accumulated enough data to be worth showing, withholding or clearly marking thin areas rather than implying full coverage.",
+    "comhairle": "Comhairle applies no coverage threshold, displaying whatever the analysis returns for every theme regardless of how thinly populated because it renders live and ungated.",
+    "meaning": "A Comhairle dashboard would present under-covered themes with the same visual authority as well-supported ones, so CIE's coverage gate would need to be layered on to distinguish a real read from barely anyone speaking to a topic."
+  },
+  "T4": {
+    "cie": "The at-least-25-votes-per-group gate requires each opinion group to cast at least 25 votes on a statement before any group-level claim about it is allowed, showing short statements as bridging candidates with the exact vote deficit rather than settled results.",
+    "comhairle": "Comhairle enforces no per-group vote minimum, reporting a cross-group consensus number even if one group cast only two or three votes on the statement.",
+    "meaning": "Because this floor is a building block of the bridging badge, its absence in Comhairle undermines the very cross-group claims that make the tool politically useful, so CIE's 25-votes-per-group gate would have to sit in front of any such claim."
+  },
+  "T5": {
+    "cie": "The opinion-map stability gate re-runs the clustering across several random seeds and shows the map only if the groupings agree across runs (median pairwise ARI at least 0.8), falling back to the honest per-statement view otherwise.",
+    "comhairle": "Comhairle renders whatever grouping Pol.is returns on a single run with no multi-seed stability check, so an unstable map that would reshuffle on re-computation is displayed as if it were solid.",
+    "meaning": "A Comhairle opinion map could show essentially arbitrary groups with no way for the viewer to know, so CIE's stability gate would need to wrap the clustering, meaning Comhairle's headline feature is precisely the one most in need of the guardrail."
+  },
+  "T6": {
+    "cie": "The per-cluster stability gate resamples the data many times to measure how consistently each individual group holds together (Jaccard overlap at least 0.75), letting stable clusters carry headline claims while demoting shaky ones to directional.",
+    "comhairle": "Comhairle performs no per-cluster stability assessment and has no notion of demoting a shaky group's claim, presenting every group Pol.is returns with equal confidence in the live, ungated view.",
+    "meaning": "Without this gate a Comhairle result invites a candidate to over-trust a fragile subgroup, so per-cluster stability is part of the honesty layer that would need to sit between Comhairle's analysis and any published claim."
+  },
+  "T7": {
+    "cie": "The per-group Wilson lower bound gate requires each opinion group's Wilson 95% lower bound on its agreement with a statement to exceed 0.5, using the pessimistic end of the confidence interval so that only genuinely confident agreement passes.",
+    "comhairle": "Comhairle surfaces Pol.is's point-estimate consensus float directly and applies no Wilson interval or lower-bound test, so a statement whose raw agreement merely looks above half displays as consensus even when the uncertainty band dips below 0.5.",
+    "meaning": "This is the statistical heart of a defensible bridging claim that Comhairle omits, so before a candidate could publicly claim opposed groups agree, CIE's Wilson-lower-bound gate would have to be computed on top of Comhairle's raw output."
+  },
+  "T8": {
+    "cie": "The bridging and representativeness badge stamps every result surface with exactly one confidence label from a fixed vocabulary, awarding a bridging badge only when the full gate stack of vote counts, group agreement, and Wilson lower bounds all pass, so the badge is the claim rather than the bare number.",
+    "comhairle": "Comhairle has no badge concept at all, showing the raw consensus figure with no label describing how much confidence it deserves because it renders live and ungated with no gate stack behind a claim.",
+    "meaning": "The badge is the single most visible thing CIE adds and Comhairle lacks, so integrating means CIE's entire gate stack would run behind Comhairle's output to earn a badge and ensure a candidate never stands behind an unlabeled figure the statistics do not support."
+  },
+  "T9": {
+    "cie": "The claim-type gate is a hard rule that the product may never say a percentage of the district believes something unless a real representative sample exists, enforced mechanically by a copy-linter that scans every dashboard string, export, and communication for forbidden polling language.",
+    "comhairle": "Comhairle has no claim-type gate, computing and returning opinion groups and per-statement agreement with nothing in the pipeline inspecting or constraining how those numbers are described to a reader.",
+    "meaning": "Integrating means this gate has to be added as a layer on top of whatever Comhairle emits, so CIE would wrap or post-process Comhairle's output and run its copy-linter before anything reaches a candidate or the public."
+  },
+  "T10": {
+    "cie": "The paraphrase and verbatim-egress gate keeps constituents' exact words inside the raw store and never on a dashboard, export, or vendor file, substituting a human-reviewed paraphrase at the export layer to prevent re-identification through distinctive speech.",
+    "comhairle": "Comhairle serves statements verbatim by design, storing and returning the exact submitted text with no export-layer paraphrase substitution, the direct opposite posture to this gate.",
+    "meaning": "This is a genuine architectural conflict rather than a missing feature, so CIE would have to intercept every egress path from Comhairle, hold verbatim text in a controlled store, and emit only reviewed paraphrases, exactly the seam the frozen record contract is meant to create."
+  },
+  "M1": {
+    "cie": "The low-friction web entry milestone lets a participant join from a landing page, QR code, or unique invite code with no install and no login and be voting in under a minute, plus a proportionate integrity layer that contains astroturfing without adding friction for real people.",
+    "comhairle": "Comhairle covers the mechanics of web entry and codes, but the proportionate astroturf-integrity layer sized to the invite population that CIE specifies is not present, so this rates partial rather than satisfied.",
+    "meaning": "Most of the entry plumbing already exists on the Comhairle side, so the integration work is additive, bolting on rate limits, code-scoped access, and coordinated-response detection rather than rebuilding the front door."
+  },
+  "M2": {
+    "cie": "The consent-and-AI-disclosure milestone structures consent as two independent unbundled tiers with contact off by default, so a participant can agree to analysis without agreeing to be contacted, and plainly discloses that AI is involved.",
+    "comhairle": "Comhairle records consent as a single boolean on the user profile and does run AI services, but one all-or-nothing flag cannot express CIE's two-tier unbundling, so it rates partial.",
+    "meaning": "Integration would keep Comhairle's consent record as the storage point but split the single boolean into CIE's independent tiers with contact defaulted off, a small schema seam whose important part is policy that must be wired before any field collection begins."
+  },
+  "M3": {
+    "cie": "The vote-elicitation floor is the defensible spine where participants vote agree, disagree, or pass on short statements seeded from real swing-theme research and expanded as constituents submit their own emergent statements.",
+    "comhairle": "Comhairle satisfies this outright, as its wrapped Pol.is tool is exactly vote-on-statements with participant-submitted statements over seeded and emergent content.",
+    "meaning": "This is the strongest point of agreement and the natural integration anchor, so CIE can adopt Comhairle's Pol.is spine directly rather than rebuild it, layering its discipline on top of this shared, proven elicitation floor."
+  },
+  "M4": {
+    "cie": "The instrument-as-a-budget milestone treats the whole elicitation as a time and attention budget of four to six mobile items completable in under seven minutes, ordered by ascending cognitive load and worded neutrally with explicit pass options and validated wording.",
+    "comhairle": "Comhairle's HeyForm tool covers general survey building, but it does not encode CIE's specific budget discipline of the under-seven-minute ceiling, ascending-load ordering, and validated neutral wording, so it rates partial.",
+    "meaning": "Integration can reuse HeyForm as the delivery mechanism while treating CIE's budget as authoring rules the instrument owner applies, keeping clear that Comhairle gives a survey tool but the guarantee comes from constraining how it is used."
+  },
+  "M5": {
+    "cie": "The named-instrument-owner milestone requires a specific accountable person for the instrument, with their deliverable and hours confirmed before field collection begins, because the make-or-break expertise of writing unbiased items must be assigned to someone.",
+    "comhairle": "This is marked not applicable for Comhairle because it is not a platform capability at all, so Comhairle neither provides nor precludes a named, resourced staff owner.",
+    "meaning": "This milestone is orthogonal to the code, living in the project's governance and staffing plan, so it carries over unchanged regardless of whether CIE builds fresh or forks Comhairle."
+  },
+  "M6": {
+    "cie": "The frozen v0 record contract is a fixed, agreed data shape for every response, respondent, item, type, value, open text, and timestamp, normalized to the unit interval and append-only, forming the stable seam the pipeline, dashboard, and analysis all build against in parallel.",
+    "comhairle": "This is a gap, as Comhairle's data model is a stub-level schema that never implements CIE's normalized, append-only response contract and has concrete holes such as a Reaction with no target-id tying it to its statement.",
+    "meaning": "This contract is the linchpin of any real integration, so an export-first path must map Comhairle's Group, Reaction, and Statement into CIE's frozen v0 contract, without which the paraphrase gate, validity card, and dashboard have nothing stable to consume."
+  },
+  "M7": {
+    "cie": "The proven analysis core reduces the vote matrix with PCA into a 2-D opinion map, clusters participants with k-means choosing the number of groups by silhouette score within a calibrated bound, so opinion groups come from vote patterns only.",
+    "comhairle": "Comhairle satisfies this, as its wrapped Pol.is tool does the same PCA-to-k-means clustering on response patterns to produce opinion groups.",
+    "meaning": "Because the analysis core matches, integration need not reimplement clustering and CIE can consume Comhairle's group assignments, with the one caution that CIE re-derives the calibrated k-bound on real pilot data where Comhairle enforces no such validation."
+  },
+  "M8": {
+    "cie": "The validity card attaches to every result the per-group vote counts, smallest-group margin, coverage, flagged-record count, knife-edge flags, and non-representative label, so a candidate can defend every number in public with the evidence of how solid it is.",
+    "comhairle": "This is a gap with no counterpart in Comhairle, whose Pol.is tool outputs clusters and agreement but attaches no validity card, confidence badge, or non-representative label.",
+    "meaning": "Integrating means CIE must compute and bind a validity card onto whatever Comhairle produces, which requires the per-group counts and coverage that only the frozen record contract reliably exposes, landing in CIE's downstream analysis and presentation layer."
+  },
+  "M9": {
+    "cie": "The local-embeddings-plus-one-batch-call milestone runs embeddings locally so constituent text never leaves controlled infrastructure and makes at most a single batch LLM call over scrubbed, aggregated text, giving one auditable egress point at flat cost.",
+    "comhairle": "Comhairle takes the opposite posture, calling external AI services per record rather than embedding locally, which multiplies egress points and sends individual text outward.",
+    "meaning": "This is a posture conflict, so a compliant integration would route embeddings to a local model and collapse Comhairle's per-record calls into CIE's one batch-over-aggregates step, reinforcing the record-contract dependency since scrubbed aggregates presuppose a normalized store."
+  },
+  "M10": {
+    "cie": "The candidate bridging dashboard ranks statements by bridging score, shows per-group support beside every statement label, and displays divisive results honestly, giving the candidate a decision aid where a consensus statement surfaces only because every group actually supports it.",
+    "comhairle": "Comhairle has participation and admin UIs and its Pol.is core computes the needed group data, but it does not ship CIE's bridging-ranked candidate dashboard with per-group support beside every label, so it rates partial.",
+    "meaning": "Integration can source the underlying group-by-statement numbers from Comhairle's clustering, but the bridging ranking, per-group columns, and honest divisive display are CIE's to build as a presentation layer depending on the analysis core, validity card, and record contract."
+  },
+  "M11": {
+    "cie": "The scope-banner-and-methods-note milestone stamps every surface with a verbatim banner clarifying that results are what engaged responding constituents told us and not what the district believes, alongside a plain-language methods note, drawing the exact line the claim-type gate enforces.",
+    "comhairle": "This is a gap, as Comhairle has no scope banner or standing claim-discipline surface and presents results without a persistent not-what-the-district-believes caveat.",
+    "meaning": "Integrating means CIE must inject the verbatim scope banner and methods note into every surface rendering Comhairle-derived results including exports, enforced by the same copy-linter behind the claim-type gate, since Comhairle's ungated output will not carry it along."
+  },
+  "M12": {
+    "cie": "The contract-deltas check audits the build against the signed funder agreement across claim-type, representation, data-handling, and budget deltas before launch, with the representation and claim-type delta a hard red go/no-go gate.",
+    "comhairle": "This is not applicable as a platform capability, since a governance audit against a signed agreement is not something Comhairle's code provides or blocks, though nothing about it prevents one either.",
+    "meaning": "This milestone is the umbrella verifying the other guarantees are wired before launch, so its practical effect on a Comhairle integration is to force the claim-type gate, scope banner, and validity card to actually be present in whatever surfaces Comhairle-derived results reach."
+  }
+}

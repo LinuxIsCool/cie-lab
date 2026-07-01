@@ -157,6 +157,47 @@ if _detail_path.exists():
             _it["comhairle"] = _d.get("comhairle", "")
             _it["meaning"] = _d.get("meaning", "")
 
+# Concise alternative — one Insight-block sentence per cell (analysis/coverage_concise.json).
+# The web view toggles Detailed / Concise; these are the *_s (short) fields.
+_concise_path = Path(__file__).resolve().parent / "coverage_concise.json"
+if _concise_path.exists():
+    _concise = json.load(open(_concise_path))
+    for _it in COVERAGE_ITEMS:
+        _c = _concise.get(_it["id"])
+        if _c:
+            _it["cie_s"] = _c.get("cie", "")
+            _it["comhairle_s"] = _c.get("comhairle", "")
+            _it["meaning_s"] = _c.get("meaning", "")
+
+# Reverse view — features Comhairle ships that CIE has no answer for. Discovered by 5 repo-study
+# agents across the Comhairle codebase (tools / identity / services / data-model / frontend) and
+# merged into analysis/reverse_detail.json. Each item mirrors the coverage grammar: a verbose
+# cie/comhairle/meaning trio + concise *_s variants, with a gain / watch / diverges stance.
+REVERSE_ITEMS: list = []
+_reverse_path = Path(__file__).resolve().parent / "reverse_detail.json"
+if _reverse_path.exists():
+    REVERSE_ITEMS = json.load(open(_reverse_path)).get("items", [])
+
+
+def _reverse_block() -> dict | None:
+    if not REVERSE_ITEMS:
+        return None
+    counts = {"gain": 0, "watch": 0, "diverges": 0}
+    for it in REVERSE_ITEMS:
+        counts[it.get("status", "watch")] = counts.get(it.get("status", "watch"), 0) + 1
+    n = len(REVERSE_ITEMS)
+    finding = (
+        f"Read the other direction, Comhairle is broad where CIE is deep. Studying its codebase surfaces "
+        f"{n} capabilities CIE has no answer for — a full identity and multi-org stack, a suite of elicitation "
+        f"tools beyond voting, an operational engagement layer (transcription, events, notifications, jobs), a "
+        f"localization pipeline, and a tool-agnostic interchange grammar. Most are things CIE deferred by staying "
+        f"narrow ({counts['gain']} worth adopting, {counts['watch']} worth watching); {counts['diverges']} are ones "
+        f"CIE deliberately refuses on principle — demographic quotas, mutable storage, verbatim serving, per-record "
+        f"external AI — where the divergence is the design, not a gap."
+    )
+    return {"gain": counts["gain"], "watch": counts["watch"], "diverges": counts["diverges"],
+            "total": n, "finding": finding, "items": REVERSE_ITEMS}
+
 # Component (spec subsystem) each item belongs to — a functional grouping across R/T/M.
 _COMPONENT = {
     "Claim discipline": ["R1", "R2", "R3", "R5", "R6", "T9", "M11"],
@@ -246,6 +287,10 @@ ASSESSMENT = {
         {"t": "A moderation / provenance entity", "d": "So the two-class moderation policy (hide-but-count vs exclude-session) survives the handoff instead of silently corrupting the statistics."},
     ],
 }
+# the reverse view (Comhairle-has, CIE-doesn't) attaches when reverse_detail.json is present
+_rev_block = _reverse_block()
+if _rev_block:
+    ASSESSMENT["reverse"] = _rev_block
 
 
 def build_and_write(ds: dict, art: dict | None = None) -> dict:
@@ -258,6 +303,9 @@ def build_and_write(ds: dict, art: dict | None = None) -> dict:
     print(f"✓ wrote {out}")
     print(f"  statements={len(doc['statements'])} participants={len(doc['participants'])} votes={len(doc['votes'])}")
     print(f"  mapping rows={len(MAPPING)} ({gaps} gap/dropped) · coverage {ASSESSMENT['coverage']['satisfies']}/{ASSESSMENT['coverage']['partial']}/{ASSESSMENT['coverage']['gap']}/{ASSESSMENT['coverage']['na']}")
+    if ASSESSMENT.get("reverse"):
+        _r = ASSESSMENT["reverse"]
+        print(f"  reverse view: {_r['total']} items · gain {_r['gain']} / watch {_r['watch']} / diverges {_r['diverges']}")
     return doc
 
 
