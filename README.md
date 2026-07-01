@@ -22,8 +22,27 @@ cd analysis && uv run python run.py            # add --no-llm for pure-offline m
 cd ../web && pnpm install && pnpm dev          # http://127.0.0.1:5180
 ```
 
+## POC #2 — Ask your constituency (grounded chat-to-query)
+
+Natural-language questions over the POC #1 artifact. The LLM does two narrow jobs — **routing**
+(semantic retrieval to find which statements bear on the question) and **phrasing** — while every
+number shown is rendered from the artifact, not generated. The grounding prompt respects badges
+(`representative-enough` vs `directional` vs `below-bar`) and **refuses** unsupported premises
+(e.g. "prove everyone opposes new taxes" → "the evidence does not answer this"). One `embed` +
+one `chat` per question, both free TELUS.
+
+### Run it (adds a 2nd process to POC #1)
+
+```bash
+# 3. ask-server: embeds statements once, serves POST /api/ask {q}
+cd analysis && uv run python serve.py          # http://127.0.0.1:5181 (Vite proxies /api → here)
+```
+
+Then use the **Ask your constituency** panel at the top of the dashboard.
+
 ## Layout
-- `analysis/` — Python (uv): `gen_synthetic.py`, `bridging.py`, `telus.py` (free TELUS client), `run.py`
+- `analysis/` — Python (uv): `gen_synthetic.py`, `bridging.py`, `telus.py` (free TELUS client),
+  `run.py` (POC #1 pipeline), `ask.py` (POC #2 retrieval + grounding), `serve.py` (local /api/ask)
 - `web/` — Vite + React 19 + TS + Tailwind v4 dashboard reading the results artifact
 
 ## Notes

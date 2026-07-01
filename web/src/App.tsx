@@ -57,10 +57,101 @@ function OpinionMap({ art }: { art: Artifact }) {
   );
 }
 
+// ---- P6: ask your constituency (grounded query over the artifact) ----------
+type AskResult = { question: string; answer: string; citations: string[]; evidence: { id: string; score: number }[] };
+
+const EXAMPLES = [
+  "What do people across all groups actually agree on?",
+  "Where do the groups disagree most?",
+  "Is there real support for prioritizing water infrastructure?",
+];
+
+function highlightCard(id: string) {
+  const el = document.getElementById(`stmt-${id}`);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+  el.classList.add("ring-2", "ring-blue-400");
+  setTimeout(() => el.classList.remove("ring-2", "ring-blue-400"), 1600);
+}
+
+function AskPanel() {
+  const [q, setQ] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [res, setRes] = useState<AskResult | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function ask(question: string) {
+    const query = question.trim();
+    if (!query || loading) return;
+    setQ(query); setLoading(true); setErr(null); setRes(null);
+    try {
+      const r = await fetch("/api/ask", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ q: query }),
+      });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error ?? `HTTP ${r.status}`);
+      setRes(data);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="mb-5 rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
+      <div className="flex items-center gap-2 mb-2">
+        <h2 className="text-sm font-semibold text-slate-700">Ask your constituency</h2>
+        <span className="text-[11px] font-normal text-slate-400">— grounded in the votes, answered by free local AI</span>
+      </div>
+      <form onSubmit={(e) => { e.preventDefault(); ask(q); }} className="flex gap-2">
+        <input
+          value={q} onChange={(e) => setQ(e.target.value)}
+          placeholder="Ask what constituents think…"
+          className="flex-1 rounded-lg ring-1 ring-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <button type="submit" disabled={loading || !q.trim()}
+          className="rounded-lg bg-slate-800 text-white text-sm font-medium px-4 py-2 disabled:opacity-40 hover:bg-slate-700">
+          {loading ? "Listening…" : "Ask"}
+        </button>
+      </form>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {EXAMPLES.map((ex) => (
+          <button key={ex} onClick={() => ask(ex)} disabled={loading}
+            className="text-[11px] rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1 disabled:opacity-40">
+            {ex}
+          </button>
+        ))}
+      </div>
+
+      {err && <div className="mt-3 text-[13px] text-rose-600">Ask failed: {err} <span className="text-slate-400">(is the ask-server running? <code>cd analysis &amp;&amp; uv run python serve.py</code>)</span></div>}
+
+      {res && (
+        <div className="mt-3 rounded-lg bg-slate-50 ring-1 ring-slate-200 p-3">
+          <p className="text-[14px] leading-relaxed text-slate-800">{res.answer}</p>
+          {res.citations.length > 0 && (
+            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+              <span className="text-[11px] text-slate-400">Grounded in:</span>
+              {res.citations.map((id) => (
+                <button key={id} onClick={() => highlightCard(id)}
+                  className="text-[11px] font-semibold rounded bg-blue-50 text-blue-700 ring-1 ring-blue-200 px-1.5 py-0.5 hover:bg-blue-100">
+                  {id}
+                </button>
+              ))}
+            </div>
+          )}
+          <p className="mt-2 text-[10px] text-slate-400">The AI selected and phrased — it never produced a number. Click a citation to see the human votes behind it.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function StatementCard({ s, groups }: { s: Statement; groups: Group[] }) {
   const b = BADGE[s.badge] ?? BADGE["below-bar"];
   return (
-    <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
+    <div id={`stmt-${s.id}`} className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm scroll-mt-4 transition-shadow">
       <div className="flex items-start justify-between gap-3">
         <p className="text-[15px] leading-snug text-slate-800 font-medium">{s.text}</p>
         <span className={`shrink-0 text-[11px] font-semibold px-2 py-1 rounded-full ring-1 ${b.cls}`}>{b.label}</span>
@@ -131,6 +222,9 @@ export default function App() {
           </div>
         ))}
       </div>
+
+      {/* P6 — ask your constituency (chat-to-query, free local AI) */}
+      <AskPanel />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* statements (the headline) */}
