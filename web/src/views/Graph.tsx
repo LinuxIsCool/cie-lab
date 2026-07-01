@@ -81,7 +81,8 @@ export default function Graph() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* the graph */}
-        <div className="lg:col-span-2 rounded-xl bg-white ring-1 ring-slate-200 p-2 shadow-sm">
+        <div className="lg:col-span-2 space-y-3">
+          <div className="rounded-xl bg-white ring-1 ring-slate-200 p-2 shadow-sm">
           <svg viewBox={`0 0 ${W} ${H}`} className="w-full" onMouseLeave={() => setHover(null)}>
             {/* edges */}
             {kg.edges.map((e, i) => {
@@ -111,11 +112,10 @@ export default function Graph() {
               );
             })}
           </svg>
-          <div className="px-1 pt-1">
-            <Commentary kind="caveat" title="Themes here are loose">
-              These short civic statements look alike to the model, so the clusters are weak — the <em>links</em> between nodes tell you more than the theme groupings. Hover a node to trace its links; click to pin.
-            </Commentary>
           </div>
+          <Commentary kind="caveat" title="Themes here are loose">
+            These short civic statements look alike to the model, so the clusters are weak — the <em>links</em> between nodes tell you more than the theme groupings. Hover a node to trace its links; click to pin.
+          </Commentary>
         </div>
 
         {/* right rail: detail + legend */}
@@ -187,7 +187,7 @@ export default function Graph() {
             </div>
           </div>
 
-          <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm space-y-2">
+          <div className="space-y-2">
             <Commentary kind="methodology" title="Stance comes from votes">
               A voice supports or challenges a position based on how that person actually voted — not the AI's guess. The AI only shortens the comment into a claim.
             </Commentary>

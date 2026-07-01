@@ -46,7 +46,7 @@ export default function Dashboard() {
         {/* statements (the headline) */}
         <div className="lg:col-span-2 space-y-3">
           <h2 className="text-sm font-semibold text-slate-600">What constituents agree on, ranked by bridging</h2>
-          <div className="rounded-xl bg-white ring-1 ring-slate-200 p-3.5 shadow-sm space-y-2">
+          <div className="space-y-2">
             <Commentary kind="methodology" title="“Bridging” means broad agreement">
               We find opinion groups from voting patterns, then rank statements that <em>every</em> group tends to accept — not just what the majority wants.
             </Commentary>
@@ -63,12 +63,10 @@ export default function Dashboard() {
             <h3 className="text-sm font-semibold text-slate-600 mb-2">Opinion map</h3>
             <OpinionMap art={art} />
             <p className="mt-2 text-[11px] text-slate-400">Each dot is a respondent, placed by how they voted.</p>
-            <div className="mt-2">
-              <Commentary kind="principle" title="Groups come from votes, not identity">
-                Clusters form from vote patterns only — no demographics, no profiling. The AI just puts a neutral label on each one.
-              </Commentary>
-            </div>
           </div>
+          <Commentary kind="principle" title="Groups come from votes, not identity">
+            Clusters form from vote patterns only — no demographics, no profiling. The AI just puts a neutral label on each one.
+          </Commentary>
 
           <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
             <h3 className="text-sm font-semibold text-slate-600 mb-3">Opinion groups</h3>
@@ -91,12 +89,10 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-            <div className="mt-3">
-              <Commentary kind="methodology" title="“Feeling heard” is an overlay">
-                Everyone answers it, so it's shown here — but it never helps form the groups. That keeps the groups purely about how people voted.
-              </Commentary>
-            </div>
           </div>
+          <Commentary kind="methodology" title="“Feeling heard” is an overlay">
+            Everyone answers it, so it's shown here — but it never helps form the groups. That keeps the groups purely about how people voted.
+          </Commentary>
 
           <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
             <h3 className="text-sm font-semibold text-slate-600 mb-2">In their words</h3>
@@ -108,12 +104,10 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-            <div className="mt-2">
-              <Commentary kind="perspective" title="Comments stay in people's words">
-                About {(art.overall_self_codes.comment_rate * 100).toFixed(0)}% leave one. In a real deployment these are paraphrased for privacy, never shown word-for-word.
-              </Commentary>
-            </div>
           </div>
+          <Commentary kind="perspective" title="Comments stay in people's words">
+            About {(art.overall_self_codes.comment_rate * 100).toFixed(0)}% leave one. In a real deployment these are paraphrased for privacy, never shown word-for-word.
+          </Commentary>
         </div>
       </div>
 

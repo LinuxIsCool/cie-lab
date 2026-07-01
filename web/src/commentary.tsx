@@ -1,41 +1,27 @@
-// Compact, plain-language notes. One accent dot + a bold lead + a single sentence.
-// No tinted cards, no chips, no jargon — the goal is "understand at a glance."
-// `kind` only tints the dot (hover shows the label); it never adds visual noise.
+// Commentary = the "yellow card" look (same as P0's scope banner), reserved for
+// design-space notes. A filled amber card with a bold lead + one concise sentence,
+// placed next to whatever it explains. Amber is reserved for these cards only.
 import type { ReactNode } from "react";
 
+// kept for semantic authoring at call sites; styling is uniform (the yellow card).
 export type Kind =
   | "principle" | "design" | "architecture" | "methodology"
   | "choice" | "perspective" | "goal" | "caveat";
 
-const ACCENT: Record<Kind, { label: string; color: string }> = {
-  principle:    { label: "Principle",    color: "#6366f1" },
-  design:       { label: "Design",       color: "#3b82f6" },
-  architecture: { label: "Architecture", color: "#06b6d4" },
-  methodology:  { label: "Methodology",  color: "#8b5cf6" },
-  choice:       { label: "Choice",       color: "#f59e0b" },
-  perspective:  { label: "Perspective",  color: "#f43f5e" },
-  goal:         { label: "Goal",         color: "#10b981" },
-  caveat:       { label: "Caveat",       color: "#94a3b8" },
-};
-
-export function Commentary({ kind, title, children }: { kind: Kind; title: string; children: ReactNode }) {
-  const a = ACCENT[kind];
+export function Commentary({ title, children }: { kind?: Kind; title: string; children: ReactNode }) {
   return (
-    <div className="flex gap-2.5">
-      <span className="mt-[7px] w-1.5 h-1.5 rounded-full shrink-0" style={{ background: a.color }} title={a.label} />
-      <p className="text-[13px] leading-relaxed text-slate-600">
-        <span className="font-semibold text-slate-800">{title}.</span>{" "}{children}
-      </p>
+    <div className="rounded-lg bg-amber-50 ring-1 ring-amber-200 border-l-[3px] border-amber-400 px-3.5 py-2.5 text-[13px] leading-relaxed text-amber-900">
+      <span className="font-semibold text-amber-950">{title}.</span>{" "}{children}
     </div>
   );
 }
 
-// A quiet, contained "how to read this" panel. Single column, tight.
-export function DesignNotes({ title = "How to read this", children }: { title?: string; children: ReactNode }) {
+// A light titled group (no card of its own) so the amber cards stand on the page.
+export function DesignNotes({ title, children }: { title?: string; children: ReactNode }) {
   return (
-    <section className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
-      <h2 className="text-[13px] font-bold text-slate-700 mb-2.5">{title}</h2>
-      <div className="space-y-2">{children}</div>
+    <section className="space-y-2">
+      {title && <h2 className="text-[13px] font-bold text-slate-700">{title}</h2>}
+      {children}
     </section>
   );
 }
