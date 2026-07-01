@@ -41,7 +41,7 @@ export default function Graph() {
   const [pin, setPin] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/kg.json").then((r) => r.json()).then(setKg).catch((e) => setErr(String(e)));
+    fetch(import.meta.env.BASE_URL + "kg.json").then((r) => r.json()).then(setKg).catch((e) => setErr(String(e)));
   }, []);
 
   const focus = pin ?? hover;

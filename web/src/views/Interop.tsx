@@ -51,8 +51,8 @@ export default function Interop() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/interop.json").then((r) => r.json()),
-      fetch("/interop_mapping.json").then((r) => r.json()),
+      fetch(import.meta.env.BASE_URL + "interop.json").then((r) => r.json()),
+      fetch(import.meta.env.BASE_URL + "interop_mapping.json").then((r) => r.json()),
     ]).then(([d, m]) => { setDoc(d); setMapping(m.mapping); setA(m.assessment); }).catch((e) => setErr(String(e)));
   }, []);
 

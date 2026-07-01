@@ -2,7 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  // GitHub Pages project site serves under /cie-lab/; local dev stays at /.
+  base: command === "build" ? "/cie-lab/" : "/",
   plugins: [react(), tailwindcss()],
   server: {
     host: "127.0.0.1",
@@ -10,4 +12,4 @@ export default defineConfig({
     // P6 ask-server (analysis/serve.py) — same-origin /api, no CORS
     proxy: { "/api": "http://127.0.0.1:5181" },
   },
-});
+}));

@@ -31,7 +31,7 @@ export function useArtifact() {
   const [art, setArt] = useState<Artifact | null>(null);
   const [err, setErr] = useState<string | null>(null);
   useEffect(() => {
-    fetch("/artifact.json").then((r) => r.json()).then(setArt).catch((e) => setErr(String(e)));
+    fetch(import.meta.env.BASE_URL + "artifact.json").then((r) => r.json()).then(setArt).catch((e) => setErr(String(e)));
   }, []);
   return { art, err };
 }

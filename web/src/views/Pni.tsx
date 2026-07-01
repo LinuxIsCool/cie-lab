@@ -54,7 +54,7 @@ function Landscape({ stories }: { stories: Story[] }) {
 export default function Pni() {
   const [doc, setDoc] = useState<Pni | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  useEffect(() => { fetch("/pni.json").then((r) => r.json()).then(setDoc).catch((e) => setErr(String(e))); }, []);
+  useEffect(() => { fetch(import.meta.env.BASE_URL + "pni.json").then((r) => r.json()).then(setDoc).catch((e) => setErr(String(e))); }, []);
 
   if (err) return <div className="p-10 text-rose-600">Failed to load stories: {err} <span className="text-slate-400">— run <code>cd analysis &amp;&amp; uv run python pni.py</code></span></div>;
   if (!doc) return <div className="p-10 text-slate-400">Loading stories…</div>;

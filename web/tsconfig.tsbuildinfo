@@ -1,1 +1,1 @@
-{"root":["./src/App.tsx","./src/main.tsx"],"version":"5.9.3"}
+{"root":["./src/App.tsx","./src/commentary.tsx","./src/main.tsx","./src/portfolio.ts","./src/shared.tsx","./src/vite-env.d.ts","./src/views/Adapter.tsx","./src/views/Ask.tsx","./src/views/Baseline.tsx","./src/views/Converse.tsx","./src/views/Dashboard.tsx","./src/views/Graph.tsx","./src/views/Home.tsx","./src/views/Hybrid.tsx","./src/views/Interop.tsx","./src/views/Planned.tsx","./src/views/Pni.tsx","./src/views/Tenancy.tsx","./src/views/Wizard.tsx"],"version":"5.9.3"}
