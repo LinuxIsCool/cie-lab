@@ -38,9 +38,9 @@ const CS: Record<string, { label: string; cls: string }> = {
 };
 // reverse-view status vocabulary (kept off amber — amber is reserved for commentary cards)
 const RS: Record<string, { label: string; cls: string }> = {
-  gain: { label: "gain", cls: "bg-teal-50 text-teal-700 ring-teal-200" },
-  watch: { label: "watch", cls: "bg-orange-50 text-orange-700 ring-orange-200" },
-  diverges: { label: "diverges", cls: "bg-rose-50 text-rose-700 ring-rose-200" },
+  gain: { label: "gain", cls: "bg-cyan-50 text-cyan-700 ring-cyan-200" },
+  watch: { label: "watch", cls: "bg-indigo-50 text-indigo-700 ring-indigo-200" },
+  diverges: { label: "diverges", cls: "bg-fuchsia-50 text-fuchsia-700 ring-fuchsia-200" },
 };
 const RS_ORDER = ["gain", "watch", "diverges"];
 const REV_RANK: Record<string, number> = { gain: 0, watch: 1, diverges: 2 };
@@ -74,7 +74,7 @@ const HEX: Record<string, [string, string]> = {
 };
 const TYPE_HUE: Record<string, string> = { Requirement: "indigo", "Quality gate": "fuchsia", "Build core": "cyan", "Comhairle feature": "stone" };
 const SRC_HUE: Record<string, string> = { CIE: "blue", Comhairle: "slate" };
-const STATUS_HUE: Record<string, string> = { satisfies: "violet", partial: "sky", gap: "emerald", na: "slate", gain: "teal", watch: "orange", diverges: "rose" };
+const STATUS_HUE: Record<string, string> = { satisfies: "violet", partial: "sky", gap: "emerald", na: "slate", gain: "cyan", watch: "indigo", diverges: "fuchsia" };
 const oStyle = (hue?: string): React.CSSProperties | undefined => (hue && HEX[hue] ? { background: HEX[hue][0], color: HEX[hue][1] } : undefined);
 // id ordering: CIE spec ids (R < T < M) first, then Comhairle-sourced ids (CT/CI/CS/CD/CF, and legacy I/F).
 const ID_RANK: Record<string, number> = { R: 0, T: 1, M: 2, CT: 10, CI: 11, CS: 12, CD: 13, CF: 14, I: 11, F: 14 };
@@ -91,6 +91,9 @@ const FID: Record<string, { label: string; cls: string; def: string }> = {
 const FID_ORDER = ["clean", "rekey", "recast", "lossy", "gap", "dropped"];
 const COV = [
   { k: "satisfies", c: "#7c3aed" }, { k: "partial", c: "#0ea5e9" }, { k: "gap", c: "#059669" }, { k: "na", c: "#94a3b8" },
+] as const;
+const REV_COV = [
+  { k: "gain", c: "#0891b2" }, { k: "watch", c: "#4f46e5" }, { k: "diverges", c: "#c026d3" },
 ] as const;
 
 function H({ children }: { children: React.ReactNode }) {
@@ -230,8 +233,16 @@ export default function Interop() {
 
       {rev && rev.items.length > 0 && (
         <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
-          <div className="text-[13px] font-semibold text-slate-700">The reverse view <span className="font-normal text-slate-400">— {rev.total} features Comhairle ships that CIE has no answer for</span></div>
-          <p className="mt-1.5 text-[13px] text-slate-600 leading-relaxed">{rev.finding}</p>
+          <div className="text-[13px] font-semibold text-slate-700 mb-2.5">The reverse view <span className="font-normal text-slate-400">— {rev.total} features Comhairle ships that CIE has no answer for</span></div>
+          <div className="flex h-6 rounded-md overflow-hidden ring-1 ring-slate-200">
+            {REV_COV.map(({ k, c }) => (
+              <div key={k} style={{ width: `${(rev[k] / rev.total) * 100}%`, background: c }}
+                className="flex items-center justify-center text-[10px] font-semibold text-white" title={`${k}: ${rev[k]}`}>
+                {rev[k]}
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-[13px] text-slate-600 leading-relaxed">{rev.finding}</p>
           <div className="mt-3 pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-x-5 gap-y-2">
             {([
               ["gain", "CIE would genuinely benefit from adopting or borrowing this."],
@@ -296,7 +307,7 @@ export default function Interop() {
             <table className="text-left border-collapse" style={{ minWidth: 1400 }}>
               <thead className="sticky top-0 z-10">
                 <tr className="bg-slate-50 text-[10px] uppercase tracking-wide text-slate-400 border-b border-slate-200">
-                  {([["id", "ID", 52], ["source", "Source", 84], ["type", "Type", 120], ["component", "Component", 184], ["name", "Item", 150], ["status", "Coverage", 88]] as const).map(([k, label, w]) => (
+                  {([["id", "ID", 52], ["name", "Item", 176], ["source", "Source", 84], ["type", "Type", 120], ["component", "Component", 184], ["status", "Coverage", 88]] as const).map(([k, label, w]) => (
                     <th key={k} style={{ width: w, minWidth: w }} className="px-2.5 py-2 align-bottom">
                       <button onClick={() => clickSort(k)} className="font-semibold hover:text-slate-600">{label}{Sarrow(k)}</button>
                     </th>
@@ -310,10 +321,10 @@ export default function Interop() {
                 {rows.map((it) => (
                   <tr key={it.id} className="border-b border-slate-50 align-top hover:bg-slate-50/50">
                     <td className="px-2.5 py-2 font-mono text-[12px] text-slate-600 whitespace-nowrap">{it.id}</td>
+                    <td className="px-2.5 py-2 text-[12px] text-slate-700 font-medium">{it.name}</td>
                     <td className="px-2.5 py-2"><span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap ${it.source === "CIE" ? "bg-blue-600 text-white" : "bg-slate-600 text-white"}`}>{it.source}</span></td>
                     <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 whitespace-nowrap ${TYPE_CLS[it.type] ?? "bg-slate-100 text-slate-500 ring-slate-200"}`}>{it.type}</span></td>
                     <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 whitespace-nowrap ${compCls(it.component)}`}>{it.component}</span></td>
-                    <td className="px-2.5 py-2 text-[12px] text-slate-700 font-medium">{it.name}</td>
                     <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${it.sm[it.status]?.cls ?? ""}`}>{it.sm[it.status]?.label ?? it.status}</span>{it.sourced === false && <span className="text-slate-300 text-[10px]"> ·inf</span>}</td>
                     <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{den(it, "cie")}</td>
                     <td className="px-2.5 py-2 text-[12px] text-slate-600 leading-relaxed">{den(it, "comhairle")}</td>
