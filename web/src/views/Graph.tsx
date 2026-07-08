@@ -1,4 +1,4 @@
-// P5 · Knowledge-Graph Sensemaking — a position/claim graph over the P0 artifact.
+// P5 · Knowledge-Graph Sensemaking: a position/claim graph over the P0 artifact.
 // Layout is baked (numpy FR in analysis/kg.py); this view is a pure-SVG renderer
 // with hover-to-highlight-neighbors + a detail panel. Contrast with P0's opinion
 // map: that clusters people by vote; this clusters positions by meaning.
@@ -57,7 +57,7 @@ export default function Graph() {
     return { posOf, neighbors };
   }, [kg]);
 
-  if (err) return <div className="p-10 text-rose-600">Failed to load graph: {err} <span className="text-slate-400">— run <code>cd analysis &amp;&amp; uv run python kg.py</code></span></div>;
+  if (err) return <div className="p-10 text-rose-600">Failed to load graph: {err}. <span className="text-slate-400">Run <code>cd analysis &amp;&amp; uv run python kg.py</code></span></div>;
   if (!kg) return <div className="p-10 text-slate-400">Loading graph…</div>;
 
   const active = (id: string) => !focus || neighbors[focus]?.has(id);
@@ -68,20 +68,20 @@ export default function Graph() {
       <header className="mb-4">
         <div className="flex items-center gap-2">
           <h1 className="text-xl font-bold tracking-tight">Knowledge-graph sensemaking</h1>
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P5 · POC #3</span>
+          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P5 · Proof of concept #3</span>
         </div>
-        <p className="text-sm text-slate-500">Positions clustered by <em>meaning</em>, not people by vote — the exploration surface next to P0's opinion map</p>
+        <p className="text-sm text-slate-500">Positions clustered by <em>meaning</em>, not people by vote. This is the exploration surface next to P0's opinion map</p>
       </header>
 
       <div className="mb-4 max-w-3xl space-y-2">
         <Commentary kind="perspective" title="What a 'knowledge graph' is">
           A knowledge graph shows ideas as a web of connected dots instead of a list. Here every dot is a statement or a
           resident's comment, and a line connects two that relate. It's a way to <em>wander</em> the landscape of
-          opinion rather than read a ranked table — good for spotting how themes and voices hang together.
+          opinion rather than read a ranked table, which is good for spotting how themes and voices hang together.
         </Commentary>
         <Commentary kind="design" title="A different lens than the dashboard">
           The main dashboard (P0) groups <em>people</em> by how they voted. This groups <em>statements</em> by what they
-          <em> mean</em> — same data, flipped on its side — and hangs each resident's comment next to the position it
+          <em> mean</em>: the same data, flipped on its side, hanging each resident's comment next to the position it
           relates to. Two different ways to make sense of one conversation, side by side.
         </Commentary>
       </div>
@@ -121,8 +121,8 @@ export default function Graph() {
           </svg>
           </div>
           <Commentary kind="caveat" title="Being honest: the themes here are loose">
-            The big dark hubs are AI-named "themes" it grouped statements into. But these statements are short and
-            similar, so the grouping is weak — and we show that rather than hide it. The useful signal is the <em>links</em>
+            The big dark hubs are "themes" named by artificial intelligence, which it grouped statements into. But these statements are short and
+            similar, so the grouping is weak, and we show that rather than hide it. The useful signal is the <em>links</em>
             between dots, not the theme bubbles. Hover any dot to trace what it connects to; click to pin it.
           </Commentary>
         </div>
@@ -131,13 +131,13 @@ export default function Graph() {
         <div className="space-y-4">
           <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm min-h-[140px]">
             <h3 className="text-sm font-semibold text-slate-600 mb-2">{focusNode ? "Selected" : "Inspect"}</h3>
-            {!focusNode && <p className="text-[13px] text-slate-400">Hover or click any node — position, theme, or resident voice — to see what grounds it.</p>}
+            {!focusNode && <p className="text-[13px] text-slate-400">Hover or click any node (position, theme, or resident voice) to see what grounds it.</p>}
             {focusNode?.type === "position" && (
               <div>
                 <p className="text-[14px] text-slate-800 font-medium leading-snug">{focusNode.text}</p>
                 <div className="mt-1 flex items-center gap-2 text-[11px]">
                   <span className="px-1.5 py-0.5 rounded-full ring-1" style={{ color: BADGE_COLOR[focusNode.badge ?? ""], borderColor: "currentColor" }}>{focusNode.badge}</span>
-                  <span className="text-slate-400">GIC {focusNode.gic?.toFixed(2)}</span>
+                  <span className="text-slate-400">Group-informed consensus {focusNode.gic?.toFixed(2)}</span>
                 </div>
                 <div className="mt-2.5 space-y-1">
                   {focusNode.per_group?.map((pg) => (
@@ -146,7 +146,7 @@ export default function Graph() {
                       <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
                         <div className="h-full rounded-full" style={{ width: `${(pg.agree_rate ?? 0) * 100}%`, background: groupColor(pg.group) }} />
                       </div>
-                      <span className="text-[11px] tabular-nums text-slate-500 w-8 text-right">{pg.agree_rate != null ? `${(pg.agree_rate * 100).toFixed(0)}%` : "—"}</span>
+                      <span className="text-[11px] tabular-nums text-slate-500 w-8 text-right">{pg.agree_rate != null ? `${(pg.agree_rate * 100).toFixed(0)}%` : "N/A"}</span>
                     </div>
                   ))}
                 </div>
@@ -161,13 +161,13 @@ export default function Graph() {
                 </div>
                 <p className="text-[14px] text-slate-800 font-medium">"{focusNode.label}"</p>
                 <p className="mt-1 text-[12px] text-slate-400 italic">from: "{focusNode.text}"</p>
-                <p className="mt-1 text-[11px] text-slate-400">stance = this resident's actual vote on the linked position (not the AI's guess)</p>
+                <p className="mt-1 text-[11px] text-slate-400">stance = this resident's actual vote on the linked position (not the artificial intelligence's guess)</p>
               </div>
             )}
             {focusNode?.type === "theme" && (
               <div>
                 <p className="text-[14px] text-slate-800 font-semibold">{focusNode.label}</p>
-                <p className="text-[12px] text-slate-400 mt-0.5">AI-named theme · {kg.themes.find((t) => t.id === focusNode.id)?.members.length} positions</p>
+                <p className="text-[12px] text-slate-400 mt-0.5">Theme named by artificial intelligence · {kg.themes.find((t) => t.id === focusNode.id)?.members.length} positions</p>
               </div>
             )}
           </div>
@@ -175,10 +175,10 @@ export default function Graph() {
           <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm text-[12px]">
             <h3 className="text-sm font-semibold text-slate-600 mb-2">Legend</h3>
             <div className="space-y-1.5">
-              <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: THEME_COLOR }} /> Theme (AI-named cluster)</div>
-              <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: BADGE_COLOR["representative-enough"] }} /> Position — bridges across groups</div>
-              <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: BADGE_COLOR.directional }} /> Position — directional</div>
-              <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: BADGE_COLOR["below-bar"] }} /> Position — below bar</div>
+              <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: THEME_COLOR }} /> Theme (named by artificial intelligence)</div>
+              <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: BADGE_COLOR["representative-enough"] }} /> Position: bridges across groups</div>
+              <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: BADGE_COLOR.directional }} /> Position: directional</div>
+              <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: BADGE_COLOR["below-bar"] }} /> Position: below bar</div>
               <div className="pt-1 mt-1 border-t border-slate-100" />
               <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: GROUP_COLORS[0] }} /> Resident voice (by opinion group)</div>
               <div className="flex items-center gap-3 pt-0.5">
@@ -200,12 +200,12 @@ export default function Graph() {
             <Commentary kind="methodology" title="A 'voice' is a real comment, and its side comes from a real vote">
               The small colored dots are residents' comments. Whether a voice <span className="font-semibold text-emerald-700">supports</span>
               or <span className="font-semibold text-rose-600">challenges</span> a statement is read from how that person
-              actually voted on it — not the AI's guess. The AI only shortens their comment into a short claim; the
+              actually voted on it, not the artificial intelligence's guess. The artificial intelligence only shortens their comment into a short claim; the
               stance is still theirs.
             </Commentary>
             <Commentary kind="architecture" title="Why it loads instantly">
               Working out where every dot should sit is real computation, so it's done once ahead of time and saved. The
-              page just draws the finished picture — which is also why exploring it feels immediate.
+              page just draws the finished picture, which is also why exploring it feels immediate.
             </Commentary>
           </div>
         </div>
@@ -213,7 +213,7 @@ export default function Graph() {
 
       <footer className="mt-8 text-[11px] text-slate-400">
         Structure by free TELUS e5 embeddings · theme names + claim paraphrases by Gemma · stance from votes · $0.
-        The AI groups and phrases; it never decides agreement.
+        The artificial intelligence groups and phrases; it never decides agreement.
       </footer>
     </div>
   );

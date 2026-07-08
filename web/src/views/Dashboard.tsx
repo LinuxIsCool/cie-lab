@@ -1,4 +1,4 @@
-// P0 · Core listening loop — the candidate dashboard. Reads the cie.results.v0
+// P0 · Core listening loop: the candidate dashboard. Reads the cie.results.v0
 // artifact and shows bridging statements, opinion map, groups, and comments.
 import { useMemo } from "react";
 import { useArtifact, groupColor, Meter, OpinionMap, StatementCard } from "../shared";
@@ -16,12 +16,12 @@ export default function Dashboard() {
       <header className="mb-4">
         <div className="flex items-center gap-2">
           <h1 className="text-xl font-bold tracking-tight">Core listening loop</h1>
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P0 · POC #1</span>
+          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P0 · Proof of concept #1</span>
         </div>
-        <p className="text-sm text-slate-500">Candidate view — the spine every other prototype branches from (synthetic data)</p>
+        <p className="text-sm text-slate-500">Candidate view, the spine every other prototype branches from (synthetic data)</p>
       </header>
 
-      {/* scope banner — legitimacy statement, not a disclaimer */}
+      {/* scope banner: legitimacy statement, not a disclaimer */}
       <div className="mb-5 rounded-lg bg-amber-50 ring-1 ring-amber-200 px-4 py-2.5 text-[13px] text-amber-900">
         <span className="font-semibold">Scope:</span> {art.scope_banner}
       </div>
@@ -44,7 +44,7 @@ export default function Dashboard() {
 
       <div className="mb-4">
         <Commentary kind="perspective" title="What you're looking at">
-          This is the main dashboard — what a candidate would see after residents respond to a set of statements by
+          This is the main dashboard: what a candidate would see after residents respond to a set of statements by
           agreeing, disagreeing, or passing. It's the heart of the whole project; every other demo in this lab is a
           variation on it. Read it top to bottom: the common ground first, then a map of where people stand, then the
           groups themselves and what they said in their own words.
@@ -57,7 +57,7 @@ export default function Dashboard() {
           <h2 className="text-sm font-semibold text-slate-600">What constituents agree on, ranked by bridging</h2>
           <div className="space-y-2">
             <Commentary kind="methodology" title="“Bridging” means broad agreement">
-              This list is ranked by how well each statement <em>bridges</em> — how well it holds up across
+              This list is ranked by how well each statement <em>bridges</em>: how well it holds up across
               <em> every</em> group, not just the biggest one. A plain poll would surface whatever 51% want; this
               deliberately promotes what people who disagree can <em>both</em> still accept, because that shared
               ground is what a real decision can stand on.
@@ -67,7 +67,7 @@ export default function Dashboard() {
               strong and statistically solid in every group. <span className="font-semibold text-sky-700">Directional</span>
               is a promising hint that isn't confirmed yet, and <span className="font-semibold text-slate-500">Below bar</span>
               means don't claim agreement. Small groups make percentages jumpy, so the tool only makes the strong claim
-              when the math backs it — the fine print (group size, coverage) is the receipts.
+              when the math backs it. The fine print (group size, coverage) is the receipts.
             </Commentary>
           </div>
           {art.statements.map((s) => <StatementCard key={s.id} s={s} groups={art.opinion_groups} />)}
@@ -81,9 +81,9 @@ export default function Dashboard() {
             <p className="mt-2 text-[11px] text-slate-400">Each dot is a respondent, placed by how they voted.</p>
           </div>
           <Commentary kind="principle" title="What an 'opinion group' is">
-            The tool watches how people vote and sorts them into a few clusters that vote alike — each cluster is an
+            The tool watches how people vote and sorts them into a few clusters that vote alike. Each cluster is an
             "opinion group." It's built from votes only: no names, no demographics, no profiling. The plain-English
-            label (like "Essential Public Services") is just the AI's neutral description of what that cluster tends to
+            label (like "Essential Public Services") is just the artificial intelligence's neutral description of what that cluster tends to
             support; the cluster itself is pure math.
           </Commentary>
 
@@ -96,7 +96,7 @@ export default function Dashboard() {
                     <span className="text-sm font-medium text-slate-700">{g.ai_label ?? `Group ${g.group + 1}`}</span>
                     <span className="text-xs text-slate-400 tabular-nums">{g.size} people</span>
                   </div>
-                  {g.ai_label && <div className="text-[10px] text-slate-400 mb-1.5">AI-labeled · descriptive only</div>}
+                  {g.ai_label && <div className="text-[10px] text-slate-400 mb-1.5">Labeled by artificial intelligence · descriptive only</div>}
                   {g.self_codes ? (
                     <div className="space-y-1.5 mt-1.5">
                       <Meter value={g.self_codes.feeling_heard_mean} label="Feeling heard" color={groupColor(g.group)} />
@@ -109,9 +109,9 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-          <Commentary kind="methodology" title="“Feeling heard” — a light extra signal">
+          <Commentary kind="methodology" title="“Feeling heard”: a light extra signal">
             Alongside voting, everyone also rates how heard they felt and how strongly they hold their view. It's shown
-            here as an overlay but never used to form the groups — so the clusters stay purely about how people voted,
+            here as an overlay but never used to form the groups, so the clusters stay purely about how people voted,
             while you still learn whether the process itself felt fair to people.
           </Commentary>
 
@@ -128,15 +128,15 @@ export default function Dashboard() {
           </div>
           <Commentary kind="perspective" title="Comments stay in people's words">
             Beyond voting, about {(art.overall_self_codes.comment_rate * 100).toFixed(0)}% add an open comment. They're
-            shown as-is here on sample data, but with real residents they'd be paraphrased for privacy — you'd get the
+            shown as-is here on sample data, but with real residents they'd be paraphrased for privacy. You'd get the
             gist, never a quote that could identify someone.
           </Commentary>
         </div>
       </div>
 
       <footer className="mt-8 text-center text-[11px] text-slate-400">
-        AI is a listening aid, never the measurement — every number here comes from human votes.
-        Group labels by free TELUS Gemma · embeddings/LLM free &amp; local.
+        Artificial intelligence is a listening aid, never the measurement. Every number here comes from human votes.
+        Group labels by free TELUS Gemma · embeddings and large language model use, free &amp; local.
       </footer>
     </div>
   );

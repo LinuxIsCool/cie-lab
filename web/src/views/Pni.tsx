@@ -1,4 +1,4 @@
-// P4 · PNI depth — full Participatory Narrative Inquiry over synthetic stories.
+// P4 · Participatory Narrative Inquiry depth: the full method over synthetic stories.
 // Renders the "narrative catalysis": a feeling × agency landscape of self-interpreted
 // stories, the patterns that fall out, and representative stories. Reads /pni.json
 // (see analysis/pni.py). Contrast with P0's *light* self-coding.
@@ -56,25 +56,25 @@ export default function Pni() {
   const [err, setErr] = useState<string | null>(null);
   useEffect(() => { fetch(import.meta.env.BASE_URL + "pni.json").then((r) => r.json()).then(setDoc).catch((e) => setErr(String(e))); }, []);
 
-  if (err) return <div className="p-10 text-rose-600">Failed to load stories: {err} <span className="text-slate-400">— run <code>cd analysis &amp;&amp; uv run python pni.py</code></span></div>;
+  if (err) return <div className="p-10 text-rose-600">Failed to load stories: {err} <span className="text-slate-400">(run <code>cd analysis &amp;&amp; uv run python pni.py</code>)</span></div>;
   if (!doc) return <div className="p-10 text-slate-400">Loading stories…</div>;
 
   return (
     <div className="max-w-5xl">
       <header className="mb-4">
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold tracking-tight">PNI depth</h1>
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P4 · POC #8</span>
+          <h1 className="text-xl font-bold tracking-tight">Participatory Narrative Inquiry depth</h1>
+          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P4 · Proof of concept #8</span>
         </div>
-        <p className="text-sm text-slate-500">Full Participatory Narrative Inquiry — stories people tell, interpreted by the people who told them</p>
+        <p className="text-sm text-slate-500">Full Participatory Narrative Inquiry: stories people tell, interpreted by the people who told them</p>
       </header>
 
       <div className="mb-5 space-y-2">
-        <Commentary kind="perspective" title="What PNI adds">
-          The other demos ask people to react to statements. Participatory Narrative Inquiry starts a step earlier: it invites people to tell a short <em>story</em>, then asks them to interpret their own — how it felt, who held the power, whether it's about the past or the future. Reading those self-interpretations across many stories reveals an emotional landscape a vote alone leaves out.
+        <Commentary kind="perspective" title="What Participatory Narrative Inquiry adds">
+          The other demos ask people to react to statements. Participatory Narrative Inquiry starts a step earlier: it invites people to tell a short <em>story</em>, then asks them to interpret their own, covering how it felt, who held the power, and whether it's about the past or the future. Reading those self-interpretations across many stories reveals an emotional landscape a vote alone leaves out.
         </Commentary>
         <Commentary kind="methodology" title="Reading the landscape">
-          Each dot is one story, placed by the teller's own answers: how positive it felt (left to right) and how much agency they had (bottom to top). The corners tell a story of their own — grievance, empowerment, and the revealing in-between where people feel grateful yet powerless, or unhappy yet ready to act.
+          Each dot is one story, placed by the teller's own answers: how positive it felt (left to right) and how much agency they had (bottom to top). The corners tell a story of their own, from grievance to empowerment, and the revealing in-between where people feel grateful yet powerless, or unhappy yet ready to act.
         </Commentary>
       </div>
 
@@ -95,7 +95,7 @@ export default function Pni() {
 
         <div className="space-y-3">
           <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
-            <h3 className="text-sm font-semibold text-slate-600 mb-2">Patterns worth attention <span className="text-[11px] font-normal text-slate-400">— from {doc.meta.n_stories} stories</span></h3>
+            <h3 className="text-sm font-semibold text-slate-600 mb-2">Patterns worth attention <span className="text-[11px] font-normal text-slate-400">(from {doc.meta.n_stories} stories)</span></h3>
             <div className="space-y-2.5">
               {doc.patterns.map((p) => (
                 <div key={p.label}>
@@ -113,7 +113,7 @@ export default function Pni() {
 
       {/* representative stories, one per corner */}
       <div className="mt-5">
-        <h2 className="text-sm font-semibold text-slate-600 mb-2">In their own words <span className="text-[11px] font-normal text-slate-400">— one story from each corner of the landscape</span></h2>
+        <h2 className="text-sm font-semibold text-slate-600 mb-2">In their own words <span className="text-[11px] font-normal text-slate-400">(one story from each corner of the landscape)</span></h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {doc.representative.map((s) => (
             <div key={s.id} className="rounded-xl bg-white ring-1 ring-slate-200 p-3.5 shadow-sm">
@@ -131,7 +131,7 @@ export default function Pni() {
 
       <div className="mt-5">
         <Commentary kind="goal" title="The bet, and its price">
-          This is the deepest listening in the portfolio, and the most demanding. A solid read wants {doc.meta.pni_volume_target}, each with the teller's own interpretation — real effort from residents and facilitators alike. P0's light self-coding (two quick ratings on the universal vote) is the pragmatic middle; P4 shows what the full method reaches for, so the trade can be weighed with eyes open.
+          This is the deepest listening in the portfolio, and the most demanding. A solid read wants {doc.meta.pni_volume_target}, each with the teller's own interpretation, real effort from residents and facilitators alike. P0's light self-coding (two quick ratings on the universal vote) is the pragmatic middle; P4 shows what the full method reaches for, so the trade can be weighed with eyes open.
         </Commentary>
       </div>
 

@@ -21846,7 +21846,7 @@
     "pass": 0
   },
   "derived": {
-    "note": "Derived by CIE; a receiving tool may recompute its own. Not part of the lossless core.",
+    "note": "Derived by the Civic Intelligence Engine; a receiving tool may recompute its own. Not part of the lossless core.",
     "groups": [
       {
         "id": "A",

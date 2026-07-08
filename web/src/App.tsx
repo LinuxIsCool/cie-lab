@@ -1,6 +1,6 @@
 // App shell: a persistent left nav tree (the portfolio) + a hash-routed content
-// area. Dependency-free routing (window.location.hash) — on-brand for a local-first
-// lab and it gives every demo a shareable URL (#/p0, #/p6, …).
+// area. Dependency-free routing (window.location.hash) is on-brand for a local-first
+// lab, and it gives every demo a shareable web address (#/p0, #/p6, …).
 import { useEffect, useState } from "react";
 import { POCS, WAVES, pocByRoute } from "./portfolio";
 import Home from "./views/Home";
@@ -43,7 +43,7 @@ function Sidebar({ route }: { route: string }) {
   return (
     <aside className="w-60 shrink-0 border-r border-slate-200 bg-slate-50/60 h-screen sticky top-0 overflow-y-auto px-3 py-4">
       <a href="#/" className="flex items-center gap-2 px-2 mb-4">
-        <span className="text-sm font-bold tracking-tight">CIE Lab</span>
+        <span className="text-sm font-bold tracking-tight">Civic Intelligence Engine Lab</span>
         <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-800 text-white">portfolio</span>
       </a>
 
@@ -78,7 +78,7 @@ function Sidebar({ route }: { route: string }) {
 
       <div className="mt-4 px-2 text-[10px] text-slate-400 leading-relaxed">
         <span className="text-emerald-500">●</span> built · <span className="text-slate-300">○</span> planned<br />
-        Free TELUS LLM/embeddings · $0
+        Free TELUS large language model/embeddings · $0
       </div>
     </aside>
   );

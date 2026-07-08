@@ -86,12 +86,12 @@ export function StatementCard({ s, groups }: { s: Statement; groups: Group[] }) 
             <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
               <div className="h-full rounded-full" style={{ width: `${(pg.agree_rate ?? 0) * 100}%`, background: groupColor(pg.group), opacity: 0.85 }} />
             </div>
-            <span className="text-xs tabular-nums text-slate-600 w-9 text-right">{pg.agree_rate != null ? `${(pg.agree_rate * 100).toFixed(0)}%` : "—"}</span>
+            <span className="text-xs tabular-nums text-slate-600 w-9 text-right">{pg.agree_rate != null ? `${(pg.agree_rate * 100).toFixed(0)}%` : "N/A"}</span>
           </div>
         ))}
       </div>
       <div className="mt-2.5 flex items-center gap-3 text-[11px] text-slate-400">
-        <span>GIC <span className="tabular-nums text-slate-600 font-medium">{s.gic.toFixed(2)}</span></span>
+        <span>Group-informed consensus <span className="tabular-nums text-slate-600 font-medium">{s.gic.toFixed(2)}</span></span>
         <span>·</span>
         <span>smallest group n={s.validity.smallest_group_seen}</span>
         <span>·</span>

@@ -1,4 +1,4 @@
-// P7 · Hybrid quant+qual — reads two signals together, group by group. P0 keeps
+// P7 · Hybrid quant+qual: reads two signals together, group by group. P0 keeps
 // the votes (quantitative common ground) and the self-codes (how heard people feel)
 // in separate panels; this view relates them per opinion group and adds each group's
 // own comments, to test whether shared ground and feeling heard travel together.
@@ -31,9 +31,9 @@ export default function Hybrid() {
       <header className="mb-4">
         <div className="flex items-center gap-2">
           <h1 className="text-xl font-bold tracking-tight">Hybrid quant + qual</h1>
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P7 · POC #7</span>
+          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P7 · Proof of concept #7</span>
         </div>
-        <p className="text-sm text-slate-500">Two signals read together — where people converge, and how the process felt</p>
+        <p className="text-sm text-slate-500">Two signals read together: where people converge, and how the process felt</p>
       </header>
 
       <div className="mb-5 space-y-2">
@@ -91,7 +91,7 @@ export default function Hybrid() {
       </div>
 
       <footer className="mt-8 text-center text-[11px] text-slate-400">
-        Same cie.results.v0 artifact as P0 — this view derives the common-ground score and pairs it with the self-codes and comments.
+        Same cie.results.v0 artifact as P0, this view derives the common-ground score and pairs it with the self-codes and comments.
       </footer>
     </div>
   );

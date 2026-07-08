@@ -1,6 +1,6 @@
-// P6 · Ask-the-Constituency — grounded chat-to-query over the P0 artifact.
-// The LLM only routes (semantic retrieval) and phrases; the numbers below the
-// answer are the real StatementCards from the artifact, rendered by React.
+// P6 · Ask-the-Constituency: grounded chat-to-query over the P0 artifact.
+// The large language model only routes (semantic retrieval) and phrases; the numbers
+// below the answer are the real StatementCards from the artifact, rendered by React.
 import { useState } from "react";
 import { useArtifact, StatementCard } from "../shared";
 import { Commentary } from "../commentary";
@@ -49,14 +49,14 @@ export default function Ask() {
       <header className="mb-4">
         <div className="flex items-center gap-2">
           <h1 className="text-xl font-bold tracking-tight">Ask your constituency</h1>
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P6 · POC #2</span>
+          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P6 · Proof of concept #2</span>
         </div>
-        <p className="text-sm text-slate-500">Grounded chat-to-query — the AI routes &amp; phrases; every number comes from the votes</p>
+        <p className="text-sm text-slate-500">Grounded chat-to-query: the artificial intelligence routes &amp; phrases; every number comes from the votes</p>
       </header>
 
       <div className="mb-4">
         <Commentary kind="perspective" title="What this lets you do">
-          The main dashboard lays out everything at once. Here you pose a question in plain English — "where do people agree on housing?", "what divides the town?" — and receive a short answer, with the exact statements behind it shown underneath. It's the dashboard in conversational form.
+          The main dashboard lays out everything at once. Here you pose a question in plain English, such as "where do people agree on housing?" or "what divides the town?", and receive a short answer, with the exact statements behind it shown underneath. It's the dashboard in conversational form.
         </Commentary>
       </div>
 
@@ -97,14 +97,14 @@ export default function Ask() {
                 ))}
               </div>
             )}
-            <p className="mt-2 text-[10px] text-slate-400">The AI selected and phrased — it never produced a number. The votes it drew from are shown below.</p>
+            <p className="mt-2 text-[10px] text-slate-400">The artificial intelligence selected and phrased; it never produced a number. The votes it drew from are shown below.</p>
           </div>
         )}
       </div>
 
       <div className="mt-3 space-y-2">
         <Commentary kind="principle" title="Answers grounded in the votes">
-          The AI locates the statements your question touches and phrases a reply; every number it reports comes straight from the votes. It works as a helpful librarian, and the human votes stay the source of truth.
+          The artificial intelligence locates the statements your question touches and phrases a reply; every number it reports comes straight from the votes. It works as a helpful librarian, and the human votes stay the source of truth.
         </Commentary>
         <Commentary kind="methodology" title="Honest about the limits">
           When a question reaches past what the votes show, it tells you so and points back to the evidence. That candor is what lets you rely on the answers it does give.

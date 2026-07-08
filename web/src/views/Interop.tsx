@@ -1,6 +1,6 @@
 // P1 · Comhairle interop-export & integration assessment. The compare-and-contrast
 // (build-vs-fork decision, AGPL read, 70-item coverage, data-model mapping, two paths,
-// upstream gifts) made shareable — plus the working flat-file export. Reads the prebuilt
+// upstream gifts) made shareable, plus the working flat-file export. Reads the prebuilt
 // /interop.json + /interop_mapping.json (analysis/interop.py), grounded in the 06-29 doc
 // and re-verified against crownshy/comhairle HEAD (2026-07-01).
 import { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ type Interop = {
 };
 type MapRow = { cie: string; comhairle: string; fidelity: string; note: string };
 type CovItem = { id: string; area: string; name: string; status: string; note: string; sourced?: boolean; cie?: string; comhairle?: string; meaning?: string; cie_s?: string; comhairle_s?: string; meaning_s?: string; component?: string };
-// "reverse view" — features Comhairle has that CIE doesn't (mirror of the coverage table)
+// "reverse view": features Comhairle has that CIE doesn't (mirror of the coverage table)
 type RevItem = { id: string; component: string; name: string; status: string; comhairle: string; cie: string; meaning: string; comhairle_s?: string; cie_s?: string; meaning_s?: string; paths?: string[] };
 type Assessment = {
   decision: string; agpl: string; verified: string;
@@ -33,10 +33,10 @@ type Assessment = {
 const CS: Record<string, { label: string; cls: string }> = {
   satisfies: { label: "both have", cls: "bg-violet-50 text-violet-700 ring-violet-200" },
   partial: { label: "partial", cls: "bg-sky-50 text-sky-700 ring-sky-200" },
-  gap: { label: "CIE adds", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
+  gap: { label: "Civic Intelligence Engine adds", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
   na: { label: "n/a", cls: "bg-slate-100 text-slate-500 ring-slate-200" },
 };
-// reverse-view status vocabulary (kept off amber — amber is reserved for commentary cards)
+// reverse-view status vocabulary (kept off amber, since amber is reserved for commentary cards)
 const RS: Record<string, { label: string; cls: string }> = {
   gain: { label: "gain", cls: "bg-cyan-50 text-cyan-700 ring-cyan-200" },
   watch: { label: "watch", cls: "bg-indigo-50 text-indigo-700 ring-indigo-200" },
@@ -46,14 +46,14 @@ const RS_ORDER = ["gain", "watch", "diverges"];
 const REV_RANK: Record<string, number> = { gain: 0, watch: 1, diverges: 2 };
 const AREA_SHORT: Record<string, string> = { Requirement: "Req", "Quality gate": "Gate", "Build core": "Build" };
 const STATUS_RANK: Record<string, number> = { satisfies: 0, partial: 1, gap: 2, na: 3 };
-// Type (R/T/M + the Comhairle side) — soft outline chips, distinct from the Coverage palette.
+// Type (R/T/M + the Comhairle side): soft outline chips, distinct from the Coverage palette.
 const TYPE_CLS: Record<string, string> = {
   Requirement: "bg-indigo-50 text-indigo-700 ring-indigo-200",
   "Quality gate": "bg-fuchsia-50 text-fuchsia-700 ring-fuchsia-200",
   "Build core": "bg-cyan-50 text-cyan-700 ring-cyan-200",
   "Comhairle feature": "bg-stone-100 text-stone-600 ring-stone-300",
 };
-// Component — 20 labels, so map each name deterministically into a fixed palette (stable per name).
+// Component: 20 labels, so map each name deterministically into a fixed palette (stable per name).
 const COMP_PALETTE = [
   "bg-rose-50 text-rose-700 ring-rose-200", "bg-orange-50 text-orange-700 ring-orange-200",
   "bg-lime-50 text-lime-700 ring-lime-200", "bg-emerald-50 text-emerald-700 ring-emerald-200",
@@ -81,12 +81,12 @@ const ID_RANK: Record<string, number> = { R: 0, T: 1, M: 2, CT: 10, CI: 11, CS: 
 const idKey = (id: string) => { const m = id.match(/^([A-Z]+)(\d+)$/); const g = ID_RANK[m?.[1] ?? "R"] ?? 99; return g * 1000 + (m ? parseInt(m[2], 10) : 0); };
 
 const FID: Record<string, { label: string; cls: string; def: string }> = {
-  clean: { label: "clean", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200", def: "A direct one-to-one match — the value carries over as-is." },
-  rekey: { label: "re-key", cls: "bg-sky-50 text-sky-700 ring-sky-200", def: "Same meaning, different id scheme — CIE's ULIDs become UUIDs." },
-  recast: { label: "recast", cls: "bg-violet-50 text-violet-700 ring-violet-200", def: "The information survives in a different shape — a comment lands as a Statement." },
+  clean: { label: "clean", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200", def: "A direct one-to-one match: the value carries over as-is." },
+  rekey: { label: "re-key", cls: "bg-sky-50 text-sky-700 ring-sky-200", def: "Same meaning, different id scheme: the Civic Intelligence Engine's Universally Unique Lexicographically Sortable Identifiers become Universally Unique Identifiers." },
+  recast: { label: "recast", cls: "bg-violet-50 text-violet-700 ring-violet-200", def: "The information survives in a different shape: a comment lands as a Statement." },
   lossy: { label: "lossy", cls: "bg-orange-50 text-orange-700 ring-orange-200", def: "It fits, though some detail (a numeric range) is simplified on the way." },
-  gap: { label: "gap", cls: "bg-rose-50 text-rose-700 ring-rose-200", def: "Their grammar has no field for it yet — the spots the upstream gifts would fill." },
-  dropped: { label: "dropped", cls: "bg-slate-100 text-slate-500 ring-slate-200", def: "Carried by CIE's trust layer, with no counterpart in the interchange schema." },
+  gap: { label: "gap", cls: "bg-rose-50 text-rose-700 ring-rose-200", def: "Their grammar has no field for it yet, so these are the spots the upstream gifts would fill." },
+  dropped: { label: "dropped", cls: "bg-slate-100 text-slate-500 ring-slate-200", def: "Carried by the Civic Intelligence Engine's trust layer, with no counterpart in the interchange schema." },
 };
 const FID_ORDER = ["clean", "rekey", "recast", "lossy", "gap", "dropped"];
 const COV = [
@@ -122,7 +122,7 @@ export default function Interop() {
     ]).then(([d, m]) => { setDoc(d); setMapping(m.mapping); setA(m.assessment); }).catch((e) => setErr(String(e)));
   }, []);
 
-  if (err) return <div className="p-10 text-rose-600">Failed to load export: {err} <span className="text-slate-400">— run <code>cd analysis &amp;&amp; uv run python interop.py</code></span></div>;
+  if (err) return <div className="p-10 text-rose-600">Failed to load export: {err} <span className="text-slate-400">Run <code>cd analysis &amp;&amp; uv run python interop.py</code> to regenerate it.</span></div>;
   if (!doc || !mapping || !a) return <div className="p-10 text-slate-400">Loading assessment…</div>;
 
   const cov = a.coverage;
@@ -134,9 +134,9 @@ export default function Interop() {
     cie: string; comhairle: string; meaning: string; cie_s?: string; comhairle_s?: string; meaning_s?: string;
   };
   const cieRows: Row[] = (cov.items ?? []).map((it) => ({
-    id: it.id, source: "CIE", type: it.area, component: it.component ?? "—", name: it.name,
+    id: it.id, source: "CIE", type: it.area, component: it.component ?? "none", name: it.name,
     status: it.status, sm: CS, sourced: it.sourced,
-    cie: it.cie ?? it.note, comhairle: it.comhairle ?? "—", meaning: it.meaning ?? it.note,
+    cie: it.cie ?? it.note, comhairle: it.comhairle ?? "none", meaning: it.meaning ?? it.note,
     cie_s: it.cie_s, comhairle_s: it.comhairle_s, meaning_s: it.meaning_s,
   }));
   const revRows: Row[] = (rev?.items ?? []).map((it) => ({
@@ -146,7 +146,7 @@ export default function Interop() {
     cie_s: it.cie_s, comhairle_s: it.comhairle_s, meaning_s: it.meaning_s,
   }));
   const allRows = [...cieRows, ...revRows];
-  const components = Array.from(new Set(allRows.map((r) => r.component))).filter((c) => c && c !== "—").sort();
+  const components = Array.from(new Set(allRows.map((r) => r.component))).filter((c) => c && c !== "none").sort();
   const types = ["Requirement", "Quality gate", "Build core", "Comhairle feature"].filter((t) => allRows.some((r) => r.type === t));
   const statusOpts = [
     ...(["satisfies", "partial", "gap", "na"] as const).filter((s) => cieRows.some((r) => r.status === s)),
@@ -174,14 +174,14 @@ export default function Interop() {
       <header className="mb-4">
         <div className="flex items-center gap-2">
           <h1 className="text-xl font-bold tracking-tight">Comhairle interop &amp; integration assessment</h1>
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P1 · POC #5</span>
+          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P1 · Proof of concept #5</span>
         </div>
-        <p className="text-sm text-slate-500">Should CIE build on Comhairle, or build its own and interoperate? The full compare-and-contrast — plus a working export.</p>
+        <p className="text-sm text-slate-500">Should the Civic Intelligence Engine build on Comhairle, or build its own and interoperate? The full compare-and-contrast, plus a working export.</p>
       </header>
 
       <div className="mb-2 space-y-2">
         <Commentary kind="perspective" title="What this page is even about">
-          There's another civic tool called <strong>Comhairle</strong> — a Scottish-Government participatory-democracy platform — that does work close to ours. This page is the assessment of how the two relate: what each is strong at, whether to build on theirs or build our own, and how our data could travel between them. It doubles as the technical brief to share with their team.
+          There's another civic tool called <strong>Comhairle</strong> (a Scottish-Government participatory-democracy platform) that does work close to ours. This page is the assessment of how the two relate: what each is strong at, whether to build on theirs or build our own, and how our data could travel between them. It doubles as the technical brief to share with their team.
         </Commentary>
         <Commentary kind="choice" title="The decision">
           {a.decision}
@@ -191,7 +191,7 @@ export default function Interop() {
       <H>How the two systems compare</H>
       <div className="rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden">
         <div className="grid grid-cols-12 px-3 py-2 border-b border-slate-100 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
-          <div className="col-span-3">Dimension</div><div className="col-span-5">Comhairle</div><div className="col-span-4">CIE (ours)</div>
+          <div className="col-span-3">Dimension</div><div className="col-span-5">Comhairle</div><div className="col-span-4">Civic Intelligence Engine (ours)</div>
         </div>
         {a.side_by_side.map((r) => (
           <div key={r.dim} className="grid grid-cols-12 px-3 py-2 border-b border-slate-50 last:border-0 text-[12px]">
@@ -202,7 +202,7 @@ export default function Interop() {
         ))}
       </div>
 
-      <H>Requirement coverage <span className="text-[11px] font-normal text-slate-400">— CIE's 70 spec items vs Comhairle</span></H>
+      <H>Requirement coverage <span className="text-[11px] font-normal text-slate-400">: the Civic Intelligence Engine's 70 spec items vs Comhairle</span></H>
       <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
         <div className="flex h-6 rounded-md overflow-hidden ring-1 ring-slate-200">
           {COV.map(({ k, c }) => (
@@ -214,17 +214,17 @@ export default function Interop() {
         </div>
         <p className="mt-3 text-[13px] text-slate-600 leading-relaxed">{cov.finding}</p>
         <div className="mt-3 pt-3 border-t border-slate-100">
-          <div className="text-[11px] font-semibold text-slate-500 mb-2">Every item falls into one of four buckets — how the two systems line up on it:</div>
+          <div className="text-[11px] font-semibold text-slate-500 mb-2">Every item falls into one of four buckets, showing how the two systems line up on it:</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2">
             {[
-              ["satisfies", "Both systems deliver this — almost always the shared Pol.is spine (voting, demographic-blind clustering). Common ground, not a CIE advantage."],
-              ["partial", "Comhairle has a weaker or related form — the mechanism exists, but not to CIE's full standard or guarantee."],
-              ["gap", "A capability only CIE brings — its trust, claim-discipline, and validity layer. These are CIE's differentiators, not a shortfall."],
-              ["na", "A CIE program or process step (staffing, sign-offs, field ops), not a platform feature — outside a code-to-code comparison."],
+              ["satisfies", "Both systems deliver this, almost always through the shared Pol.is spine (voting, demographic-blind clustering). Common ground, not a Civic Intelligence Engine advantage."],
+              ["partial", "Comhairle has a weaker or related form: the mechanism exists, but not to the Civic Intelligence Engine's full standard or guarantee."],
+              ["gap", "A capability only the Civic Intelligence Engine brings: its trust, claim-discipline, and validity layer. These are the Civic Intelligence Engine's differentiators, not a shortfall."],
+              ["na", "A Civic Intelligence Engine program or process step (staffing, sign-offs, field ops), not a platform feature, so it falls outside a code-to-code comparison."],
             ].map(([k, def]) => (
               <div key={k} className="flex items-start gap-2.5">
                 <span className="shrink-0 w-[62px] pt-px"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${CS[k].cls}`}>{CS[k].label}</span></span>
-                <span className="text-[12px] text-slate-500 leading-snug"><span className="tabular-nums font-semibold text-slate-700">{cov[k as keyof typeof cov] as number}</span> of {cov.total} — {def}</span>
+                <span className="text-[12px] text-slate-500 leading-snug"><span className="tabular-nums font-semibold text-slate-700">{cov[k as keyof typeof cov] as number}</span> of {cov.total}: {def}</span>
               </div>
             ))}
           </div>
@@ -233,7 +233,7 @@ export default function Interop() {
 
       {rev && rev.items.length > 0 && (
         <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
-          <div className="text-[13px] font-semibold text-slate-700 mb-2.5">The reverse view <span className="font-normal text-slate-400">— {rev.total} features Comhairle ships that CIE has no answer for</span></div>
+          <div className="text-[13px] font-semibold text-slate-700 mb-2.5">The reverse view <span className="font-normal text-slate-400">: {rev.total} features Comhairle ships that the Civic Intelligence Engine has no answer for</span></div>
           <div className="flex h-6 rounded-md overflow-hidden ring-1 ring-slate-200">
             {REV_COV.map(({ k, c }) => (
               <div key={k} style={{ width: `${(rev[k] / rev.total) * 100}%`, background: c }}
@@ -245,13 +245,13 @@ export default function Interop() {
           <p className="mt-3 text-[13px] text-slate-600 leading-relaxed">{rev.finding}</p>
           <div className="mt-3 pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-x-5 gap-y-2">
             {([
-              ["gain", "CIE would genuinely benefit from adopting or borrowing this."],
-              ["watch", "Real and useful, situational — worth tracking, not urgent for the pilot."],
-              ["diverges", "Comhairle has it, and CIE deliberately does without — a principled choice."],
+              ["gain", "The Civic Intelligence Engine would genuinely benefit from adopting or borrowing this."],
+              ["watch", "Real and useful, though situational: worth tracking, not urgent for the pilot."],
+              ["diverges", "Comhairle has it, and the Civic Intelligence Engine deliberately does without, as a principled choice."],
             ] as const).map(([k, def]) => (
               <div key={k} className="flex items-start gap-2.5">
                 <span className="shrink-0 w-[64px] pt-px"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${RS[k].cls}`}>{RS[k].label}</span></span>
-                <span className="text-[12px] text-slate-500 leading-snug"><span className="tabular-nums font-semibold text-slate-700">{rev[k]}</span> — {def}</span>
+                <span className="text-[12px] text-slate-500 leading-snug"><span className="tabular-nums font-semibold text-slate-700">{rev[k]}</span>: {def}</span>
               </div>
             ))}
           </div>
@@ -261,10 +261,10 @@ export default function Interop() {
       {allRows.length > 0 && (
         <div className="mt-3 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm overflow-hidden">
           <div className="px-3 pt-3 pb-2.5 border-b border-slate-100 bg-slate-50/60">
-            <div className="text-[11px] font-semibold text-slate-500 mb-1.5">Reading the item IDs <span className="font-normal text-slate-400">— the prefix names the source and the subsystem it came from</span></div>
+            <div className="text-[11px] font-semibold text-slate-500 mb-1.5">Reading the item IDs <span className="font-normal text-slate-400">: the prefix names the source and the subsystem it came from</span></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1.5 text-[12px] text-slate-600">
               <div className="flex items-baseline gap-2">
-                <span className="shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-blue-600 text-white">CIE</span>
+                <span className="shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-blue-600 text-white">Civic Intelligence Engine</span>
                 <span className="leading-snug"><code className="text-slate-700">R</code> requirement · <code className="text-slate-700">T</code> quality gate · <code className="text-slate-700">M</code> build core</span>
               </div>
               <div className="flex items-baseline gap-2">
@@ -275,7 +275,7 @@ export default function Interop() {
           </div>
           <div className="px-3 py-2 border-b border-slate-100">
             <div className="text-[12px] font-semibold text-slate-600">
-              All {allRows.length} items <span className="font-normal text-slate-400">— sort by any header</span>
+              All {allRows.length} items <span className="font-normal text-slate-400">(sort by any header)</span>
               {visible.length !== allRows.length && <span className="ml-1 text-slate-400">· {visible.length} shown</span>}
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
@@ -283,7 +283,7 @@ export default function Interop() {
                 className="text-[12px] rounded-md border border-slate-200 bg-white px-2 py-1 w-40 text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-300" />
               <select value={fSource} onChange={(e) => setFSource(e.target.value)} className={selCls} style={oStyle(SRC_HUE[fSource])} title="Filter by source">
                 <option value="">All sources</option>
-                {["CIE", "Comhairle"].map((s) => <option key={s} value={s} style={oStyle(SRC_HUE[s])}>{s}</option>)}
+                {["CIE", "Comhairle"].map((s) => <option key={s} value={s} style={oStyle(SRC_HUE[s])}>{s === "CIE" ? "Civic Intelligence Engine" : s}</option>)}
               </select>
               <select value={fType} onChange={(e) => setFType(e.target.value)} className={selCls} style={oStyle(TYPE_HUE[fType])} title="Filter by type">
                 <option value="">All types</option>
@@ -312,7 +312,7 @@ export default function Interop() {
                       <button onClick={() => clickSort(k)} className="font-semibold hover:text-slate-600">{label}{Sarrow(k)}</button>
                     </th>
                   ))}
-                  <th style={{ minWidth: 230 }} className="px-2.5 py-2 font-semibold align-bottom text-blue-600">In CIE</th>
+                  <th style={{ minWidth: 230 }} className="px-2.5 py-2 font-semibold align-bottom text-blue-600">In the Civic Intelligence Engine</th>
                   <th style={{ minWidth: 230 }} className="px-2.5 py-2 font-semibold align-bottom text-slate-500">In Comhairle</th>
                   <th style={{ minWidth: 230 }} className="px-2.5 py-2 font-semibold align-bottom text-emerald-600">What it means for integration</th>
                 </tr>
@@ -322,7 +322,7 @@ export default function Interop() {
                   <tr key={it.id} className="border-b border-slate-50 align-top hover:bg-slate-50/50">
                     <td className="px-2.5 py-2 font-mono text-[12px] text-slate-600 whitespace-nowrap">{it.id}</td>
                     <td className="px-2.5 py-2 text-[12px] text-slate-700 font-medium">{it.name}</td>
-                    <td className="px-2.5 py-2"><span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap ${it.source === "CIE" ? "bg-blue-600 text-white" : "bg-slate-600 text-white"}`}>{it.source}</span></td>
+                    <td className="px-2.5 py-2"><span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap ${it.source === "CIE" ? "bg-blue-600 text-white" : "bg-slate-600 text-white"}`}>{it.source === "CIE" ? "Civic Intelligence Engine" : it.source}</span></td>
                     <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 whitespace-nowrap ${TYPE_CLS[it.type] ?? "bg-slate-100 text-slate-500 ring-slate-200"}`}>{it.type}</span></td>
                     <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 whitespace-nowrap ${compCls(it.component)}`}>{it.component}</span></td>
                     <td className="px-2.5 py-2"><span className={`text-[10px] px-1.5 py-0.5 rounded-full ring-1 ${it.sm[it.status]?.cls ?? ""}`}>{it.sm[it.status]?.label ?? it.status}</span>{it.sourced === false && <span className="text-slate-300 text-[10px]"> ·inf</span>}</td>
@@ -332,20 +332,20 @@ export default function Interop() {
                   </tr>
                 ))}
                 {rows.length === 0 && (
-                  <tr><td colSpan={9} className="px-3 py-6 text-center text-[12px] text-slate-400">No items match — adjust search or filters.</td></tr>
+                  <tr><td colSpan={9} className="px-3 py-6 text-center text-[12px] text-slate-400">No items match. Adjust search or filters.</td></tr>
                 )}
               </tbody>
             </table>
           </div>
           <div className="px-3 py-1.5 border-t border-slate-100 text-[10px] text-slate-400">
-            <span className="text-blue-600 font-medium">CIE</span> rows are spec items surfaced from studying CIE (both have / partial / CIE adds / n·a); <span className="text-slate-600 font-medium">Comhairle</span> rows are features surfaced from studying Comhairle (gain / watch / diverges). “·inf” marks a CIE status inferred to fit the per-area counts.
+            <span className="text-blue-600 font-medium">Civic Intelligence Engine</span> rows are spec items surfaced from studying the Civic Intelligence Engine (both have / partial / Civic Intelligence Engine adds / n·a); <span className="text-slate-600 font-medium">Comhairle</span> rows are features surfaced from studying Comhairle (gain / watch / diverges). “·inf” marks a Civic Intelligence Engine status inferred to fit the per-area counts.
           </div>
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
         <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
-          <div className="text-[13px] font-semibold text-slate-700 mb-2">What CIE adds that Comhairle lacks</div>
+          <div className="text-[13px] font-semibold text-slate-700 mb-2">What the Civic Intelligence Engine adds that Comhairle lacks</div>
           <ul className="space-y-1.5">
             {a.cie_gaps.map((g, i) => (
               <li key={i} className="text-[12px] text-slate-500 leading-snug flex gap-2"><span className="text-rose-400 mt-0.5">•</span><span>{g}</span></li>
@@ -353,7 +353,7 @@ export default function Interop() {
           </ul>
         </div>
         <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
-          <div className="text-[13px] font-semibold text-slate-700 mb-2">What a collaboration would gain CIE</div>
+          <div className="text-[13px] font-semibold text-slate-700 mb-2">What a collaboration would gain for the Civic Intelligence Engine</div>
           <p className="text-[12px] text-slate-500 leading-relaxed">{a.comhairle_has}</p>
         </div>
       </div>
@@ -367,7 +367,7 @@ export default function Interop() {
       <H>Field mapping → Comhairle grammar</H>
       <div className="mb-3">
         <Commentary kind="design" title="How to read this mapping">
-          Handing data to another tool means lining up each of your fields with one of theirs. This table walks every CIE record onto Comhairle's <em>interchange grammar</em> — its Statement / Reaction / Group / Participant vocabulary — and labels how cleanly each one lands, from an exact match down to the few spots where their grammar would need a small addition to hold what CIE carries.
+          Handing data to another tool means lining up each of your fields with one of theirs. This table walks every Civic Intelligence Engine record onto Comhairle's <em>interchange grammar</em> (its Statement / Reaction / Group / Participant vocabulary) and labels how cleanly each one lands, from an exact match down to the few spots where their grammar would need a small addition to hold what the Civic Intelligence Engine carries.
         </Commentary>
       </div>
       <div className="rounded-xl bg-white ring-1 ring-slate-200 p-3.5 shadow-sm mb-3">
@@ -416,7 +416,7 @@ export default function Interop() {
         </Commentary>
       </div>
 
-      <H>Two gifts to bring upstream <span className="text-[11px] font-normal text-slate-400">— turning "compare" into "contribute"</span></H>
+      <H>Two gifts to bring upstream <span className="text-[11px] font-normal text-slate-400">(turning "compare" into "contribute")</span></H>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {a.gifts.map((g) => (
           <div key={g.t} className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
@@ -426,7 +426,7 @@ export default function Interop() {
         ))}
       </div>
 
-      <H>The working export <span className="text-[11px] font-normal text-slate-400">— {doc.conversation.n_statements} statements · {doc.conversation.n_participants} participants · {doc.conversation.n_votes} votes</span></H>
+      <H>The working export <span className="text-[11px] font-normal text-slate-400">: {doc.conversation.n_statements} statements · {doc.conversation.n_participants} participants · {doc.conversation.n_votes} votes</span></H>
       <div className="rounded-xl bg-white ring-1 ring-slate-200 p-4 shadow-sm">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-semibold text-slate-600">The flat-file <span className="font-mono text-[11px] text-slate-400">{doc.schema}</span></span>
@@ -446,7 +446,7 @@ export default function Interop() {
       </div>
       <div className="mt-3">
         <Commentary kind="principle" title="No identities leave the building">
-          Participants export as an opaque id and nothing else — no names, no demographics. The portable file carries how people voted, never who they are, so a handoff keeps every privacy promise intact.
+          Participants export as an opaque id and nothing else: no names, no demographics. The portable file carries how people voted, never who they are, so a handoff keeps every privacy promise intact.
         </Commentary>
       </div>
 

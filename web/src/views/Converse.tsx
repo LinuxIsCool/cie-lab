@@ -1,4 +1,4 @@
-// P3 · Conversational elicitation — chat with a neutral AI facilitator, then a
+// P3 · Conversational elicitation: chat with a neutral AI facilitator, then a
 // DEFENSIBLE synthesis: every position the AI extracts must quote your exact words
 // (server-validated), and you confirm before anything counts. Talks to the
 // /api/facilitate + /api/extract endpoints (see analysis/converse.py).
@@ -70,14 +70,14 @@ export default function Converse() {
       <header className="mb-4">
         <div className="flex items-center gap-2">
           <h1 className="text-xl font-bold tracking-tight">Conversational elicitation</h1>
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P3 · POC #6</span>
+          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P3 · Proof of concept #6</span>
         </div>
-        <p className="text-sm text-slate-500">Talk instead of vote — then the AI reflects back what you said, in your own words</p>
+        <p className="text-sm text-slate-500">Talk instead of vote, then the artificial intelligence reflects back what you said, in your own words</p>
       </header>
 
       <div className="mb-4 space-y-2">
         <Commentary kind="perspective" title="What you're doing here">
-          Every other demo starts from votes on ready-made statements. This one starts from a <em>conversation</em>. You talk with a neutral AI facilitator — like a thoughtful interviewer, it asks open questions and stays neutral — and afterward it reflects back the positions you expressed, so they join the same picture the votes build.
+          Every other demo starts from votes on ready-made statements. This one starts from a <em>conversation</em>. You talk with a neutral artificial intelligence facilitator (like a thoughtful interviewer, it asks open questions and stays neutral), and afterward it reflects back the positions you expressed, so they join the same picture the votes build.
         </Commentary>
         <Commentary kind="design" title="Why a conversation">
           Many people who pass over a form will gladly talk. Meeting them in their own words, at their own pace, widens who takes part. Testing whether that reach is worth the added complexity is the purpose of this prototype.
@@ -116,7 +116,7 @@ export default function Converse() {
             className="rounded-lg bg-blue-600 text-white text-sm font-medium px-4 py-2 disabled:opacity-40 hover:bg-blue-700">
             {synthing ? "Reflecting back…" : "Reflect back what I shared →"}
           </button>
-          <span className="text-[12px] text-slate-400">the AI extracts positions, each tied to your exact words</span>
+          <span className="text-[12px] text-slate-400">the artificial intelligence extracts positions, each tied to your exact words</span>
         </div>
       )}
 
@@ -125,19 +125,19 @@ export default function Converse() {
       {positions && (
         <div className="mt-5">
           <div className="space-y-2 mb-3">
-            <Commentary kind="principle" title="The catch with letting an AI 'summarize' you">
-              A conversation is exactly where an AI could put words in your mouth. So there's a hard rule: every position
+            <Commentary kind="principle" title="The catch with letting an artificial intelligence 'summarize' you">
+              A conversation is exactly where an artificial intelligence could put words in your mouth. So there's a hard rule: every position
               below must quote something you <em>actually said</em>, and the computer double-checks that the quote really
               appears in your words before showing it. Anything it couldn't ground in a real quote was thrown out, not
-              displayed — the AI can organize what you said, but it can't invent it.
+              displayed. The artificial intelligence can organize what you said, but it can't invent it.
             </Commentary>
             <Commentary kind="goal" title="And you get the final say">
-              Even then, nothing counts until <em>you</em> confirm it. Untick anything the AI got wrong or overstated.
-              You decide what becomes part of your input — the model only ever makes a suggestion for you to approve.
+              Even then, nothing counts until <em>you</em> confirm it. Untick anything the artificial intelligence got wrong or overstated.
+              You decide what becomes part of your input. The model only ever makes a suggestion for you to approve.
             </Commentary>
           </div>
 
-          <h2 className="text-sm font-semibold text-slate-600 mb-2">What the AI heard <span className="text-[11px] font-normal text-slate-400">— {confirmedCount} of {positions.length} confirmed</span></h2>
+          <h2 className="text-sm font-semibold text-slate-600 mb-2">What the artificial intelligence heard <span className="text-[11px] font-normal text-slate-400">({confirmedCount} of {positions.length} confirmed)</span></h2>
           <div className="space-y-2">
             {positions.map((p, i) => (
               p.grounded ? (
@@ -152,11 +152,11 @@ export default function Converse() {
               ) : (
                 <div key={i} className="rounded-xl bg-slate-50 ring-1 ring-slate-200 p-3.5">
                   <p className="text-[13px] text-slate-400 line-through">{p.position}</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Dropped — the AI's quote couldn't be found in your words, so it wasn't recorded.</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">Dropped: the artificial intelligence's quote couldn't be found in your words, so it wasn't recorded.</p>
                 </div>
               )
             ))}
-            {positions.length === 0 && <p className="text-[13px] text-slate-400">Nothing substantive to extract yet — say a bit more and try again.</p>}
+            {positions.length === 0 && <p className="text-[13px] text-slate-400">Nothing substantive to extract yet. Say a bit more and try again.</p>}
           </div>
         </div>
       )}

@@ -1,4 +1,4 @@
-// P8 · Config wizard — a non-technical campaign stands up an instance unaided.
+// P8 · Config wizard: a non-technical campaign stands up an instance unaided.
 // Each choice is one axis of the design space the prototypes explored; the review
 // screen emits a cie.config.v0 and links to the demos that match the picks.
 import { useMemo, useState } from "react";
@@ -58,7 +58,7 @@ export default function Wizard() {
     m.push(cfg.elicitation === "vote" ? { label: "P2 · vote-only", route: "/p2" }
       : cfg.elicitation === "conversation" ? { label: "P3 · conversation", route: "/p3" }
       : { label: "P0 · vote + comments", route: "/p0" });
-    if (cfg.depth === "full") m.push({ label: "P4 · full PNI", route: "/p4" });
+    if (cfg.depth === "full") m.push({ label: "P4 · full Participatory Narrative Inquiry", route: "/p4" });
     if (cfg.surfaces.dashboard) m.push({ label: "P0 · dashboard", route: "/p0" });
     if (cfg.surfaces.ask) m.push({ label: "P6 · ask-your-constituency", route: "/p6" });
     if (cfg.surfaces.graph) m.push({ label: "P5 · knowledge graph", route: "/p5" });
@@ -73,9 +73,9 @@ export default function Wizard() {
       <header className="mb-4">
         <div className="flex items-center gap-2">
           <h1 className="text-xl font-bold tracking-tight">Config wizard</h1>
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P8 · POC #9</span>
+          <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-white">P8 · Proof of concept #9</span>
         </div>
-        <p className="text-sm text-slate-500">Set up a listening instance in plain language — no engineer required</p>
+        <p className="text-sm text-slate-500">Set up a listening instance in plain language: no engineer required</p>
       </header>
 
       <div className="mb-5 space-y-2">
@@ -83,7 +83,7 @@ export default function Wizard() {
           Standing up a listening instance should be something a campaign can do on its own. This wizard walks through the same choices the lab explored, in everyday terms, and hands back a ready configuration at the end.
         </Commentary>
         <Commentary kind="design" title="The design space, as knobs">
-          Each question here is one of the axes the prototypes tested — how people take part, how deeply to listen, what to show. This is the point where the map of experiments becomes a product a person can actually set up.
+          Each question here is one of the axes the prototypes tested: how people take part, how deeply to listen, what to show. This is the point where the map of experiments becomes a product a person can actually set up.
         </Commentary>
       </div>
 
@@ -132,10 +132,10 @@ export default function Wizard() {
             <Choice active={cfg.depth === "none"} onClick={() => setCfg({ ...cfg, depth: "none" })} title="Votes only">
               Measure agreement and nothing more. Simplest to run and read.
             </Choice>
-            <Choice active={cfg.depth === "light"} onClick={() => setCfg({ ...cfg, depth: "light" })} title="Light — did people feel heard?">
+            <Choice active={cfg.depth === "light"} onClick={() => setCfg({ ...cfg, depth: "light" })} title="Light: did people feel heard?">
               Two quick ratings ride the vote, so you learn how the process felt without extra burden. (Demonstrated in P0.)
             </Choice>
-            <Choice active={cfg.depth === "full"} onClick={() => setCfg({ ...cfg, depth: "full" })} title="Full — people's stories">
+            <Choice active={cfg.depth === "full"} onClick={() => setCfg({ ...cfg, depth: "full" })} title="Full: people's stories">
               Collect and interpret stories for the richest picture. Deepest listening, and the most effort. (Demonstrated in P4.)
             </Choice>
           </div>
@@ -165,7 +165,7 @@ export default function Wizard() {
             </Toggle>
             <Toggle on={cfg.governance.gate} onClick={() => setCfg({ ...cfg, governance: { ...cfg.governance, gate: !cfg.governance.gate } })} title="Governance gate for free text">
               {hasFreeText
-                ? "Your setup collects free text, which an AI reads — route it through a consent + review gate first. Strongly recommended."
+                ? "Your setup collects free text, which an artificial intelligence reads. Route it through a consent and review gate first. Strongly recommended."
                 : "Only needed when you collect free text; your current setup is votes-only, so this stays off."}
             </Toggle>
           </div>
@@ -195,7 +195,7 @@ export default function Wizard() {
 
             <div className="flex items-center gap-2 pt-1">
               <a download="cie-config-v0.json" href={download} className="text-[12px] font-medium rounded-lg bg-slate-800 text-white px-3 py-1.5 hover:bg-slate-700">Download config</a>
-              <span className="text-[11px] text-slate-400">cie.config.v0 — the instance definition</span>
+              <span className="text-[11px] text-slate-400">cie.config.v0: the instance definition</span>
             </div>
           </div>
         )}
@@ -213,12 +213,12 @@ export default function Wizard() {
 
       <div className="mt-5">
         <Commentary kind="goal" title="A door you can walk back through">
-          These are reversible choices — a campaign can start simple and add depth or surfaces later as trust grows. Keeping setup this light, and this changeable, is what makes the tool approachable before anyone commits to a bigger platform.
+          These are reversible choices: a campaign can start simple and add depth or surfaces later as trust grows. Keeping setup this light, and this changeable, is what makes the tool approachable before anyone commits to a bigger platform.
         </Commentary>
       </div>
 
       <footer className="mt-8 text-center text-[11px] text-slate-400">
-        Every option maps to a working demo in this lab — the wizard configures real pieces, not a promise.
+        Every option maps to a working demo in this lab: the wizard configures real pieces, not a promise.
       </footer>
     </div>
   );
